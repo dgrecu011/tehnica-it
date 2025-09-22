@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Magazin Tehnică IT</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="fixed top-0 left-0 w-full z-50 bg-violet-900/90 backdrop-blur-md shadow-md">
+  <div class="max-w-7xl mx-auto flex justify-between items-center p-4">
+    <h1 class="text-2xl font-bold text-white drop-shadow-lg">Tehnică IT</h1>
+    <nav>
+      <!-- Meniu mobil -->
+      <div id="mobile-menu" class="md:hidden text-white text-3xl cursor-pointer">&#9776;</div>
+      <ul id="menu" class="hidden md:flex space-x-6 font-medium">
+        <li><a href="#home" class="hover:text-yellow-400 transition">Acasă</a></li>
+        <li><a href="#products" class="hover:text-yellow-400 transition">Produse</a></li>
+        <li><a href="#offers" class="hover:text-yellow-400 transition">Promoții</a></li>
+        <li><a href="#contact" class="hover:text-yellow-400 transition">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+
+<!-- Hero -->
+<section id="home">
+  <div class="parallax-bg" style="background-image: url('/images/welcomeBK.png');"></div>
+  <div class="container mx-auto h-full flex flex-col justify-center items-center px-4 text-center text-white">
+    <h2 class="text-4xl md:text-6xl font-extrabold mb-6 drop-shadow-lg">Bine ați venit la Tehnică IT!</h2>
+    <p class="text-lg md:text-2xl max-w-2xl mb-8 drop-shadow-md">
+      Descoperiți cele mai bune produse IT la prețuri competitive și oferte exclusive.
+    </p>
+    <a href="#products" class="button">
+  Vezi Produsele
+</a>
+
+  </div>
+</section>
+
+<!-- Offers -->
+<section id="offers">
+  <div class="parallax-bg" style="background-image: url('/images/oferteBK.png');"></div>
+  <div class="container mx-auto h-full flex flex-col justify-center items-center px-6 text-white">
+    <h2 class="text-4xl font-extrabold text-center mb-12 drop-shadow-lg">🎉 Oferte Speciale 🎉</h2>
+    <div class="grid gap-10 md:grid-cols-3">
+      <div class="bg-white/90 backdrop-blur-md rounded-2xl shadow-xl p-8 transform hover:-translate-y-2 transition duration-300 border-t-4 border-yellow-400">
+        <h3 class="text-2xl font-bold text-blue-700 mb-4">Laptopuri Gaming -20%</h3>
+        <p class="text-gray-800 mb-4">Reduceri exclusive la laptopurile de gaming de top. Stoc limitat!</p>
+        <span class="inline-block bg-yellow-400 text-yellow-900 px-4 py-2 rounded-full font-semibold">Doar azi!</span>
+      </div>
+      <div class="bg-white/90 backdrop-blur-md rounded-2xl shadow-xl p-8 transform hover:-translate-y-2 transition duration-300 border-t-4 border-yellow-400">
+        <h3 class="text-2xl font-bold text-blue-700 mb-4">Set Mouse + Tastatură</h3>
+        <p class="text-gray-800 mb-4">Combină confortul și performanța la un preț special de pachet.</p>
+        <span class="inline-block bg-red-500 text-white px-4 py-2 rounded-full font-semibold">Până la 25 Septembrie</span>
+      </div>
+      <div class="bg-white/90 backdrop-blur-md rounded-2xl shadow-xl p-8 transform hover:-translate-y-2 transition duration-300 border-t-4 border-yellow-400">
+        <h3 class="text-2xl font-bold text-blue-700 mb-4">Transport Gratuit</h3>
+        <p class="text-gray-800 mb-4">Beneficiază de transport gratuit pentru comenzile peste 2000 MDL.</p>
+        <span class="inline-block bg-green-500 text-white px-4 py-2 rounded-full font-semibold">Permanent</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Categorii -->
+<section id="categories" class="relative h-screen snap-start px-4">
+  <!-- Fundal personalizabil -->
+  <div class="parallax-bg" style="background-image: url('/images/categoriiBK.png');"></div>
+
+  <div class="relative max-w-7xl mx-auto h-full flex flex-col justify-center items-center text-center z-10">
+    <h2 class="text-3xl md:text-4xl font-bold mb-12 text-white drop-shadow-lg">Categorii de Produse</h2>
+    <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+      <a href="#products" class="category-card group bg-white/80 backdrop-blur-md rounded-2xl shadow-lg overflow-hidden transform hover:scale-105 transition duration-300 p-6 flex flex-col items-center text-center">
+        <div class="h-24 w-24 mb-4 flex justify-center items-center">
+          <img src="/images/laptopspng.png" alt="Laptopuri" class="h-20 w-20 object-contain">
+        </div>
+        <h3 class="font-semibold text-lg">Laptopuri</h3>
+      </a>
+
+      <a href="#products" class="category-card group bg-white/80 backdrop-blur-md rounded-2xl shadow-lg overflow-hidden transform hover:scale-105 transition duration-300 p-6 flex flex-col items-center text-center">
+        <div class="h-24 w-24 mb-4 flex justify-center items-center">
+          <img src="/images/pcpng.png" alt="PC-uri" class="h-20 w-20 object-contain">
+        </div>
+        <h3 class="font-semibold text-lg">PC-uri</h3>
+      </a>
+
+      <a href="#products" class="category-card group bg-white/80 backdrop-blur-md rounded-2xl shadow-lg overflow-hidden transform hover:scale-105 transition duration-300 p-6 flex flex-col items-center text-center">
+        <div class="h-24 w-24 mb-4 flex justify-center items-center">
+          <img src="/images/accesoriespng.png" alt="Accesorii" class="h-20 w-20 object-contain">
+        </div>
+        <h3 class="font-semibold text-lg">Accesorii</h3>
+      </a>
+
+      <a href="#products" class="category-card group bg-white/80 backdrop-blur-md rounded-2xl shadow-lg overflow-hidden transform hover:scale-105 transition duration-300 p-6 flex flex-col items-center text-center">
+        <div class="h-24 w-24 mb-4 flex justify-center items-center">
+          <img src="/images/componets.png" alt="Componente PC" class="h-20 w-20 object-contain">
+        </div>
+        <h3 class="font-semibold text-lg">Componente PC</h3>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Produse -->
+<section id="products" class="relative h-screen snap-start px-4">
+  <!-- Fundal personalizabil -->
+  <div class="parallax-bg" style="background-image: url('/images/produseBack.png');"></div>
+
+  <div class="relative max-w-7xl mx-auto h-full flex flex-col justify-center items-center z-10">
+    <h2 class="text-3xl md:text-4xl font-bold mb-12 text-white drop-shadow-lg">Produse Populare</h2>
+    <div id="products-grid" class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 w-full">
+      <!-- Produsele se generează din JS -->
+    </div>
+  </div>
+</section>
+
+
+<!-- Contact -->
+<section id="contact" class="relative min-h-screen flex items-center justify-center px-4">
+  <!-- 🖼️ Fundal imagine -->
+  <div class="absolute inset-0 bg-cover bg-center" 
+       style="background-image: url('/images/contactBK.png');">
+  </div>
+  <!-- Overlay pentru efect de întunecare ușoară -->
+  <div class="absolute inset-0 bg-black/50"></div>
+
+  <!-- Conținut -->
+  <div class="relative max-w-4xl w-full bg-white/20 backdrop-blur-lg rounded-3xl shadow-2xl p-8 md:p-12 z-10">
+    <h2 class="text-4xl md:text-5xl font-extrabold text-center text-white mb-6 drop-shadow-lg">
+      Contactează-ne
+    </h2>
+    <p class="text-center text-gray-200 mb-10 max-w-2xl mx-auto">
+      Ai întrebări sau vrei o ofertă personalizată? Trimite-ne un mesaj și revenim rapid!
+    </p>
+
+    <form class="space-y-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <input type="text" placeholder="Nume" required
+               class="w-full px-4 py-3 rounded-xl border border-white/30 bg-white/10 text-white placeholder-gray-300 focus:ring-2 focus:ring-yellow-400 outline-none">
+        <input type="email" placeholder="Email" required
+               class="w-full px-4 py-3 rounded-xl border border-white/30 bg-white/10 text-white placeholder-gray-300 focus:ring-2 focus:ring-yellow-400 outline-none">
+      </div>
+      <textarea placeholder="Mesaj" required
+                class="w-full px-4 py-3 rounded-xl border border-white/30 bg-white/10 text-white placeholder-gray-300 focus:ring-2 focus:ring-yellow-400 outline-none h-32"></textarea>
+      <button type="submit"
+              class="w-full py-4 rounded-xl bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-bold text-lg transition transform hover:-translate-y-1 shadow-lg">
+        Trimite Mesajul
+      </button>
+    </form>
+  </div>
+</section>
+
+
+<footer class="bg-blue-600 text-white text-center py-6">
+  <p>&copy; 2025 Tehnică IT. Toate drepturile rezervate.</p>
+</footer>
+
+<script src="products.js"></script>
+</body>
+</html>
