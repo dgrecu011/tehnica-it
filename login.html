@@ -3,43 +3,39 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login - Tehnica IT</title>
+<title>Login - Tehnică IT</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<link rel="stylesheet" href="style.css">
-<style>
-body { background: #f0f0f0; }
-</style>
 </head>
-<body class="flex items-center justify-center min-h-screen">
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
 
-<div class="bg-white p-10 rounded-3xl shadow-2xl w-full max-w-md">
-  <h1 class="text-3xl font-bold mb-6 text-center">Autentificare</h1>
-  <form id="loginForm" class="space-y-4">
-    <input type="email" id="email" placeholder="Email" required class="w-full px-4 py-3 border rounded-xl">
-    <input type="password" id="password" placeholder="Parolă" required class="w-full px-4 py-3 border rounded-xl">
-    <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-xl hover:bg-blue-700 transition duration-300">Login</button>
+<div class="bg-white p-10 rounded-3xl shadow-xl w-full max-w-md">
+  <h2 class="text-3xl font-bold mb-6 text-center">Autentificare</h2>
+  <form id="loginForm" class="space-y-6">
+    <input type="email" id="email" placeholder="Email" required class="w-full px-5 py-4 rounded-2xl border border-gray-300 outline-none focus:ring-2 focus:ring-blue-500">
+    <input type="password" id="password" placeholder="Parolă" required class="w-full px-5 py-4 rounded-2xl border border-gray-300 outline-none focus:ring-2 focus:ring-blue-500">
+    <button type="submit" class="w-full py-4 rounded-2xl bg-blue-600 text-white font-bold hover:bg-blue-700 transition">Login</button>
   </form>
   <p class="mt-4 text-center text-gray-600">Nu ai cont? <a href="register.html" class="text-blue-600 hover:underline">Înregistrează-te</a></p>
 </div>
 
 <script>
-// Simulăm autentificarea cu LocalStorage
-document.getElementById("loginForm").addEventListener("submit", e=>{
+const form = document.getElementById("loginForm");
+form.addEventListener("submit", e=>{
   e.preventDefault();
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
-
-  const users = JSON.parse(localStorage.getItem("users")) || [];
-  const user = users.find(u=>u.email===email && u.password===password);
-
+  
+  let users = JSON.parse(localStorage.getItem("users")) || [];
+  let user = users.find(u=>u.email === email && u.password === password);
   if(user){
     localStorage.setItem("currentUser", JSON.stringify(user));
     alert("Autentificare reușită!");
     window.location.href = "index.html";
   } else {
-    alert("Email sau parolă incorectă!");
+    alert("Email sau parolă incorecte!");
   }
 });
 </script>
+
 </body>
 </html>
