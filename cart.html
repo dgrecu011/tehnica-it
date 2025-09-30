@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coș - Tehnica IT</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="style.css">
+<style>
+html { scroll-behavior: smooth; }
+
+/* Card coș */
+.cart-item {
+  @apply bg-white p-4 rounded-2xl shadow-md flex items-center justify-between transition transform duration-300;
+}
+.cart-item:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 10px 15px rgba(0,0,0,0.15);
+}
+</style>
+</head>
+<body class="bg-gray-100 flex flex-col min-h-screen">
+
+<!-- Header -->
+<header class="fixed top-0 left-0 w-full z-50 bg-gradient-to-r from-blue-800 to-violet-900 shadow-lg backdrop-blur-md transition-all duration-300">
+  <div class="max-w-7xl mx-auto flex justify-between items-center p-4">
+    <a href="index.html" class="text-2xl font-bold text-white hover:text-yellow-400 transition duration-300">Tehnica IT</a>
+    <nav>
+      <ul class="hidden md:flex space-x-8 font-medium text-white items-center">
+        <li><a href="index.html#products" class="hover:text-yellow-400 transition duration-300">Produse</a></li>
+        <li><a href="index.html#offers" class="hover:text-yellow-400 transition duration-300">Promoții</a></li>
+        <li><a href="index.html#contact" class="hover:text-yellow-400 transition duration-300">Contact</a></li>
+        <li><a href="login.html" class="hover:text-yellow-400 transition duration-300">Login</a></li>
+        <li><a href="register.html" class="hover:text-yellow-400 transition duration-300">Register</a></li>
+        <li class="relative">
+          <a href="cart.html" class="hover:text-yellow-400 transition duration-300">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.6 8h13.2L17 13M7 13h10M10 21a1 1 0 11-2 0 1 1 0 012 0zm8 0a1 1 0 11-2 0 1 1 0 012 0z" />
+            </svg>
+            <span id="cart-count" class="absolute -top-2 -right-3 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">0</span>
+          </a>
+        </li>
+      </ul>
+      <div id="mobile-menu" class="md:hidden text-white text-3xl cursor-pointer">&#9776;</div>
+    </nav>
+  </div>
+</header>
+
+<!-- Coș -->
+<main class="flex-grow pt-32 container mx-auto px-4">
+  <h1 class="text-4xl font-bold text-gray-900 mb-8 text-center">Coșul tău</h1>
+  <div id="cart-items" class="space-y-4"></div>
+  <div class="text-right mt-6 text-xl font-bold" id="cart-total"></div>
+  <div class="text-center mt-6">
+    <button id="checkoutBtn" class="bg-yellow-400 text-gray-900 px-6 py-3 rounded-2xl font-semibold hover:bg-yellow-300 transition duration-300">
+      Finalizează Comanda
+    </button>
+  </div>
+</main>
+
+<!-- Back to top -->
+<button id="backToTop" class="fixed bottom-6 right-6 bg-yellow-400 text-gray-900 px-4 py-2 rounded-full hidden">↑ Sus</button>
+
+<!-- Footer -->
+<footer class="bg-gray-900 text-gray-300 py-6 mt-auto relative z-10">
+  <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center px-4">
+    <p>&copy; 2025 Tehnică IT by Grecu Dionisie. Toate drepturile rezervate.</p>
+    <nav class="flex space-x-6 mt-2 md:mt-0">
+      <a href="#privacy" class="hover:text-yellow-400 transition duration-300">Politica de confidențialitate</a>
+      <a href="#terms" class="hover:text-yellow-400 transition duration-300">Termeni și condiții</a>
+      <a href="#help" class="hover:text-yellow-400 transition duration-300">Ajutor</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+// Meniul mobil
+const mobileMenu = document.getElementById("mobile-menu");
+const navUl = document.querySelector("header nav ul");
+mobileMenu.addEventListener("click", () => navUl.classList.toggle("hidden"));
+
+// Back to top
+const backBtn = document.getElementById("backToTop");
+window.addEventListener("scroll", ()=> backBtn.style.display = window.scrollY > 300 ? "block" : "none");
+backBtn.addEventListener("click", ()=> window.scrollTo({top:0, behavior:"smooth"}));
+
+// Coș funcțional
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+function updateCart() {
+  const cartItems = document.getElementById("cart-items");
+  const cartCount = document.getElementById("cart-count");
+  const cartTotal = document.getElementById("cart-total");
+
+  cartItems.innerHTML = "";
+  let total = 0;
+
+  cart.forEach((item, index) => {
+    total += item.price * item.quantity;
+    const div = document.createElement("div");
+    div.className = "cart-item";
+    div.innerHTML = `
+      <div>
+        <h3 class="font-bold">${item.name}</h3>
+        <p class="text-gray-700">MDL ${item.price} x ${item.quantity}</p>
+      </div>
+      <div class="flex space-x-2">
+        <button class="bg-red-500 text-white px-3 py-1 rounded" onclick="removeItem(${index})">Șterge</button>
+      </div>
+    `;
+    cartItems.appendChild(div);
+  });
+
+  cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+  cartTotal.textContent = "Total: MDL " + total;
+}
+
+function removeItem(index){
+  cart.splice(index,1);
+  localStorage.setItem("cart", JSON.stringify(cart));
+  updateCart();
+}
+
+// Prevenim dublarea produselor: adăugăm funcția de adăugare aici pentru test
+document.querySelectorAll(".add-to-cart").forEach(button=>{
+  button.addEventListener("click", e=>{
+    const card = e.target.closest(".card");
+    const id = card.dataset.id;
+    const name = card.querySelector("h3").innerText;
+    const price = parseInt(card.querySelector("span").innerText);
+
+    const existing = cart.find(i=>i.id===id);
+    if(existing){
+      existing.quantity += 1;
+    } else {
+      cart.push({id,name,price,quantity:1});
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+    updateCart();
+  });
+});
+
+updateCart();
+
+// Checkout button
+document.getElementById("checkoutBtn").addEventListener("click",()=>{
+  if(cart.length === 0) return alert("Coșul este gol!");
+  alert("Comanda a fost finalizată!");
+  cart = [];
+  localStorage.setItem("cart", JSON.stringify(cart));
+  updateCart();
+});
+</script>
+</body>
+</html>
