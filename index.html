@@ -6,13 +6,13 @@
 <title>Magazin Tehnică IT</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="style.css">
-<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
 <style>
-.card, .card-offer {
-  @apply bg-white p-6 rounded-3xl shadow-lg relative z-10 transition transform duration-300;
-}
-.card:hover, .card-offer:hover { @apply shadow-2xl scale-105; }
+  .card, .card-offer {
+    @apply bg-white p-6 rounded-3xl shadow-lg relative z-10 transition transform duration-300;
+  }
+  .card:hover, .card-offer:hover { @apply shadow-2xl scale-105; }
 </style>
 </head>
 <body class="bg-gray-100 font-sans flex flex-col min-h-screen">
@@ -21,48 +21,35 @@
 <header class="fixed top-0 left-0 w-full z-50 bg-gradient-to-r from-blue-800 to-violet-900 shadow-lg backdrop-blur-md transition-all duration-300">
   <div class="max-w-7xl mx-auto flex justify-between items-center p-4">
     <a href="#home" class="text-2xl font-bold text-white hover:text-yellow-400 transition duration-300">Tehnica IT</a>
-    <nav>
-      <ul id="nav-list" class="hidden md:flex space-x-6 font-medium text-white items-center">
+    <nav class="relative">
+      <ul id="desktop-nav" class="hidden md:flex space-x-8 font-medium text-white">
         <li><a href="#products" class="hover:text-yellow-400 transition duration-300">Produse</a></li>
         <li><a href="#offers" class="hover:text-yellow-400 transition duration-300">Promoții</a></li>
         <li><a href="#contact" class="hover:text-yellow-400 transition duration-300">Contact</a></li>
+        <li><a href="cart.html" class="hover:text-yellow-400 transition duration-300">Coș (<span id="cart-count">0</span>)</a></li>
         <li id="login-link"><a href="login.html" class="hover:text-yellow-400 transition duration-300">Login</a></li>
         <li id="register-link"><a href="register.html" class="hover:text-yellow-400 transition duration-300">Register</a></li>
-        <li id="user-info" class="hidden text-white font-semibold"></li>
-        <li id="logout-btn" class="hidden cursor-pointer hover:text-yellow-400 transition duration-300">Logout</li>
-        <li class="relative">
-          <a href="cart.html" class="hover:text-yellow-400 transition duration-300">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.6 8h13.2L17 13M7 13h10M10 21a1 1 0 11-2 0 1 1 0 012 0zm8 0a1 1 0 11-2 0 1 1 0 012 0z" />
-            </svg>
-            <span id="cart-count" class="absolute -top-2 -right-3 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">0</span>
-          </a>
-        </li>
+        <li id="user-info" class="hidden"></li>
+        <li><button id="logout-btn" class="hidden text-yellow-400">Logout</button></li>
       </ul>
+      <!-- Mobile -->
       <div id="mobile-menu" class="md:hidden text-white text-3xl cursor-pointer">&#9776;</div>
+      <ul id="mobile-nav" class="md:hidden hidden absolute right-0 mt-2 w-52 bg-blue-900 rounded-xl shadow-lg p-4 space-y-2">
+        <li><a href="#products" class="block hover:text-yellow-400">Produse</a></li>
+        <li><a href="#offers" class="block hover:text-yellow-400">Promoții</a></li>
+        <li><a href="#contact" class="block hover:text-yellow-400">Contact</a></li>
+        <li><a href="cart.html" class="block hover:text-yellow-400">Coș (<span id="mobile-cart-count">0</span>)</a></li>
+        <li id="mobile-login-link"><a href="login.html" class="block hover:text-yellow-400">Login</a></li>
+        <li id="mobile-register-link"><a href="register.html" class="block hover:text-yellow-400">Register</a></li>
+        <li id="mobile-user-info" class="hidden text-yellow-400 font-bold"></li>
+        <li><button id="mobile-logout-btn" class="hidden text-yellow-400 w-full text-left">Logout</button></li>
+      </ul>
     </nav>
-  </div>
-  <div id="mobile-nav" class="md:hidden hidden bg-blue-800/95 backdrop-blur-md">
-    <ul class="flex flex-col space-y-4 p-6 text-white font-medium">
-      <li><a href="#products" class="hover:text-yellow-400 transition duration-300">Produse</a></li>
-      <li><a href="#offers" class="hover:text-yellow-400 transition duration-300">Promoții</a></li>
-      <li><a href="#contact" class="hover:text-yellow-400 transition duration-300">Contact</a></li>
-      <li id="mobile-login-link"><a href="login.html" class="hover:text-yellow-400 transition duration-300">Login</a></li>
-      <li id="mobile-register-link"><a href="register.html" class="hover:text-yellow-400 transition duration-300">Register</a></li>
-      <li id="mobile-user-info" class="hidden font-semibold"></li>
-      <li id="mobile-logout-btn" class="hidden cursor-pointer hover:text-yellow-400 transition duration-300">Logout</li>
-      <li class="relative">
-        <a href="cart.html" class="hover:text-yellow-400 transition duration-300">
-          Coș
-          <span id="mobile-cart-count" class="absolute -top-2 -right-5 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">0</span>
-        </a>
-      </li>
-    </ul>
   </div>
 </header>
 
 <!-- Hero -->
-<section id="home" class="relative text-white py-32 min-h-[70vh] flex items-center">
+<section id="home" class="relative text-white py-32 min-h-[70vh] flex items-center mt-16">
   <div class="absolute inset-0 z-0">
     <img src="/images/hero-bg.png" alt="Hero Background" class="w-full h-full object-cover opacity-30">
     <div class="absolute inset-0 bg-gradient-to-r from-blue-900 via-violet-900 to-gray-800 opacity-70"></div>
@@ -76,39 +63,6 @@
   </div>
 </section>
 
-<!-- Despre Noi -->
-<section id="about" class="py-32 bg-gray-100">
-  <div class="container mx-auto text-center max-w-4xl" data-aos="fade-up">
-    <h2 class="text-4xl font-extrabold mb-12 text-gray-900">Despre Noi</h2>
-    <p class="text-lg md:text-xl mb-6 text-gray-800">La Tehnică IT, oferim soluții IT performante: laptopuri, PC-uri și accesorii. Experiența noastră de peste 10 ani ne permite să aducem tehnologia la prețuri accesibile.</p>
-    <p class="text-lg md:text-xl text-gray-800">Fiecare produs este testat riguros pentru a asigura calitatea dorită. Echipa noastră oferă consultanță personalizată pentru nevoile fiecărui client.</p>
-  </div>
-</section>
-
-<!-- Oferte Speciale -->
-<section id="offers" class="py-32 bg-gray-50">
-  <div class="container mx-auto text-center" data-aos="fade-up">
-    <h2 class="text-4xl font-extrabold mb-12 text-gray-900">🎉 Oferte Speciale 🎉</h2>
-    <div class="grid gap-10 md:grid-cols-3">
-      <div class="card-offer" data-aos="zoom-in" data-aos-delay="200">
-        <h3 class="text-2xl font-bold text-blue-700 mb-4">Laptopuri Gaming -20%</h3>
-        <p class="text-gray-700 mb-4">Reduceri exclusive la laptopurile de gaming de top. Stoc limitat!</p>
-        <span class="inline-block bg-yellow-400 text-yellow-900 px-4 py-2 rounded-full font-semibold animate-pulse">Doar azi!</span>
-      </div>
-      <div class="card-offer" data-aos="zoom-in" data-aos-delay="400">
-        <h3 class="text-2xl font-bold text-blue-700 mb-4">Set Mouse + Tastatură</h3>
-        <p class="text-gray-700 mb-4">Combină confortul și performanța la un preț special de pachet.</p>
-        <span class="inline-block bg-red-500 text-white px-4 py-2 rounded-full font-semibold animate-pulse">Până la 25 Septembrie</span>
-      </div>
-      <div class="card-offer" data-aos="zoom-in" data-aos-delay="600">
-        <h3 class="text-2xl font-bold text-blue-700 mb-4">Transport Gratuit</h3>
-        <p class="text-gray-700 mb-4">Beneficiază de transport gratuit pentru comenzile peste 2000 MDL.</p>
-        <span class="inline-block bg-green-500 text-white px-4 py-2 rounded-full font-semibold animate-pulse">Permanent</span>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- Produse Populare -->
 <section id="products" class="py-32 bg-gray-100">
   <div class="container mx-auto text-center">
@@ -119,128 +73,101 @@
         <h3 class="text-xl font-bold mb-2">Laptop Gaming X</h3>
         <p class="text-gray-700 mb-2">Performanță maximă pentru jocuri și muncă.</p>
         <span class="text-blue-700 font-semibold">15000</span>
-        <button class="add-to-cart mt-2 bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700">Adaugă în coș</button>
+        <button class="add-to-cart mt-2 px-4 py-2 bg-yellow-400 rounded-2xl font-semibold hover:bg-yellow-300 transition">Adaugă în coș</button>
       </div>
       <div class="card" data-id="2" data-aos="fade-up" data-aos-delay="200">
         <img src="/images/keyboard1.png" alt="Tastatură" class="rounded-2xl mb-4">
         <h3 class="text-xl font-bold mb-2">Set Tastatură + Mouse</h3>
         <p class="text-gray-700 mb-2">Confort și precizie la un preț avantajos.</p>
         <span class="text-blue-700 font-semibold">1200</span>
-        <button class="add-to-cart mt-2 bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700">Adaugă în coș</button>
+        <button class="add-to-cart mt-2 px-4 py-2 bg-yellow-400 rounded-2xl font-semibold hover:bg-yellow-300 transition">Adaugă în coș</button>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Contact -->
-<section id="contact" class="relative min-h-screen flex justify-center items-center bg-gray-900">
-  <div class="absolute inset-0 z-0">
-    <img src="/images/contact-bg.png" alt="Contact Background" class="w-full h-full object-cover opacity-30">
-    <div class="absolute inset-0 bg-black/50"></div>
-  </div>
-  <div class="relative z-10 max-w-4xl w-full bg-white/10 backdrop-blur-lg rounded-3xl shadow-2xl p-8 md:p-12" data-aos="fade-up">
-    <h2 class="text-4xl md:text-5xl font-extrabold text-white text-center mb-6">Contactează-ne</h2>
-    <p class="text-center text-gray-300 mb-10">Ai întrebări sau vrei o ofertă personalizată? Trimite-ne un mesaj și revenim rapid!</p>
-    <form class="space-y-6">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <input type="text" placeholder="Nume" required class="w-full px-5 py-4 rounded-2xl border border-white/30 bg-white/10 text-white placeholder-gray-300 focus:ring-2 focus:ring-yellow-400 outline-none transition-all duration-300 hover:scale-105">
-        <input type="email" placeholder="Email" required class="w-full px-5 py-4 rounded-2xl border border-white/30 bg-white/10 text-white placeholder-gray-300 focus:ring-2 focus:ring-yellow-400 outline-none transition-all duration-300 hover:scale-105">
-      </div>
-      <textarea placeholder="Mesaj" required class="w-full px-5 py-4 rounded-2xl border border-white/30 bg-white/10 text-white placeholder-gray-300 focus:ring-2 focus:ring-yellow-400 outline-none h-36 transition-all duration-300 hover:scale-105"></textarea>
-      <button type="submit" class="w-full py-4 rounded-2xl bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-bold text-lg transition transform hover:-translate-y-1 shadow-lg animate-pulse">
-        Trimite Mesajul
-      </button>
-    </form>
-  </div>
-</section>
-
 <!-- Footer -->
-<footer class="bg-gray-900 text-gray-300 py-6 mt-auto relative z-10">
-  <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center px-4">
-    <p>&copy; 2025 Tehnică IT by Grecu Dionisie. Toate drepturile rezervate.</p>
-    <nav class="flex space-x-6 mt-2 md:mt-0">
-      <a href="#privacy" class="hover:text-yellow-400 transition duration-300">Politica de confidențialitate</a>
-      <a href="#terms" class="hover:text-yellow-400 transition duration-300">Termeni și condiții</a>
-      <a href="#help" class="hover:text-yellow-400 transition duration-300">Ajutor</a>
-    </nav>
-  </div>
-</footer>
+<footer class="bg-gray-900 text-gray-300 py-6 mt-auto text-center">© 2025 Tehnică IT by Grecu Dionisie</footer>
 
 <script src="products.js"></script>
 <script>
-AOS.init({ duration: 1000, once: true });
+document.addEventListener("DOMContentLoaded", ()=>{
 
-// ================= User + Header =================
-const mobileMenuBtn = document.getElementById("mobile-menu");
-const mobileNav = document.getElementById("mobile-nav");
-mobileMenuBtn.addEventListener("click", ()=> mobileNav.classList.toggle("hidden"));
+  AOS.init({ duration: 1000, once: true });
 
-const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-const loginLink = document.getElementById("login-link");
-const registerLink = document.getElementById("register-link");
-const userInfo = document.getElementById("user-info");
-const logoutBtn = document.getElementById("logout-btn");
+  // ================= Header mobil =================
+  const mobileMenuBtn = document.getElementById("mobile-menu");
+  const mobileNav = document.getElementById("mobile-nav");
+  mobileMenuBtn.addEventListener("click", ()=> mobileNav.classList.toggle("hidden"));
 
-const mobileLoginLink = document.getElementById("mobile-login-link");
-const mobileRegisterLink = document.getElementById("mobile-register-link");
-const mobileUserInfo = document.getElementById("mobile-user-info");
-const mobileLogoutBtn = document.getElementById("mobile-logout-btn");
+  // ================= User + Login/Logout =================
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  const loginLink = document.getElementById("login-link");
+  const registerLink = document.getElementById("register-link");
+  const userInfo = document.getElementById("user-info");
+  const logoutBtn = document.getElementById("logout-btn");
 
-const cartCount = document.getElementById("cart-count");
-const mobileCartCount = document.getElementById("mobile-cart-count");
+  const mobileLoginLink = document.getElementById("mobile-login-link");
+  const mobileRegisterLink = document.getElementById("mobile-register-link");
+  const mobileUserInfo = document.getElementById("mobile-user-info");
+  const mobileLogoutBtn = document.getElementById("mobile-logout-btn");
 
-let cart = currentUser?.cart || [];
+  const cartCount = document.getElementById("cart-count");
+  const mobileCartCount = document.getElementById("mobile-cart-count");
 
-function updateCartCount(){
-  const totalItems = cart.reduce((sum, item)=>sum + item.quantity, 0);
-  cartCount.textContent = totalItems;
-  mobileCartCount.textContent = totalItems;
-}
+  let cart = currentUser?.cart || [];
 
-function handleLogout(){
-  localStorage.removeItem("currentUser");
-  alert("Te-ai delogat cu succes!");
-  window.location.reload();
-}
+  function updateCartCount(){
+    const totalItems = cart.reduce((sum, item)=>sum + item.quantity, 0);
+    cartCount.textContent = totalItems;
+    mobileCartCount.textContent = totalItems;
+  }
 
-if(currentUser){
-  loginLink.style.display = "none";
-  registerLink.style.display = "none";
-  userInfo.textContent = "Bine ai venit, " + currentUser.name;
-  userInfo.classList.remove("hidden");
-  logoutBtn.classList.remove("hidden");
-  logoutBtn.addEventListener("click", handleLogout);
+  function handleLogout(){
+    localStorage.removeItem("currentUser");
+    alert("Te-ai delogat cu succes!");
+    window.location.reload();
+  }
 
-  mobileLoginLink.style.display = "none";
-  mobileRegisterLink.style.display = "none";
-  mobileUserInfo.textContent = "Bine ai venit, " + currentUser.name;
-  mobileUserInfo.classList.remove("hidden");
-  mobileLogoutBtn.classList.remove("hidden");
-  mobileLogoutBtn.addEventListener("click", handleLogout);
-}
+  if(currentUser){
+    loginLink.style.display = "none";
+    registerLink.style.display = "none";
+    userInfo.textContent = "Bine ai venit, " + currentUser.name;
+    userInfo.classList.remove("hidden");
+    logoutBtn.classList.remove("hidden");
+    logoutBtn.addEventListener("click", handleLogout);
 
-updateCartCount();
+    mobileLoginLink.style.display = "none";
+    mobileRegisterLink.style.display = "none";
+    mobileUserInfo.textContent = "Bine ai venit, " + currentUser.name;
+    mobileUserInfo.classList.remove("hidden");
+    mobileLogoutBtn.classList.remove("hidden");
+    mobileLogoutBtn.addEventListener("click", handleLogout);
+  }
 
-// ================= Adaugă în coș =================
-document.querySelectorAll(".add-to-cart").forEach(btn=>{
-  btn.addEventListener("click", e=>{
-    if(!currentUser){ alert("Trebuie să fii logat!"); return; }
-    const card = e.target.closest(".card");
-    const id = card.dataset.id;
-    const name = card.querySelector("h3").textContent;
-    const price = parseInt(card.querySelector("span").textContent);
-    
-    let existing = cart.find(p=>p.id==id);
-    if(existing) { existing.quantity +=1; }
-    else { cart.push({id, name, price, quantity:1}); }
-    
-    currentUser.cart = cart;
-    localStorage.setItem("currentUser", JSON.stringify(currentUser));
-    updateCartCount();
-    alert(`${name} a fost adăugat în coș!`);
+  updateCartCount();
+
+  // ================= Adaugă în coș =================
+  document.querySelectorAll(".add-to-cart").forEach(btn=>{
+    btn.addEventListener("click", e=>{
+      if(!currentUser){ alert("Trebuie să fii logat!"); return; }
+      const card = e.target.closest(".card");
+      const id = card.dataset.id;
+      const name = card.querySelector("h3").textContent;
+      const price = parseInt(card.querySelector("span").textContent);
+
+      let existing = cart.find(p=>p.id==id);
+      if(existing) existing.quantity +=1;
+      else cart.push({id, name, price, quantity:1});
+
+      currentUser.cart = cart;
+      localStorage.setItem("currentUser", JSON.stringify(currentUser));
+      updateCartCount();
+      alert(`${name} a fost adăugat în coș!`);
+    });
   });
+
 });
 </script>
-
 </body>
 </html>

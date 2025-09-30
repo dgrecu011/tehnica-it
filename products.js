@@ -1,92 +1,97 @@
-const products = [
-  {
-    name: "Laptop Gaming RTX 3060",
-    description: "Performanță la nivel înalt pentru gaming și muncă.",
-    price: 15999,
-    image: "/images/tastaturaMecan.png",
-    rating: 5,
-    badge: "Reducere 20%",
-    stock: "limitat"
-  },
-  {
-    name: "Mouse Wireless Ergonomic",
-    description: "Confort și precizie pentru zile lungi de lucru.",
-    price: 1299,
-    image: "/images/mouse1.jpg",
-    rating: 4,
-    badge: "Nou",
-    stock: ""
-  },
-  {
-    name: "Tastatură Mecanică RGB",
-    description: "Gaming și productivitate cu iluminare RGB personalizată.",
-    price: 2299,
-    image: "/images/keyboard1.jpg",
-    rating: 5,
-    badge: "",
-    stock: "limitat"
-  },
-  // adaugă mai multe produse după nevoie
+// Lista de produse (poți adăuga câte vrei aici)
+const productsData = [
+  { id: 1, name: "Laptop Gaming X", price: 15000, desc: "Performanță maximă pentru jocuri și muncă.", img: "/images/laptop1.png" },
+  { id: 2, name: "Set Tastatură + Mouse", price: 1200, desc: "Confort și precizie la un preț avantajos.", img: "/images/keyboard1.png" },
+  { id: 3, name: "Monitor UltraHD 27\"", price: 5200, desc: "Claritate și culori vibrante pentru lucru și gaming.", img: "/images/monitor1.png" },
+  { id: 4, name: "Căști Wireless Pro", price: 900, desc: "Sunet imersiv și autonomie de 30 ore.", img: "/images/headset1.png" },
+  { id: 5, name: "Mouse Gaming RGB", price: 700, desc: "Precizie ridicată și design ergonomic.", img: "/images/mouse1.png" },
+  { id: 6, name: "Laptop Business Elite", price: 17500, desc: "Subțire, puternic și elegant pentru birou.", img: "/images/laptop2.png" }
 ];
 
-const grid = document.getElementById("products-grid");
-const loadMoreBtn = document.getElementById("loadMoreBtn");
+// Configurare câte produse să se afișeze inițial
+let productsPerPage = 3;
+let currentIndex = 0;
 
-let productsToShow = 3;
+function renderProducts(){
+  const grid = document.getElementById("products-grid");
+  if(!grid) return;
+  
+  let end = currentIndex + productsPerPage;
+  let sliced = productsData.slice(currentIndex, end);
 
-function displayProducts() {
-  grid.innerHTML = "";
-  products.slice(0, productsToShow).forEach((product, index) => {
-    const stars = Array.from({ length: 5 }, (_, i) => 
-      `<svg class="w-5 h-5 ${i < product.rating ? 'text-yellow-400' : 'text-gray-300'}" fill="currentColor" viewBox="0 0 20 20">
-         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.945a1 1 0 00.95.69h4.157c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.945c.3.921-.755 1.688-1.54 1.118l-3.37-2.448a1 1 0 00-1.176 0l-3.37 2.448c-.784.57-1.838-.197-1.539-1.118l1.285-3.945a1 1 0 00-.364-1.118L2.028 9.372c-.783-.57-.38-1.81.588-1.81h4.157a1 1 0 00.951-.69l1.285-3.945z"/>
-       </svg>`
-    ).join('');
-
-    const card = document.createElement("div");
-    card.className = `
-      product-card relative flex flex-col p-6 rounded-3xl shadow-lg overflow-hidden
-      transition-transform transform hover:-translate-y-3 hover:shadow-2xl
-      bg-gradient-to-tr from-white via-gray-50 to-white group
-      hover:from-blue-50 hover:via-purple-50 hover:to-pink-50
-      aos-init aos-animate
-    `;
+  sliced.forEach(prod=>{
+    let card = document.createElement("div");
+    card.className = "card";
+    card.setAttribute("data-id", prod.id);
     card.setAttribute("data-aos", "fade-up");
-    card.setAttribute("data-aos-delay", `${index * 150}`);
-
     card.innerHTML = `
-      ${product.badge ? `<span class="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full font-semibold text-sm animate-pulse">${product.badge}</span>` : ''}
-      ${product.stock ? `<span class="absolute top-4 right-4 bg-yellow-400 text-gray-900 px-3 py-1 rounded-full font-semibold text-sm animate-pulse">${product.stock}</span>` : ''}
-      
-      <div class="overflow-hidden rounded-2xl mb-4 relative group">
-        <img src="${product.image || '/images/placeholder.jpg'}" alt="${product.name}" 
-             class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110 group-hover:brightness-110 rounded-2xl shadow-md">
-        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition transform group-hover:translate-y-1 text-white text-sm p-2 rounded-2xl flex items-center justify-center">
-          ${product.description}
-        </div>
-      </div>
-
-      <h3 class="text-xl font-semibold text-gray-800 mb-2">${product.name}</h3>
-      <div class="flex items-center mb-4">
-        ${stars}
-      </div>
-      <div class="mt-auto flex justify-between items-center">
-        <span class="text-lg font-bold text-blue-700">${product.price} MDL</span>
-        <button class="bg-yellow-400 text-gray-900 px-4 py-2 rounded-xl font-semibold hover:bg-yellow-300 hover:scale-105 transition transform shadow-md">
-          Adaugă în coș
-        </button>
-      </div>
+      <img src="${prod.img}" alt="${prod.name}" class="rounded-2xl mb-4">
+      <h3 class="text-xl font-bold mb-2">${prod.name}</h3>
+      <p class="text-gray-700 mb-2">${prod.desc}</p>
+      <span class="text-blue-700 font-semibold">${prod.price}</span>
+      <button class="add-to-cart mt-2 px-4 py-2 bg-yellow-400 rounded-2xl font-semibold hover:bg-yellow-300 transition">Adaugă în coș</button>
     `;
     grid.appendChild(card);
   });
+
+  currentIndex = end;
+
+  if(currentIndex >= productsData.length){
+    let btn = document.getElementById("load-more");
+    if(btn) btn.style.display = "none";
+  }
+
+  // Reatașează butoanele pentru coș
+  attachAddToCartEvents();
 }
 
-// Inițial
-displayProducts();
+// Atașează butoanele pentru adăugare în coș
+function attachAddToCartEvents(){
+  document.querySelectorAll(".add-to-cart").forEach(btn=>{
+    if(!btn.dataset.bound){
+      btn.dataset.bound = true; // prevenim dubla legare
+      btn.addEventListener("click", e=>{
+        const card = e.target.closest(".card");
+        const id = card.dataset.id;
+        const name = card.querySelector("h3").textContent;
+        const price = parseInt(card.querySelector("span").textContent);
 
-// Load more
-loadMoreBtn.addEventListener("click", () => {
-  productsToShow += 3;
-  if (productsToShow >= products.length) loadMoreBtn.style.display = "none";
-  displayProducts();
+        let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+        if(!currentUser){ alert("Trebuie să fii logat!"); return; }
+
+        let cart = currentUser.cart || [];
+        let existing = cart.find(p=>p.id==id);
+        if(existing) existing.quantity +=1;
+        else cart.push({id, name, price, quantity:1});
+
+        currentUser.cart = cart;
+        localStorage.setItem("currentUser", JSON.stringify(currentUser));
+
+        // Actualizează badge-ul coșului
+        let totalItems = cart.reduce((sum, item)=>sum + item.quantity, 0);
+        document.getElementById("cart-count").textContent = totalItems;
+        document.getElementById("mobile-cart-count").textContent = totalItems;
+
+        alert(`${name} a fost adăugat în coș!`);
+      });
+    }
+  });
+}
+
+// Load More
+function loadMore(){
+  renderProducts();
+}
+
+document.addEventListener("DOMContentLoaded", ()=>{
+  renderProducts();
+
+  // Butonul de încărcare suplimentară
+  const grid = document.getElementById("products-grid");
+  const btn = document.createElement("button");
+  btn.id = "load-more";
+  btn.className = "mt-10 px-6 py-3 bg-blue-700 text-white rounded-2xl hover:bg-blue-600 transition";
+  btn.textContent = "Încarcă mai multe";
+  btn.addEventListener("click", loadMore);
+  grid.insertAdjacentElement("afterend", btn);
 });

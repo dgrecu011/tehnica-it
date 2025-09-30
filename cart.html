@@ -1,62 +1,110 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Coș - Tehnică IT</title>
-<script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coș de cumpărături</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 min-h-screen flex flex-col">
+<body class="bg-gray-100 font-sans">
 
-<header class="bg-blue-800 text-white p-4 text-center font-bold">Coșul tău</header>
+  <!-- Header simplu -->
+  <header class="bg-gradient-to-r from-blue-800 to-violet-900 shadow-lg">
+    <div class="max-w-7xl mx-auto flex justify-between items-center p-4">
+      <a href="index.html" class="text-2xl font-bold text-white">Tehnica IT</a>
+      <a href="cart.html" class="relative text-white text-xl">
+        🛒
+        <span id="cart-count" class="absolute -top-2 -right-3 bg-yellow-400 text-gray-900 rounded-full px-2 text-sm font-bold">0</span>
+      </a>
+    </div>
+  </header>
 
-<main class="flex-grow container mx-auto py-12">
-  <div id="cart-container" class="grid gap-6"></div>
-  <div class="text-right mt-6">
-    <span class="text-xl font-bold">Total: MDL <span id="cart-total">0</span></span>
-  </div>
-</main>
+  <!-- Coș -->
+  <main class="max-w-4xl mx-auto py-16 px-4">
+    <h1 class="text-4xl font-extrabold text-gray-900 mb-10 text-center">Coșul tău</h1>
 
-<footer class="bg-gray-900 text-gray-300 py-6 text-center">© 2025 Tehnică IT</footer>
+    <div id="cart-container" class="bg-white rounded-2xl shadow-lg p-6">
+      <p class="text-gray-600">Se încarcă produsele...</p>
+    </div>
 
-<script>
-const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-const cartContainer = document.getElementById("cart-container");
-const cartTotal = document.getElementById("cart-total");
+    <div class="mt-10 flex justify-between items-center">
+      <button id="clear-cart" class="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-2xl font-semibold transition">
+        Golește coșul
+      </button>
+      <h2 class="text-2xl font-bold text-gray-800">Total: <span id="cart-total">0</span> MDL</h2>
+    </div>
 
-if(!currentUser){
-  cartContainer.innerHTML = '<p class="text-center text-red-500">Trebuie să fii logat pentru a vedea coșul!</p>';
-} else {
-  let cart = currentUser.cart || [];
-  function renderCart(){
-    cartContainer.innerHTML = "";
-    let total = 0;
-    cart.forEach(item=>{
-      total += item.price * item.quantity;
-      const div = document.createElement("div");
-      div.className="bg-white p-4 rounded-xl shadow flex justify-between items-center";
-      div.innerHTML=`
-        <div>
-          <h3 class="font-bold">${item.name}</h3>
-          <p>MDL ${item.price} x ${item.quantity}</p>
-        </div>
-        <div>
-          <button class="remove-btn bg-red-500 px-3 py-1 text-white rounded">Șterge</button>
-        </div>
-      `;
-      div.querySelector(".remove-btn").addEventListener("click", ()=>{
-        cart = cart.filter(i=>i.id!==item.id);
-        currentUser.cart = cart;
-        localStorage.setItem("currentUser", JSON.stringify(currentUser));
-        renderCart();
+    <div class="mt-8 text-center">
+      <button class="bg-green-500 hover:bg-green-600 text-white px-10 py-4 rounded-2xl font-bold text-xl transition">
+        Finalizează comanda
+      </button>
+    </div>
+  </main>
+
+  <!-- Script Coș -->
+  <script>
+    function loadCart(){
+      let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+      let container = document.getElementById("cart-container");
+      let countEl = document.getElementById("cart-count");
+      let totalEl = document.getElementById("cart-total");
+
+      if(!currentUser){
+        container.innerHTML = "<p class='text-red-600'>Trebuie să fii logat pentru a vedea coșul!</p>";
+        return;
+      }
+
+      let cart = currentUser.cart || [];
+      if(cart.length === 0){
+        container.innerHTML = "<p class='text-gray-600'>Coșul este gol.</p>";
+        countEl.textContent = "0";
+        totalEl.textContent = "0";
+        return;
+      }
+
+      let html = `<ul class="divide-y divide-gray-200">`;
+      let total = 0;
+      let count = 0;
+
+      cart.forEach((item, index)=>{
+        total += item.price * item.quantity;
+        count += item.quantity;
+
+        html += `
+          <li class="flex justify-between items-center py-4">
+            <div>
+              <h3 class="text-lg font-bold text-gray-900">${item.name}</h3>
+              <p class="text-gray-600">Preț: ${item.price} MDL</p>
+              <p class="text-gray-600">Cantitate: ${item.quantity}</p>
+            </div>
+            <button onclick="removeItem(${index})" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition">Șterge</button>
+          </li>
+        `;
       });
-      cartContainer.appendChild(div);
+
+      html += `</ul>`;
+      container.innerHTML = html;
+
+      countEl.textContent = count;
+      totalEl.textContent = total;
+    }
+
+    function removeItem(index){
+      let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+      currentUser.cart.splice(index, 1);
+      localStorage.setItem("currentUser", JSON.stringify(currentUser));
+      loadCart();
+    }
+
+    document.getElementById("clear-cart").addEventListener("click", ()=>{
+      let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+      currentUser.cart = [];
+      localStorage.setItem("currentUser", JSON.stringify(currentUser));
+      loadCart();
     });
-    cartTotal.textContent = total;
-  }
-  renderCart();
-}
-</script>
+
+    document.addEventListener("DOMContentLoaded", loadCart);
+  </script>
 
 </body>
 </html>
