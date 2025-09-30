@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Finalizează comanda</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+
+  <!-- Header -->
+  <header class="bg-gradient-to-r from-blue-800 to-violet-900 shadow-lg">
+    <div class="max-w-7xl mx-auto flex justify-between items-center p-4">
+      <a href="index.html" class="text-2xl font-bold text-white">Tehnica IT</a>
+      <a href="cart.html" class="relative text-white text-xl">
+        🛒
+        <span id="cart-count" class="absolute -top-2 -right-3 bg-yellow-400 text-gray-900 rounded-full px-2 text-sm font-bold">0</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Checkout -->
+  <main class="max-w-4xl mx-auto py-16 px-4">
+    <h1 class="text-4xl font-extrabold text-gray-900 mb-10 text-center">Finalizează comanda</h1>
+
+    <!-- Rezumat comanda -->
+    <div id="order-summary" class="bg-white rounded-2xl shadow-lg p-6 mb-10">
+      <h2 class="text-2xl font-bold mb-4 text-gray-800">Rezumatul coșului</h2>
+      <div id="summary-items" class="divide-y divide-gray-200 mb-4">
+        <p class="text-gray-600">Se încarcă...</p>
+      </div>
+      <h3 class="text-xl font-bold text-gray-900">Total: <span id="order-total">0</span> MDL</h3>
+    </div>
+
+    <!-- Formular livrare -->
+    <form id="checkout-form" class="bg-white rounded-2xl shadow-lg p-6 space-y-6">
+      <h2 class="text-2xl font-bold text-gray-800 mb-4">Date de livrare</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <input type="text" id="fullname" placeholder="Nume complet" required class="w-full px-4 py-3 border rounded-xl">
+        <input type="tel" id="phone" placeholder="Telefon" required class="w-full px-4 py-3 border rounded-xl">
+      </div>
+      <input type="text" id="address" placeholder="Adresă livrare" required class="w-full px-4 py-3 border rounded-xl">
+
+      <h2 class="text-2xl font-bold text-gray-800 mb-4">Metodă de plată</h2>
+      <div class="space-y-3">
+        <label class="flex items-center space-x-3">
+          <input type="radio" name="payment" value="ramburs" checked>
+          <span>Plată la livrare</span>
+        </label>
+        <label class="flex items-center space-x-3">
+          <input type="radio" name="payment" value="card">
+          <span>Card bancar</span>
+        </label>
+      </div>
+
+      <button type="submit" class="w-full py-4 rounded-2xl bg-green-500 hover:bg-green-600 text-white font-bold text-lg transition">
+        Confirmă comanda
+      </button>
+    </form>
+  </main>
+
+  <!-- Script Checkout -->
+  <script>
+    function loadOrderSummary(){
+      let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+      let summary = document.getElementById("summary-items");
+      let totalEl = document.getElementById("order-total");
+      let countEl = document.getElementById("cart-count");
+
+      if(!currentUser){
+        summary.innerHTML = "<p class='text-red-600'>Trebuie să fii logat pentru a finaliza comanda!</p>";
+        return;
+      }
+
+      let cart = currentUser.cart || [];
+      if(cart.length === 0){
+        summary.innerHTML = "<p class='text-gray-600'>Coșul este gol.</p>";
+        totalEl.textContent = "0";
+        countEl.textContent = "0";
+        return;
+      }
+
+      let html = "";
+      let total = 0;
+      let count = 0;
+
+      cart.forEach(item=>{
+        total += item.price * item.quantity;
+        count += item.quantity;
+        html += `
+          <div class="py-2 flex justify-between">
+            <span>${item.name} (x${item.quantity})</span>
+            <span>${item.price * item.quantity} MDL</span>
+          </div>
+        `;
+      });
+
+      summary.innerHTML = html;
+      totalEl.textContent = total;
+      countEl.textContent = count;
+    }
+
+    document.getElementById("checkout-form").addEventListener("submit", (e)=>{
+      e.preventDefault();
+
+      const name = document.getElementById("fullname").value;
+      const phone = document.getElementById("phone").value;
+      const address = document.getElementById("address").value;
+      const payment = document.querySelector("input[name='payment']:checked").value;
+
+      let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+      if(!currentUser) return alert("Trebuie să fii logat!");
+
+      let order = {
+        client: name,
+        telefon: phone,
+        adresa: address,
+        plata: payment,
+        produse: currentUser.cart,
+        total: document.getElementById("order-total").textContent,
+        data: new Date().toLocaleString()
+      };
+
+      // Simulare salvare comandă (localStorage)
+      let orders = JSON.parse(localStorage.getItem("orders")) || [];
+      orders.push(order);
+      localStorage.setItem("orders", JSON.stringify(orders));
+
+      // Golește coșul
+      currentUser.cart = [];
+      localStorage.setItem("currentUser", JSON.stringify(currentUser));
+
+      alert("Comanda ta a fost plasată cu succes!");
+      window.location.href = "index.html";
+    });
+
+    document.addEventListener("DOMContentLoaded", loadOrderSummary);
+  </script>
+
+</body>
+</html>
