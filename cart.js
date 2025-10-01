@@ -1,74 +1,85 @@
-// Preluăm coșul din localStorage sau inițializăm unul gol
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
+const cartItemsContainer = document.getElementById('cart-items');
+const cartTotalEl = document.getElementById('cart-total');
 
-// Selectăm elementele din DOM
-const cartItemsContainer = document.getElementById("cart-items");
-const cartTotalEl = document.getElementById("cart-total");
-const checkoutBtn = document.getElementById("checkout");
-const cartCountEl = document.getElementById("cart-count");
+let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-// Funcție pentru a actualiza coșul în DOM
-function renderCart() {
-  cartItemsContainer.innerHTML = ""; // Resetăm lista
+// Funcție pentru afișarea produselor din coș
+function displayCart() {
+  cartItemsContainer.innerHTML = '';
 
-  if(cart.length === 0){
-    cartItemsContainer.innerHTML = `<p class="text-center text-lg">Coșul este gol</p>`;
-    cartTotalEl.textContent = "0.00";
-    cartCountEl.textContent = "0";
+  if (cart.length === 0) {
+    cartItemsContainer.innerHTML = '<p class="text-center text-lg">Coșul este gol.</p>';
+    cartTotalEl.textContent = 0;
     return;
   }
 
   let total = 0;
-  cart.forEach((item, index) => {
+
+  cart.forEach(item => {
     total += item.price * item.quantity;
 
-    const cartItem = document.createElement("div");
-    cartItem.className = "flex items-center justify-between bg-white dark:bg-gray-800 p-4 rounded-xl shadow";
+    const div = document.createElement('div');
+    div.className = "flex items-center justify-between bg-white dark:bg-gray-800 p-4 rounded-2xl shadow";
 
-    cartItem.innerHTML = `
+    div.innerHTML = `
       <div class="flex items-center space-x-4">
-        <img src="${item.img}" alt="${item.name}" class="w-16 h-16 object-cover rounded">
+        <img src="${item.img}" alt="${item.name}" class="w-20 h-20 object-cover rounded-lg">
         <div>
-          <p class="font-semibold">${item.name}</p>
-          <p>${item.price.toFixed(2)} USD x ${item.quantity}</p>
+          <h4 class="font-semibold">${item.name}</h4>
+          <p>$${item.price} x ${item.quantity}</p>
         </div>
       </div>
-      <button data-index="${index}" class="px-3 py-1 bg-red-600 hover:bg-red-500 text-white rounded-lg transition">Șterge</button>
+      <div class="flex items-center space-x-2">
+        <button class="px-2 py-1 bg-red-600 dark:bg-red-700 text-white rounded hover:bg-red-500 dark:hover:bg-red-600 decrease">-</button>
+        <span>${item.quantity}</span>
+        <button class="px-2 py-1 bg-green-600 dark:bg-green-700 text-white rounded hover:bg-green-500 dark:hover:bg-green-600 increase">+</button>
+        <button class="px-2 py-1 bg-gray-400 dark:bg-gray-600 text-black rounded hover:bg-gray-300 dark:hover:bg-gray-500 remove">X</button>
+      </div>
     `;
 
-    cartItemsContainer.appendChild(cartItem);
+    // Evenimente pentru butoane
+    div.querySelector('.increase').addEventListener('click', () => {
+      item.quantity += 1;
+      saveAndRefresh();
+    });
+    div.querySelector('.decrease').addEventListener('click', () => {
+      if (item.quantity > 1) item.quantity -= 1;
+      saveAndRefresh();
+    });
+    div.querySelector('.remove').addEventListener('click', () => {
+      cart = cart.filter(i => i.id !== item.id);
+      saveAndRefresh();
+    });
+
+    cartItemsContainer.appendChild(div);
   });
 
   cartTotalEl.textContent = total.toFixed(2);
-  cartCountEl.textContent = cart.reduce((acc, item) => acc + item.quantity, 0);
-
-  // Adăugăm eveniment de ștergere pentru fiecare produs
-  document.querySelectorAll("#cart-items button").forEach(btn => {
-    btn.addEventListener("click", (e) => {
-      const idx = e.target.getAttribute("data-index");
-      cart.splice(idx, 1);
-      saveCart();
-      renderCart();
-    });
-  });
 }
 
-// Salvăm coșul în localStorage
-function saveCart() {
-  localStorage.setItem("cart", JSON.stringify(cart));
+// Salvează coș și actualizează
+function saveAndRefresh() {
+  localStorage.setItem('cart', JSON.stringify(cart));
+  displayCart();
+  updateCartCount();
 }
 
-// Buton finalizează comanda
-checkoutBtn.addEventListener("click", () => {
-  if(cart.length === 0){
-    alert("Coșul este gol!");
+// Funcție pentru actualizarea numărului de produse
+function updateCartCount() {
+  const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+  document.getElementById('cart-count').textContent = count;
+}
+
+// Checkout
+document.getElementById('checkout-btn').addEventListener('click', () => {
+  if (cart.length === 0) {
+    alert('Coșul este gol!');
     return;
   }
-  alert("Comanda a fost finalizată!");
+  alert('Comanda a fost finalizată!');
   cart = [];
-  saveCart();
-  renderCart();
+  saveAndRefresh();
 });
 
-// Inițializare
-renderCart();
+displayCart();
+updateCartCount();

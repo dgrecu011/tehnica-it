@@ -1,66 +1,58 @@
 // Lista de produse
-const productsData = [
-  { id: 1, name: "Laptop Gaming X", price: 1500, img: "/images/laptop1.jpg" },
-  { id: 2, name: "Laptop Office Y", price: 1200, img: "/images/laptop2.jpg" },
-  { id: 3, name: "Tastatură Mecanică", price: 80, img: "/images/keyboard.jpg" },
-  { id: 4, name: "Mouse Wireless", price: 50, img: "/images/mouse.jpg" },
-  { id: 5, name: "Monitor 24'' Full HD", price: 200, img: "/images/monitor.jpg" },
-  { id: 6, name: "Căști Gaming", price: 70, img: "/images/headset.jpg" },
-  { id: 7, name: "SSD 1TB", price: 150, img: "/images/ssd.jpg" }
+const products = [
+  { id: 1, name: "Laptop Gaming X", price: 1500, img: "images/laptop1.jpg" },
+  { id: 2, name: "Laptop Office Y", price: 1200, img: "images/laptop2.jpg" },
+  { id: 3, name: "Mouse RGB Z", price: 50, img: "images/mouse1.jpg" },
+  { id: 4, name: "Tastatură Mecanică A", price: 100, img: "images/keyboard1.jpg" },
+  { id: 5, name: "Căști Gaming B", price: 80, img: "images/headset1.jpg" },
+  { id: 6, name: "Placă Video RTX 4090", price: 2000, img: "images/gpu1.jpg" },
 ];
 
-// Coșul din localStorage
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
+// Salvează coșul în localStorage
+let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-// Containerul de produse
-const productsGrid = document.getElementById("products-grid");
+// Funcție pentru a actualiza numărul de produse în coș
+function updateCartCount() {
+  const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+  document.getElementById('cart-count').textContent = count;
+}
+updateCartCount();
 
-// Render produse
-function renderProducts() {
-  productsGrid.innerHTML = "";
-  productsData.forEach(product => {
-    const card = document.createElement("div");
-    card.className = "product-card bg-white dark:bg-gray-800 p-4 rounded-xl shadow flex flex-col items-center text-center transition hover:shadow-lg";
+// Funcție pentru a genera cardurile de produse
+function displayProducts() {
+  const grid = document.getElementById('products-grid') || document.getElementById('recommended-products');
+  if (!grid) return;
+
+  products.forEach(product => {
+    const card = document.createElement('div');
+    card.className = "product-card bg-white dark:bg-gray-800 p-6 rounded-2xl shadow hover:scale-105 transition text-center";
+
     card.innerHTML = `
-      <img src="${product.img}" alt="${product.name}" class="w-48 h-48 object-cover mb-4 rounded">
-      <h3 class="font-semibold text-lg mb-2">${product.name}</h3>
-      <p class="text-blue-900 dark:text-blue-400 font-bold mb-4">${product.price.toFixed(2)} USD</p>
-      <button data-id="${product.id}" class="px-4 py-2 bg-blue-900 dark:bg-blue-700 text-white rounded-xl hover:bg-blue-800 dark:hover:bg-blue-600 transition">Adaugă în coș</button>
+      <img src="${product.img}" alt="${product.name}" class="w-full h-48 object-cover mb-4 rounded-lg">
+      <h4 class="font-semibold text-xl mb-2">${product.name}</h4>
+      <p class="text-lg font-bold mb-4">$${product.price}</p>
+      <button class="px-4 py-2 bg-blue-600 dark:bg-blue-700 text-white rounded-xl hover:bg-blue-500 dark:hover:bg-blue-600 transition add-to-cart">Adaugă în coș</button>
     `;
-    productsGrid.appendChild(card);
-  });
 
-  // Adaugăm eveniment butoane
-  document.querySelectorAll(".product-card button").forEach(btn => {
-    btn.addEventListener("click", (e) => {
-      const id = parseInt(e.target.getAttribute("data-id"));
-      addToCart(id);
-    });
+    const button = card.querySelector('.add-to-cart');
+    button.addEventListener('click', () => addToCart(product.id));
+
+    grid.appendChild(card);
   });
 }
 
-// Adaugă în coș
+// Adaugă produs în coș
 function addToCart(productId) {
-  const product = productsData.find(p => p.id === productId);
-  const existing = cart.find(item => item.id === productId);
-
-  if(existing) {
-    existing.quantity += 1;
+  const product = products.find(p => p.id === productId);
+  const cartItem = cart.find(item => item.id === productId);
+  if (cartItem) {
+    cartItem.quantity += 1;
   } else {
     cart.push({ ...product, quantity: 1 });
   }
-
-  localStorage.setItem("cart", JSON.stringify(cart));
+  localStorage.setItem('cart', JSON.stringify(cart));
   updateCartCount();
   alert(`${product.name} a fost adăugat în coș!`);
 }
 
-// Actualizează numărul de produse din header
-function updateCartCount() {
-  const cartCountEl = document.getElementById("cart-count");
-  cartCountEl.textContent = cart.reduce((acc, item) => acc + item.quantity, 0);
-}
-
-// Inițializare
-renderProducts();
-updateCartCount();
+displayProducts();
