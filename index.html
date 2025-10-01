@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ro" class="scroll-smooth">
+<html lang="ro">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,23 +9,23 @@
 <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
 </head>
-<body class="bg-[#f1f0e4] dark:bg-gray-900 text-[#3e3f29] dark:text-white font-sans transition-colors duration-500 flex flex-col min-h-screen">
+<body class="bg-gray-100 text-gray-800 font-sans transition-colors duration-500 flex flex-col min-h-screen">
 
 <!-- Header -->
-<header id="header" class="bg-[#7d8d86] text-white shadow-lg sticky top-0 z-50 dark:bg-gray-800 transition-all">
+<header id="header" class="bg-blue-600 text-white shadow-lg sticky top-0 z-50 dark:bg-gray-900 transition-all">
   <div class="container mx-auto flex justify-between items-center px-6 py-4">
     <h1 class="text-2xl font-bold">Tehnică IT</h1>
     <nav class="hidden md:flex space-x-6 font-semibold">
-      <a href="index.html" class="hover:text-yellow-300">Acasă</a>
-      <a href="products.html" class="hover:text-yellow-300">Produse</a>
-      <a href="#about" class="hover:text-yellow-300">Despre</a>
-      <a href="#contact" class="hover:text-yellow-300">Contact</a>
+      <a href="index.html" class="hover:text-yellow-400 transition">Acasă</a>
+      <a href="products.html" class="hover:text-yellow-400 transition">Produse</a>
+      <a href="#about" class="hover:text-yellow-400 transition">Despre</a>
+      <a href="#contact" class="hover:text-yellow-400 transition">Contact</a>
     </nav>
     <div class="flex items-center">
-      <a href="cart.html" class="relative">
+      <a href="cart.html" class="relative mr-4 text-xl">
         🛒<span id="cart-count" class="absolute -top-2 -right-2 bg-yellow-400 text-black text-xs font-bold px-2 py-0.5 rounded-full">0</span>
       </a>
-      <button id="dark-toggle" class="ml-4 px-3 py-1 bg-gray-200 dark:bg-gray-700 text-black dark:text-white rounded-full hover:bg-gray-300 dark:hover:bg-gray-600 transition">
+      <button id="dark-toggle" class="px-3 py-1 bg-white dark:bg-gray-700 text-gray-800 dark:text-white rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition">
         🌙
       </button>
     </div>
@@ -35,20 +35,20 @@
 <main class="flex-grow">
 
 <!-- Hero Section -->
-<section id="home" class="relative bg-gradient-to-r from-[#bca88d] to-[#7d8d86] text-white text-center py-32 overflow-hidden">
+<section id="home" class="relative bg-gradient-to-r from-blue-600 to-blue-400 text-white text-center py-32 overflow-hidden dark:from-gray-800 dark:to-gray-700">
   <h1 class="text-5xl font-bold mb-4 animate-bounce" data-aos="fade-down">Tehnică IT - Totul pentru PC-ul tău</h1>
-  <p class="text-xl mb-6" data-aos="fade-up" data-aos-delay="200">Laptopuri, PC-uri, periferice și componente de top, într-un singur loc!</p>
-  <a href="products.html" class="px-8 py-3 bg-blue-700 rounded-2xl hover:bg-blue-600 transition animate-pulse inline-block" data-aos="zoom-in" data-aos-delay="400">Vezi Produse</a>
+  <p class="text-xl mb-6" data-aos="fade-up" data-aos-delay="200">Laptopuri, PC-uri, periferice și componente de top!</p>
+  <a href="products.html" class="px-8 py-3 bg-yellow-400 text-gray-900 rounded-2xl hover:bg-yellow-300 transition animate-pulse inline-block" data-aos="zoom-in" data-aos-delay="400">Vezi Produse</a>
 </section>
 
-<!-- Despre noi -->
+<!-- About -->
 <section id="about" class="py-20 max-w-7xl mx-auto px-6">
   <h2 class="text-4xl font-bold text-center mb-10" data-aos="fade-up">Despre noi</h2>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
     <div data-aos="fade-right">
       <img src="images/laptop1.jpg" alt="Laptop" class="rounded-xl shadow-lg hover:scale-105 transition-transform">
     </div>
-    <div class="flex flex-col justify-center" data-aos="fade-left">
+    <div class="flex flex-col justify-center text-gray-700 dark:text-gray-200" data-aos="fade-left">
       <p class="mb-4">Suntem pasionați de tehnologie și oferim produse IT de calitate. De la laptopuri de gaming la componente performante, totul într-un singur loc.</p>
       <p>Livrare rapidă, suport dedicat și produse de top pentru orice nevoie.</p>
     </div>
@@ -56,32 +56,43 @@
 </section>
 
 <!-- Produse Recomandate -->
-<section class="py-20 bg-gray-100 dark:bg-gray-800">
+<section class="py-20 bg-gray-50 dark:bg-gray-900">
   <div class="max-w-7xl mx-auto px-6">
-    <h2 class="text-4xl font-bold text-center mb-10" data-aos="fade-up">Produse Recomandate</h2>
+    <h2 class="text-4xl font-bold text-center mb-10 text-gray-800 dark:text-gray-100" data-aos="fade-up">Produse Recomandate</h2>
     <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"></div>
     <div class="text-center mt-10">
-      <button id="load-more" class="px-6 py-3 bg-blue-700 text-white rounded-2xl hover:bg-blue-600 transition animate-glowBtn">Încarcă mai multe</button>
+      <button id="load-more" class="px-6 py-3 bg-blue-600 text-white rounded-2xl hover:bg-blue-500 transition animate-glowBtn">Încarcă mai multe</button>
     </div>
   </div>
 </section>
 
 <!-- Testimonials -->
-<section class="py-20 max-w-7xl mx-auto px-6">
+<section id="testimonials" class="py-20 max-w-7xl mx-auto px-6">
   <h2 class="text-4xl font-bold text-center mb-10" data-aos="fade-up">Ce spun clienții</h2>
   <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-    <div class="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-md transform hover:scale-105 transition" data-aos="fade-up" data-aos-delay="100">
+    <div class="testimonial-card bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md transform hover:scale-105 transition" data-aos="fade-up" data-aos-delay="100">
       <p>"Produsele sunt de top și livrarea rapidă! Recomand cu încredere."</p>
       <h4 class="mt-4 font-bold">– Andrei P.</h4>
     </div>
-    <div class="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-md transform hover:scale-105 transition" data-aos="fade-up" data-aos-delay="200">
+    <div class="testimonial-card bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md transform hover:scale-105 transition" data-aos="fade-up" data-aos-delay="200">
       <p>"Suportul clienți a fost excelent, m-au ajutat să aleg PC-ul perfect."</p>
       <h4 class="mt-4 font-bold">– Maria L.</h4>
     </div>
-    <div class="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-md transform hover:scale-105 transition" data-aos="fade-up" data-aos-delay="300">
+    <div class="testimonial-card bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md transform hover:scale-105 transition" data-aos="fade-up" data-aos-delay="300">
       <p>"Design modern și produse performante. Sunt foarte mulțumit!"</p>
       <h4 class="mt-4 font-bold">– Victor R.</h4>
     </div>
+  </div>
+</section>
+
+<!-- Newsletter Signup -->
+<section class="py-20 bg-gray-100 dark:bg-gray-800">
+  <div class="max-w-xl mx-auto text-center" data-aos="fade-up">
+    <h2 class="text-3xl font-bold mb-6 text-gray-800 dark:text-gray-100">Abonează-te la newsletter</h2>
+    <form class="flex flex-col sm:flex-row gap-4 justify-center">
+      <input type="email" placeholder="Email-ul tău" class="p-3 rounded-xl flex-1 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100">
+      <button type="submit" class="px-6 py-3 bg-yellow-400 text-gray-900 rounded-xl hover:bg-yellow-300 transition animate-glowBtn">Abonează-te</button>
+    </form>
   </div>
 </section>
 
@@ -89,87 +100,50 @@
 <section id="contact" class="py-20 max-w-7xl mx-auto px-6">
   <h2 class="text-4xl font-bold text-center mb-10" data-aos="fade-up">Contactează-ne</h2>
   <form class="max-w-xl mx-auto space-y-4" data-aos="fade-up" data-aos-delay="100">
-    <input type="text" placeholder="Nume" class="w-full p-3 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-black dark:text-white">
-    <input type="email" placeholder="Email" class="w-full p-3 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-black dark:text-white">
-    <textarea placeholder="Mesaj" class="w-full p-3 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-black dark:text-white"></textarea>
-    <button type="submit" class="px-6 py-3 bg-green-600 text-white rounded-xl hover:bg-green-500 transition animate-glowBtn">Trimite</button>
+    <input type="text" placeholder="Nume" class="w-full p-3 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100">
+    <input type="email" placeholder="Email" class="w-full p-3 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100">
+    <textarea placeholder="Mesaj" class="w-full p-3 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100"></textarea>
+    <button type="submit" class="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-500 transition animate-glowBtn">Trimite</button>
   </form>
 </section>
+
+<!-- Back to Top -->
+<button id="back-to-top" class="fixed bottom-6 right-6 p-3 bg-blue-600 text-white rounded-full hover:bg-blue-500 transition hidden">↑</button>
 
 </main>
 
 <!-- Footer -->
-<footer class="bg-[#3e3f29] text-white py-6 dark:bg-gray-800 mt-auto">
+<footer class="bg-blue-600 text-white py-6 dark:bg-gray-900 mt-auto">
   <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
     <p>&copy; 2025 Tehnică IT. Toate drepturile rezervate.</p>
     <div class="flex space-x-6 mt-4 md:mt-0">
-      <a href="index.html" class="hover:text-yellow-300">Acasă</a>
-      <a href="products.html" class="hover:text-yellow-300">Produse</a>
-      <a href="#about" class="hover:text-yellow-300">Despre</a>
-      <a href="#contact" class="hover:text-yellow-300">Contact</a>
+      <a href="index.html" class="hover:text-yellow-400 transition">Acasă</a>
+      <a href="products.html" class="hover:text-yellow-400 transition">Produse</a>
+      <a href="#about" class="hover:text-yellow-400 transition">Despre</a>
+      <a href="#contact" class="hover:text-yellow-400 transition">Contact</a>
     </div>
   </div>
 </footer>
 
+<script src="products.js"></script>
 <script src="cart.js"></script>
 <script>
 AOS.init({ duration: 1000, once: true });
 
-// Produse demo
-const allProducts = [
-  {name:"Laptop Gaming X", price:15000, img:"images/laptop1.jpg"},
-  {name:"PC Desktop Pro", price:12000, img:"images/desktop1.jpg"},
-  {name:"Laptop Ultra", price:18000, img:"images/laptop2.jpg"},
-  {name:"Mouse Gaming Razer", price:800, img:"images/mouse1.jpg"},
-  {name:"Tastatura Mechanical", price:1200, img:"images/keyboard1.jpg"},
-  {name:"Monitor 4K", price:3500, img:"images/monitor1.jpg"},
-  {name:"SSD 1TB", price:900, img:"images/ssd1.jpg"},
-  {name:"Laptop Office", price:7000, img:"images/laptop3.jpg"},
-  {name:"PC Mini ITX", price:10000, img:"images/desktop2.jpg"},
-];
+// Dark Mode Toggle
+const darkToggle = document.getElementById('dark-toggle');
+darkToggle.addEventListener('click', () => {
+  document.body.classList.toggle('dark');
+  localStorage.setItem('dark-mode', document.body.classList.contains('dark'));
+});
+if(localStorage.getItem('dark-mode') === 'true') document.body.classList.add('dark');
 
-const productsGrid = document.getElementById("products-grid");
-let productsShown = 0;
-const productsPerLoad = 3;
-
-function loadProducts() {
-  const nextProducts = allProducts.slice(productsShown, productsShown + productsPerLoad);
-  nextProducts.forEach((item,index)=>{
-    const card = document.createElement('div');
-    card.className = "product-card bg-white dark:bg-gray-900 rounded-xl shadow-md overflow-hidden transition transform hover:scale-105 relative";
-    card.setAttribute("data-aos","fade-up");
-    card.setAttribute("data-aos-delay", index*100);
-    card.innerHTML = `
-      <div class="absolute top-3 left-3 bg-red-500 text-white px-2 py-1 rounded-xl text-sm animate-pulse">New</div>
-      <img src="${item.img}" alt="${item.name}">
-      <div class="p-4">
-        <h3 class="font-bold text-lg">${item.name}</h3>
-        <p class="text-blue-700 dark:text-blue-400 font-semibold">${item.price} RON</p>
-        <button class="add-to-cart-btn mt-4 px-4 py-2 bg-blue-700 text-white rounded-xl hover:bg-blue-600 transition animate-glowBtn">Adaugă în coș</button>
-      </div>
-    `;
-    productsGrid.appendChild(card);
-  });
-  document.querySelectorAll('.add-to-cart-btn').forEach(btn=>{
-    btn.addEventListener('click', e=>{
-      const card = e.target.closest('.product-card');
-      const name = card.querySelector('h3').textContent;
-      const price = parseInt(card.querySelector('p').textContent.replace(/\D/g,''));
-      const img = card.querySelector('img').src;
-      cart.push({name, price, img});
-      localStorage.setItem('cart', JSON.stringify(cart));
-      document.querySelectorAll('#cart-count').forEach(el=> el.textContent = cart.length);
-      alert(`${name} a fost adăugat în coș!`);
-    });
-  });
-  productsShown += nextProducts.length;
-  if(productsShown >= allProducts.length){
-    document.getElementById('load-more').style.display = 'none';
-  }
-}
-
-document.getElementById('load-more').addEventListener('click', loadProducts);
-loadProducts();
+// Back to Top Button
+const backBtn = document.getElementById('back-to-top');
+window.addEventListener('scroll', () => {
+  backBtn.classList.toggle('hidden', window.scrollY < 400);
+});
+backBtn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
 </script>
 </body>
 </html>
