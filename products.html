@@ -1,128 +1,82 @@
 <!DOCTYPE html>
-<html lang="ro" class="scroll-smooth">
+<html lang="ro" class="transition-colors duration-500">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Produse - Tehnică IT</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="stylesheet" href="style.css">
-<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Produse - Darwin IT</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-[#f1f0e4] dark:bg-gray-900 text-[#3e3f29] dark:text-white font-sans transition-colors duration-500 flex flex-col min-h-screen">
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans transition-colors duration-500">
 
-<!-- Header -->
-<header id="header" class="bg-[#7d8d86] text-white shadow-lg sticky top-0 z-50 dark:bg-gray-800">
-  <div class="container mx-auto flex justify-between items-center px-6 py-4">
-    <h1 class="text-2xl font-bold">Tehnică IT</h1>
-    <nav class="hidden md:flex space-x-6 font-semibold">
-      <a href="index.html" class="hover:text-yellow-300">Acasă</a>
-      <a href="products.html" class="hover:text-yellow-300">Produse</a>
-      <a href="index.html#about" class="hover:text-yellow-300">Despre</a>
-      <a href="index.html#contact" class="hover:text-yellow-300">Contact</a>
-    </nav>
-    <div class="flex items-center">
-      <a href="cart.html" class="relative">
-        🛒<span id="cart-count" class="absolute -top-2 -right-2 bg-yellow-400 text-black text-xs font-bold px-2 py-0.5 rounded-full">0</span>
-      </a>
-      <button id="dark-toggle" class="ml-4 px-3 py-1 bg-gray-200 dark:bg-gray-700 text-black dark:text-white rounded-full hover:bg-gray-300 dark:hover:bg-gray-600 transition">
-        🌙
-      </button>
-    </div>
-  </div>
-</header>
-
-<main class="flex-grow">
-
-<!-- Titlu Produse -->
-<section class="py-16 bg-[#bca88d] text-white text-center">
-  <h2 class="text-4xl font-bold mb-4" data-aos="fade-down">Toate Produsele</h2>
-  <p class="text-lg">Descoperă gama noastră completă de produse IT</p>
-</section>
-
-<!-- Lista Produse -->
-<section class="py-20">
-  <div class="max-w-7xl mx-auto px-6">
-    <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"></div>
-    <div class="text-center mt-10">
-      <button id="load-more" class="px-6 py-3 bg-blue-700 text-white rounded-2xl hover:bg-blue-600 transition">Încarcă mai multe</button>
-    </div>
-  </div>
-</section>
-
-</main>
-
-<!-- Footer -->
-<footer class="bg-[#3e3f29] text-white py-6 dark:bg-gray-800 mt-auto">
-  <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
-    <p>&copy; 2025 Tehnică IT. Toate drepturile rezervate.</p>
-    <div class="flex space-x-6 mt-4 md:mt-0">
-      <a href="index.html" class="hover:text-yellow-300">Acasă</a>
-      <a href="products.html" class="hover:text-yellow-300">Produse</a>
-      <a href="index.html#about" class="hover:text-yellow-300">Despre</a>
-      <a href="index.html#contact" class="hover:text-yellow-300">Contact</a>
-    </div>
-  </div>
-</footer>
-
-<script src="cart.js"></script>
-<script>
-AOS.init({ duration: 1000, once: true });
-
-// Produse demo
-const allProducts = [
-  {name:"Laptop Gaming X", price:15000, img:""},
-  {name:"PC Desktop Pro", price:12000, img:"images/desktop1.jpg"},
-  {name:"Laptop Ultra", price:18000, img:"images/laptop2.jpg"},
-  {name:"Mouse Gaming Razer", price:800, img:"images/mouse1.jpg"},
-  {name:"Tastatura Mechanical", price:1200, img:"images/keyboard1.jpg"},
-  {name:"Monitor 4K", price:3500, img:"images/monitor1.jpg"},
-  {name:"SSD 1TB", price:900, img:"images/ssd1.jpg"},
-  {name:"Laptop Office", price:7000, img:"images/laptop3.jpg"},
-  {name:"PC Mini ITX", price:10000, img:"images/desktop2.jpg"},
-];
-
-const productsGrid = document.getElementById("products-grid");
-let productsShown = 0;
-const productsPerLoad = 3;
-
-function loadProducts() {
-  const nextProducts = allProducts.slice(productsShown, productsShown + productsPerLoad);
-  nextProducts.forEach((item,index)=>{
-    const card = document.createElement('div');
-    card.className = "product-card bg-white dark:bg-gray-900 rounded-xl shadow-md overflow-hidden transition transform hover:scale-105";
-    card.setAttribute("data-aos","fade-up");
-    card.setAttribute("data-aos-delay", index*100);
-    card.innerHTML = `
-      <img src="${item.img}" alt="${item.name}">
-      <div class="p-4">
-        <h3 class="font-bold text-lg">${item.name}</h3>
-        <p class="text-blue-700 dark:text-blue-400 font-semibold">${item.price} RON</p>
-        <button class="add-to-cart-btn mt-4 px-4 py-2 bg-blue-700 text-white rounded-xl hover:bg-blue-600 transition animate-glowBtn">Adaugă în coș</button>
+  <!-- Header -->
+  <header class="bg-white dark:bg-gray-800 shadow sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
+      <h1 class="text-2xl font-bold text-blue-900 dark:text-blue-400">Darwin IT</h1>
+      <nav class="hidden md:flex space-x-6 font-semibold">
+        <a href="index.html" class="hover:text-blue-500 transition">Acasă</a>
+        <a href="#" class="hover:text-blue-500 transition">Produse</a>
+        <a href="index.html#about" class="hover:text-blue-500 transition">Despre</a>
+        <a href="index.html#contact" class="hover:text-blue-500 transition">Contact</a>
+      </nav>
+      <div class="flex items-center space-x-4">
+        <button id="dark-toggle" class="px-3 py-1 rounded-lg bg-blue-900 text-white hover:bg-blue-800 transition">Dark</button>
+        <a href="cart.html" class="relative text-2xl">🛒
+          <span id="cart-count" class="absolute -top-2 -right-2 bg-yellow-400 text-black text-xs font-bold px-2 py-0.5 rounded-full">0</span>
+        </a>
       </div>
-    `;
-    productsGrid.appendChild(card);
-  });
-  document.querySelectorAll('.add-to-cart-btn').forEach(btn=>{
-    btn.addEventListener('click', e=>{
-      const card = e.target.closest('.product-card');
-      const name = card.querySelector('h3').textContent;
-      const price = parseInt(card.querySelector('p').textContent.replace(/\D/g,''));
-      const img = card.querySelector('img').src;
-      cart.push({name, price, img});
-      localStorage.setItem('cart', JSON.stringify(cart));
-      document.querySelectorAll('#cart-count').forEach(el=> el.textContent = cart.length);
-      alert(`${name} a fost adăugat în coș!`);
-    });
-  });
-  productsShown += nextProducts.length;
-  if(productsShown >= allProducts.length){
-    document.getElementById('load-more').style.display = 'none';
-  }
-}
+    </div>
+  </header>
 
-document.getElementById('load-more').addEventListener('click', loadProducts);
-loadProducts();
-</script>
+  <!-- Titlu pagina -->
+  <section class="py-16 bg-blue-900 dark:bg-blue-800 text-white text-center">
+    <h2 class="text-4xl font-bold mb-4">Toate Produsele</h2>
+    <p class="text-lg">Explorează gama noastră completă de produse IT</p>
+  </section>
+
+  <!-- Produse -->
+  <section class="py-20 max-w-7xl mx-auto px-6">
+    <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- Produsele vor fi încărcate din products.js -->
+    </div>
+    <div class="text-center mt-10">
+      <button id="load-more" class="px-6 py-3 bg-blue-900 dark:bg-blue-700 text-white rounded-xl hover:bg-blue-800 dark:hover:bg-blue-600 transition">Încarcă mai multe</button>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 dark:bg-gray-900 text-gray-100 py-10 mt-10">
+    <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div>
+        <h3 class="font-bold mb-2">Despre Darwin IT</h3>
+        <p>Suntem magazinul tău de încredere pentru produse IT și gadgeturi de calitate.</p>
+      </div>
+      <div>
+        <h3 class="font-bold mb-2">Contact</h3>
+        <p>Email: contact@darwin.md</p>
+        <p>Telefon: +373 22 123 456</p>
+        <p>Adresa: Chișinău, Moldova</p>
+      </div>
+      <div>
+        <h3 class="font-bold mb-2">Link-uri utile</h3>
+        <ul>
+          <li><a href="index.html" class="hover:text-blue-400 transition">Acasă</a></li>
+          <li><a href="#" class="hover:text-blue-400 transition">Produse</a></li>
+          <li><a href="index.html#about" class="hover:text-blue-400 transition">Despre</a></li>
+          <li><a href="index.html#contact" class="hover:text-blue-400 transition">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <script src="products.js"></script>
+  <script src="script.js"></script>
+  <script>
+    // Dark mode toggle
+    const darkBtn = document.getElementById("dark-toggle");
+    darkBtn.addEventListener("click", () => {
+      document.documentElement.classList.toggle("dark");
+    });
+  </script>
 </body>
 </html>

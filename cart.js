@@ -1,24 +1,74 @@
-const cartGrid = document.getElementById("cart-grid");
-const cartCount = document.getElementById("cart-count");
-let cart = JSON.parse(localStorage.getItem("cart") || "[]");
+// Preluăm coșul din localStorage sau inițializăm unul gol
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-if(cartCount) cartCount.innerText = cart.length;
+// Selectăm elementele din DOM
+const cartItemsContainer = document.getElementById("cart-items");
+const cartTotalEl = document.getElementById("cart-total");
+const checkoutBtn = document.getElementById("checkout");
+const cartCountEl = document.getElementById("cart-count");
 
-if(cartGrid){
-  cartGrid.innerHTML = "";
+// Funcție pentru a actualiza coșul în DOM
+function renderCart() {
+  cartItemsContainer.innerHTML = ""; // Resetăm lista
+
+  if(cart.length === 0){
+    cartItemsContainer.innerHTML = `<p class="text-center text-lg">Coșul este gol</p>`;
+    cartTotalEl.textContent = "0.00";
+    cartCountEl.textContent = "0";
+    return;
+  }
+
+  let total = 0;
   cart.forEach((item, index) => {
-    const div = document.createElement("div");
-    div.className = "cart-item flex justify-between items-center p-4 bg-white dark:bg-gray-900 mb-4 rounded-xl shadow-md";
-    div.innerHTML = `
-      <span>${item.name} - ${item.price} MDL</span>
-      <button class="remove-btn px-3 py-1 bg-red-600 text-white rounded-xl hover:bg-red-500">Șterge</button>
-    `;
-    cartGrid.appendChild(div);
+    total += item.price * item.quantity;
 
-    div.querySelector(".remove-btn").addEventListener("click", ()=>{
-      cart.splice(index,1);
-      localStorage.setItem("cart",JSON.stringify(cart));
-      location.reload();
+    const cartItem = document.createElement("div");
+    cartItem.className = "flex items-center justify-between bg-white dark:bg-gray-800 p-4 rounded-xl shadow";
+
+    cartItem.innerHTML = `
+      <div class="flex items-center space-x-4">
+        <img src="${item.img}" alt="${item.name}" class="w-16 h-16 object-cover rounded">
+        <div>
+          <p class="font-semibold">${item.name}</p>
+          <p>${item.price.toFixed(2)} USD x ${item.quantity}</p>
+        </div>
+      </div>
+      <button data-index="${index}" class="px-3 py-1 bg-red-600 hover:bg-red-500 text-white rounded-lg transition">Șterge</button>
+    `;
+
+    cartItemsContainer.appendChild(cartItem);
+  });
+
+  cartTotalEl.textContent = total.toFixed(2);
+  cartCountEl.textContent = cart.reduce((acc, item) => acc + item.quantity, 0);
+
+  // Adăugăm eveniment de ștergere pentru fiecare produs
+  document.querySelectorAll("#cart-items button").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      const idx = e.target.getAttribute("data-index");
+      cart.splice(idx, 1);
+      saveCart();
+      renderCart();
     });
   });
 }
+
+// Salvăm coșul în localStorage
+function saveCart() {
+  localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+// Buton finalizează comanda
+checkoutBtn.addEventListener("click", () => {
+  if(cart.length === 0){
+    alert("Coșul este gol!");
+    return;
+  }
+  alert("Comanda a fost finalizată!");
+  cart = [];
+  saveCart();
+  renderCart();
+});
+
+// Inițializare
+renderCart();

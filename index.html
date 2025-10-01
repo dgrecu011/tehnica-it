@@ -1,149 +1,111 @@
 <!DOCTYPE html>
-<html lang="ro">
+<html lang="ro" class="transition-colors duration-500">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tehnică IT - Acasă</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="stylesheet" href="style.css">
-<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Darwin IT - Magazin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-gray-100 text-gray-800 font-sans transition-colors duration-500 flex flex-col min-h-screen">
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans transition-colors duration-500">
 
-<!-- Header -->
-<header id="header" class="bg-blue-600 text-white shadow-lg sticky top-0 z-50 dark:bg-gray-900 transition-all">
-  <div class="container mx-auto flex justify-between items-center px-6 py-4">
-    <h1 class="text-2xl font-bold">Tehnică IT</h1>
-    <nav class="hidden md:flex space-x-6 font-semibold">
-      <a href="index.html" class="hover:text-yellow-400 transition">Acasă</a>
-      <a href="products.html" class="hover:text-yellow-400 transition">Produse</a>
-      <a href="#about" class="hover:text-yellow-400 transition">Despre</a>
-      <a href="#contact" class="hover:text-yellow-400 transition">Contact</a>
-    </nav>
-    <div class="flex items-center">
-      <a href="cart.html" class="relative mr-4 text-xl">
-        🛒<span id="cart-count" class="absolute -top-2 -right-2 bg-yellow-400 text-black text-xs font-bold px-2 py-0.5 rounded-full">0</span>
-      </a>
-      <button id="dark-toggle" class="px-3 py-1 bg-white dark:bg-gray-700 text-gray-800 dark:text-white rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition">
-        🌙
-      </button>
+  <!-- Header -->
+  <header class="bg-white dark:bg-gray-800 shadow sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
+      <h1 class="text-2xl font-bold text-blue-900 dark:text-blue-400">Darwin IT</h1>
+      <nav class="hidden md:flex space-x-6 font-semibold">
+        <a href="#" class="hover:text-blue-500 transition">Acasă</a>
+        <a href="#products" class="hover:text-blue-500 transition">Produse</a>
+        <a href="#about" class="hover:text-blue-500 transition">Despre</a>
+        <a href="#contact" class="hover:text-blue-500 transition">Contact</a>
+      </nav>
+      <div class="flex items-center space-x-4">
+        <button id="dark-toggle" class="px-3 py-1 rounded-lg bg-blue-900 text-white hover:bg-blue-800 transition">Dark</button>
+        <a href="cart.html" class="relative text-2xl">🛒
+          <span id="cart-count" class="absolute -top-2 -right-2 bg-yellow-400 text-black text-xs font-bold px-2 py-0.5 rounded-full">0</span>
+        </a>
+      </div>
     </div>
-  </div>
-</header>
+  </header>
 
-<main class="flex-grow">
+  <!-- Hero -->
+  <section class="bg-blue-900 dark:bg-blue-800 text-white py-32 text-center px-6">
+    <h1 class="text-5xl font-bold mb-4">Gadget-uri și produse IT</h1>
+    <p class="text-xl mb-6 max-w-xl mx-auto">Descoperă cele mai noi produse IT la prețuri avantajoase</p>
+    <a href="#products" class="px-6 py-3 bg-white text-blue-900 rounded-xl font-semibold hover:bg-gray-100 transition">Vezi Produsele</a>
+  </section>
 
-<!-- Hero Section -->
-<section id="home" class="relative bg-gradient-to-r from-blue-600 to-blue-400 text-white text-center py-32 overflow-hidden dark:from-gray-800 dark:to-gray-700">
-  <h1 class="text-5xl font-bold mb-4 animate-bounce" data-aos="fade-down">Tehnică IT - Totul pentru PC-ul tău</h1>
-  <p class="text-xl mb-6" data-aos="fade-up" data-aos-delay="200">Laptopuri, PC-uri, periferice și componente de top!</p>
-  <a href="products.html" class="px-8 py-3 bg-yellow-400 text-gray-900 rounded-2xl hover:bg-yellow-300 transition animate-pulse inline-block" data-aos="zoom-in" data-aos-delay="400">Vezi Produse</a>
-</section>
-
-<!-- About -->
-<section id="about" class="py-20 max-w-7xl mx-auto px-6">
-  <h2 class="text-4xl font-bold text-center mb-10" data-aos="fade-up">Despre noi</h2>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-    <div data-aos="fade-right">
-      <img src="images/laptop1.jpg" alt="Laptop" class="rounded-xl shadow-lg hover:scale-105 transition-transform">
+  <!-- Categorii -->
+  <section id="categories" class="py-16 max-w-7xl mx-auto px-6">
+    <h2 class="text-3xl font-bold mb-10 text-center">Categorii</h2>
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6">
+      <div class="category-card p-4 rounded-xl bg-white dark:bg-gray-800 shadow text-center cursor-pointer">
+        <img src="/images/laptop-icon.png" alt="Laptopuri" class="mx-auto mb-2 w-16 h-16">
+        <p class="font-semibold">Laptopuri</p>
+      </div>
+      <div class="category-card p-4 rounded-xl bg-white dark:bg-gray-800 shadow text-center cursor-pointer">
+        <img src="/images/keyboard-icon.png" alt="Tastaturi" class="mx-auto mb-2 w-16 h-16">
+        <p class="font-semibold">Tastaturi</p>
+      </div>
+      <div class="category-card p-4 rounded-xl bg-white dark:bg-gray-800 shadow text-center cursor-pointer">
+        <img src="/images/mouse-icon.png" alt="Mouse-uri" class="mx-auto mb-2 w-16 h-16">
+        <p class="font-semibold">Mouse-uri</p>
+      </div>
+      <div class="category-card p-4 rounded-xl bg-white dark:bg-gray-800 shadow text-center cursor-pointer">
+        <img src="/images/monitor-icon.png" alt="Monitoare" class="mx-auto mb-2 w-16 h-16">
+        <p class="font-semibold">Monitoare</p>
+      </div>
+      <div class="category-card p-4 rounded-xl bg-white dark:bg-gray-800 shadow text-center cursor-pointer">
+        <img src="/images/headset-icon.png" alt="Audio" class="mx-auto mb-2 w-16 h-16">
+        <p class="font-semibold">Audio</p>
+      </div>
+      <div class="category-card p-4 rounded-xl bg-white dark:bg-gray-800 shadow text-center cursor-pointer">
+        <img src="/images/ssd-icon.png" alt="Hardware" class="mx-auto mb-2 w-16 h-16">
+        <p class="font-semibold">Hardware</p>
+      </div>
     </div>
-    <div class="flex flex-col justify-center text-gray-700 dark:text-gray-200" data-aos="fade-left">
-      <p class="mb-4">Suntem pasionați de tehnologie și oferim produse IT de calitate. De la laptopuri de gaming la componente performante, totul într-un singur loc.</p>
-      <p>Livrare rapidă, suport dedicat și produse de top pentru orice nevoie.</p>
+  </section>
+
+  <!-- Produse recomandate -->
+  <section id="products" class="py-16 max-w-7xl mx-auto px-6">
+    <h2 class="text-3xl font-bold mb-10 text-center">Produse recomandate</h2>
+    <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- Produsele vor fi încărcate din products.js -->
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- Produse Recomandate -->
-<section class="py-20 bg-gray-50 dark:bg-gray-900">
-  <div class="max-w-7xl mx-auto px-6">
-    <h2 class="text-4xl font-bold text-center mb-10 text-gray-800 dark:text-gray-100" data-aos="fade-up">Produse Recomandate</h2>
-    <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"></div>
-    <div class="text-center mt-10">
-      <button id="load-more" class="px-6 py-3 bg-blue-600 text-white rounded-2xl hover:bg-blue-500 transition animate-glowBtn">Încarcă mai multe</button>
+  <!-- Footer -->
+  <footer class="bg-gray-800 dark:bg-gray-900 text-gray-100 py-10 mt-10">
+    <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div>
+        <h3 class="font-bold mb-2">Despre Darwin IT</h3>
+        <p>Suntem magazinul tău de încredere pentru produse IT și gadgeturi de calitate.</p>
+      </div>
+      <div>
+        <h3 class="font-bold mb-2">Contact</h3>
+        <p>Email: contact@darwin.md</p>
+        <p>Telefon: +373 22 123 456</p>
+        <p>Adresa: Chișinău, Moldova</p>
+      </div>
+      <div>
+        <h3 class="font-bold mb-2">Link-uri utile</h3>
+        <ul>
+          <li><a href="#" class="hover:text-blue-400 transition">Acasă</a></li>
+          <li><a href="#products" class="hover:text-blue-400 transition">Produse</a></li>
+          <li><a href="#about" class="hover:text-blue-400 transition">Despre</a></li>
+          <li><a href="#contact" class="hover:text-blue-400 transition">Contact</a></li>
+        </ul>
+      </div>
     </div>
-  </div>
-</section>
+  </footer>
 
-<!-- Testimonials -->
-<section id="testimonials" class="py-20 max-w-7xl mx-auto px-6">
-  <h2 class="text-4xl font-bold text-center mb-10" data-aos="fade-up">Ce spun clienții</h2>
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-    <div class="testimonial-card bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md transform hover:scale-105 transition" data-aos="fade-up" data-aos-delay="100">
-      <p>"Produsele sunt de top și livrarea rapidă! Recomand cu încredere."</p>
-      <h4 class="mt-4 font-bold">– Andrei P.</h4>
-    </div>
-    <div class="testimonial-card bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md transform hover:scale-105 transition" data-aos="fade-up" data-aos-delay="200">
-      <p>"Suportul clienți a fost excelent, m-au ajutat să aleg PC-ul perfect."</p>
-      <h4 class="mt-4 font-bold">– Maria L.</h4>
-    </div>
-    <div class="testimonial-card bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md transform hover:scale-105 transition" data-aos="fade-up" data-aos-delay="300">
-      <p>"Design modern și produse performante. Sunt foarte mulțumit!"</p>
-      <h4 class="mt-4 font-bold">– Victor R.</h4>
-    </div>
-  </div>
-</section>
-
-<!-- Newsletter Signup -->
-<section class="py-20 bg-gray-100 dark:bg-gray-800">
-  <div class="max-w-xl mx-auto text-center" data-aos="fade-up">
-    <h2 class="text-3xl font-bold mb-6 text-gray-800 dark:text-gray-100">Abonează-te la newsletter</h2>
-    <form class="flex flex-col sm:flex-row gap-4 justify-center">
-      <input type="email" placeholder="Email-ul tău" class="p-3 rounded-xl flex-1 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100">
-      <button type="submit" class="px-6 py-3 bg-yellow-400 text-gray-900 rounded-xl hover:bg-yellow-300 transition animate-glowBtn">Abonează-te</button>
-    </form>
-  </div>
-</section>
-
-<!-- Contact -->
-<section id="contact" class="py-20 max-w-7xl mx-auto px-6">
-  <h2 class="text-4xl font-bold text-center mb-10" data-aos="fade-up">Contactează-ne</h2>
-  <form class="max-w-xl mx-auto space-y-4" data-aos="fade-up" data-aos-delay="100">
-    <input type="text" placeholder="Nume" class="w-full p-3 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100">
-    <input type="email" placeholder="Email" class="w-full p-3 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100">
-    <textarea placeholder="Mesaj" class="w-full p-3 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100"></textarea>
-    <button type="submit" class="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-500 transition animate-glowBtn">Trimite</button>
-  </form>
-</section>
-
-<!-- Back to Top -->
-<button id="back-to-top" class="fixed bottom-6 right-6 p-3 bg-blue-600 text-white rounded-full hover:bg-blue-500 transition hidden">↑</button>
-
-</main>
-
-<!-- Footer -->
-<footer class="bg-blue-600 text-white py-6 dark:bg-gray-900 mt-auto">
-  <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
-    <p>&copy; 2025 Tehnică IT. Toate drepturile rezervate.</p>
-    <div class="flex space-x-6 mt-4 md:mt-0">
-      <a href="index.html" class="hover:text-yellow-400 transition">Acasă</a>
-      <a href="products.html" class="hover:text-yellow-400 transition">Produse</a>
-      <a href="#about" class="hover:text-yellow-400 transition">Despre</a>
-      <a href="#contact" class="hover:text-yellow-400 transition">Contact</a>
-    </div>
-  </div>
-</footer>
-
-<script src="products.js"></script>
-<script src="cart.js"></script>
-<script>
-AOS.init({ duration: 1000, once: true });
-
-// Dark Mode Toggle
-const darkToggle = document.getElementById('dark-toggle');
-darkToggle.addEventListener('click', () => {
-  document.body.classList.toggle('dark');
-  localStorage.setItem('dark-mode', document.body.classList.contains('dark'));
-});
-if(localStorage.getItem('dark-mode') === 'true') document.body.classList.add('dark');
-
-// Back to Top Button
-const backBtn = document.getElementById('back-to-top');
-window.addEventListener('scroll', () => {
-  backBtn.classList.toggle('hidden', window.scrollY < 400);
-});
-backBtn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
-</script>
+  <script src="products.js"></script>
+  <script src="script.js"></script>
+  <script>
+    const darkBtn = document.getElementById("dark-toggle");
+    darkBtn.addEventListener("click", () => {
+      document.documentElement.classList.toggle("dark");
+    });
+  </script>
 </body>
 </html>
