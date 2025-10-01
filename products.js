@@ -1,97 +1,81 @@
-// Lista de produse (poți adăuga câte vrei aici)
-const productsData = [
-  { id: 1, name: "Laptop Gaming X", price: 15000, desc: "Performanță maximă pentru jocuri și muncă.", img: "/images/laptop1.png" },
-  { id: 2, name: "Set Tastatură + Mouse", price: 1200, desc: "Confort și precizie la un preț avantajos.", img: "/images/keyboard1.png" },
-  { id: 3, name: "Monitor UltraHD 27\"", price: 5200, desc: "Claritate și culori vibrante pentru lucru și gaming.", img: "/images/monitor1.png" },
-  { id: 4, name: "Căști Wireless Pro", price: 900, desc: "Sunet imersiv și autonomie de 30 ore.", img: "/images/headset1.png" },
-  { id: 5, name: "Mouse Gaming RGB", price: 700, desc: "Precizie ridicată și design ergonomic.", img: "/images/mouse1.png" },
-  { id: 6, name: "Laptop Business Elite", price: 17500, desc: "Subțire, puternic și elegant pentru birou.", img: "/images/laptop2.png" }
+const products = [
+  { name: "Laptop Gaming X", desc: "Performanță maximă pentru jocuri și muncă.", price: 15000, img: "images/laptop.png" },
+  { name: "Mouse Wireless", desc: "Conexiune rapidă și precizie ridicată.", price: 350, img: "images/mouse.png" },
+  { name: "Tastatură Mechanical", desc: "Tastare confortabilă și iluminare RGB.", price: 1200, img: "images/keyboard.png" },
+  { name: "Monitor 27\" 4K", desc: "Rezoluție ultra HD pentru productivitate și gaming.", price: 5500, img: "images/monitor.png" },
+  { name: "Căști Gaming", desc: "Sunet surround și microfon detașabil.", price: 800, img: "images/headset.png" },
+  { name: "SSD 1TB", desc: "Viteză mare de citire și scriere.", price: 1500, img: "images/ssd.png" },
+  { name: "Placă Video RTX 4070", desc: "Performanță de top pentru gaming.", price: 12000, img: "images/gpu.png" },
+  { name: "Router WiFi 6", desc: "Viteză și stabilitate maximă pentru rețea.", price: 900, img: "images/router.png" },
+  { name: "Suport Laptop", desc: "Ergonomie și răcire optimă.", price: 200, img: "images/laptop-stand.png" }
 ];
 
-// Configurare câte produse să se afișeze inițial
-let productsPerPage = 3;
+const productsGrid = document.getElementById('products-grid');
+const loadMoreButton = document.getElementById('load-more');
+
 let currentIndex = 0;
+const itemsPerPage = 6;
 
-function renderProducts(){
-  const grid = document.getElementById("products-grid");
-  if(!grid) return;
-  
-  let end = currentIndex + productsPerPage;
-  let sliced = productsData.slice(currentIndex, end);
+// Funcție pentru glow constant pe card
+function glowCard(card) {
+  const glow = document.createElement("div");
+  glow.className = `
+    absolute inset-0 rounded-xl pointer-events-none
+    bg-gradient-to-r from-blue-400/20 via-purple-400/20 to-pink-400/20
+    animate-glowCard
+  `;
+  card.appendChild(glow);
+}
 
-  sliced.forEach(prod=>{
-    let card = document.createElement("div");
-    card.className = "card";
-    card.setAttribute("data-id", prod.id);
-    card.setAttribute("data-aos", "fade-up");
-    card.innerHTML = `
-      <img src="${prod.img}" alt="${prod.name}" class="rounded-2xl mb-4">
-      <h3 class="text-xl font-bold mb-2">${prod.name}</h3>
-      <p class="text-gray-700 mb-2">${prod.desc}</p>
-      <span class="text-blue-700 font-semibold">${prod.price}</span>
-      <button class="add-to-cart mt-2 px-4 py-2 bg-yellow-400 rounded-2xl font-semibold hover:bg-yellow-300 transition">Adaugă în coș</button>
+// Funcție pentru glow pulsant buton
+function glowButton(btn) {
+  btn.classList.add("animate-glowBtn");
+}
+
+function displayProducts() {
+  const nextProducts = products.slice(currentIndex, currentIndex + itemsPerPage);
+  nextProducts.forEach(product => {
+    const card = document.createElement('div');
+    card.className = `
+      relative bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-transparent
+      transition duration-300 transform hover:-translate-y-2 hover:scale-105 hover:shadow-2xl
+      hover:border-blue-500 overflow-hidden flex flex-col
     `;
-    grid.appendChild(card);
+    card.setAttribute("data-aos", "fade-up");
+
+    card.innerHTML = `
+      <div class="overflow-hidden relative">
+        <img src="${product.img}" alt="${product.name}" class="w-full h-48 object-cover transition-transform duration-500 hover:scale-110">
+      </div>
+      <div class="p-4 flex flex-col flex-1">
+        <h3 class="font-bold text-lg">${product.name}</h3>
+        <p class="mt-2 text-gray-700 dark:text-gray-300 flex-1">${product.desc}</p>
+        <p class="mt-3 font-semibold text-blue-700 dark:text-blue-400">${product.price} RON</p>
+        <button class="mt-4 flex items-center justify-center gap-2 bg-yellow-400 text-black py-2 rounded-lg
+          hover:bg-yellow-300 hover:scale-105 transition transform">
+          <i class="fas fa-cart-plus"></i> Adaugă în coș
+        </button>
+      </div>
+    `;
+
+    // Glow constant pe card
+    glowCard(card);
+    // Glow pulsant pe buton
+    const btn = card.querySelector("button");
+    glowButton(btn);
+
+    productsGrid.appendChild(card);
   });
 
-  currentIndex = end;
+  currentIndex += itemsPerPage;
 
-  if(currentIndex >= productsData.length){
-    let btn = document.getElementById("load-more");
-    if(btn) btn.style.display = "none";
+  if (currentIndex >= products.length) {
+    loadMoreButton.style.display = 'none';
   }
-
-  // Reatașează butoanele pentru coș
-  attachAddToCartEvents();
 }
 
-// Atașează butoanele pentru adăugare în coș
-function attachAddToCartEvents(){
-  document.querySelectorAll(".add-to-cart").forEach(btn=>{
-    if(!btn.dataset.bound){
-      btn.dataset.bound = true; // prevenim dubla legare
-      btn.addEventListener("click", e=>{
-        const card = e.target.closest(".card");
-        const id = card.dataset.id;
-        const name = card.querySelector("h3").textContent;
-        const price = parseInt(card.querySelector("span").textContent);
+// Load more
+loadMoreButton.addEventListener('click', displayProducts);
 
-        let currentUser = JSON.parse(localStorage.getItem("currentUser"));
-        if(!currentUser){ alert("Trebuie să fii logat!"); return; }
-
-        let cart = currentUser.cart || [];
-        let existing = cart.find(p=>p.id==id);
-        if(existing) existing.quantity +=1;
-        else cart.push({id, name, price, quantity:1});
-
-        currentUser.cart = cart;
-        localStorage.setItem("currentUser", JSON.stringify(currentUser));
-
-        // Actualizează badge-ul coșului
-        let totalItems = cart.reduce((sum, item)=>sum + item.quantity, 0);
-        document.getElementById("cart-count").textContent = totalItems;
-        document.getElementById("mobile-cart-count").textContent = totalItems;
-
-        alert(`${name} a fost adăugat în coș!`);
-      });
-    }
-  });
-}
-
-// Load More
-function loadMore(){
-  renderProducts();
-}
-
-document.addEventListener("DOMContentLoaded", ()=>{
-  renderProducts();
-
-  // Butonul de încărcare suplimentară
-  const grid = document.getElementById("products-grid");
-  const btn = document.createElement("button");
-  btn.id = "load-more";
-  btn.className = "mt-10 px-6 py-3 bg-blue-700 text-white rounded-2xl hover:bg-blue-600 transition";
-  btn.textContent = "Încarcă mai multe";
-  btn.addEventListener("click", loadMore);
-  grid.insertAdjacentElement("afterend", btn);
-});
+// Primele produse
+displayProducts();

@@ -1,25 +1,66 @@
-/* ===== Animatii suplimentare ===== */
-
-/* Tooltip bounce */
-.product-card .group div.absolute {
-  transition: transform 0.3s ease, opacity 0.3s ease;
+/* ===== Fundal animat ===== */
+body {
+  background-size: 300% 300%;
+  animation: background 15s ease infinite;
+  transition: background 0.5s ease, color 0.5s ease;
+  color: #3e3f29;
 }
-.product-card .group:hover div.absolute {
-  transform: translateY(-5px);
-  opacity: 1;
+body.dark {
+  color: #f1f0e4;
 }
-
-/* Badge pulsant */
-.animate-pulse {
-  animation: pulse 2s infinite;
-}
-@keyframes pulse {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.1); opacity: 0.8; }
+@keyframes background {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
 }
 
-/* Glow pe imagine la hover */
+/* ===== Header ===== */
+header, #header {
+  transition: all 0.3s ease;
+}
+header.scrolled, #header.scrolled {
+  padding: 0.5rem 1rem;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+header ul li a:hover {
+  transform: scale(1.05);
+}
+
+/* ===== Carduri futuriste ===== */
+.product-card {
+  position: relative;
+  background: white;
+  border-radius: 1rem;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.5s ease;
+  z-index: 0;
+}
+.product-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #4f9cf9, #9f7afc, #f48fb1);
+  opacity: 0.15;
+  filter: blur(15px);
+  pointer-events: none;
+  animation: glowCard 3s ease-in-out infinite;
+  z-index: -1;
+}
+@keyframes glowCard {
+  0%, 100% { transform: scale(1); opacity: 0.15; }
+  50% { transform: scale(1.05); opacity: 0.5; }
+}
+.product-card:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  background: linear-gradient(135deg, #e0f7fa, #ffe0b2, #f3e5f5);
+}
+
+/* ===== Imagini card ===== */
 .product-card img {
+  width: 100%;
+  height: 12rem;
+  object-fit: cover;
   transition: transform 0.5s ease, filter 0.5s ease, box-shadow 0.5s ease;
 }
 .product-card:hover img {
@@ -28,62 +69,65 @@
   box-shadow: 0 10px 25px rgba(0,0,0,0.2);
 }
 
-/* Buton Adaugă în coș hover */
-.product-card button {
+/* ===== Buton Adaugă în coș ===== */
+.add-to-cart-btn, .product-card button {
   transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+  position: relative;
 }
-.product-card button:hover {
+.add-to-cart-btn:hover, .product-card button:hover {
   transform: scale(1.05);
-  box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.2), 0 0 10px #facc15;
+}
+.animate-glowBtn {
+  animation: glowBtn 2s ease-in-out infinite;
+}
+@keyframes glowBtn {
+  0%, 100% { box-shadow: 0 0 5px #facc15; }
+  50% { box-shadow: 0 0 15px #facc15; }
 }
 
-/* Hero text animat */
+/* ===== Tooltip bounce ===== */
+.product-card .group div.absolute {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.product-card .group:hover div.absolute {
+  transform: translateY(-5px);
+  opacity: 1;
+}
+
+/* ===== Hero text animat ===== */
 #home h1, #home p, #home a {
   transition: transform 0.6s ease, opacity 0.6s ease;
 }
 #home[data-aos='fade-down'] { transform: translateY(-20px); opacity: 0; }
 #home[data-aos='fade-up'] { transform: translateY(20px); opacity: 0; }
 
-/* Fade-in general */
+/* ===== Fade-in general ===== */
 [data-aos] {
   opacity: 0;
   transition-property: opacity, transform;
 }
 
-/* Gradient pulsant pentru carduri la hover */
-.product-card:hover {
-  background: linear-gradient(135deg, #e0f7fa, #ffe0b2, #f3e5f5);
-  transition: background 0.5s ease;
-}
-
-/* Footer responsive */
+/* ===== Footer ===== */
 footer nav a {
   transition: color 0.3s ease;
 }
 footer nav a:hover {
-  color: #facc15; /* galben Tailwind */
+  color: #facc15;
 }
 
-/* Media queries pentru ajustări mobile */
+/* ===== Media Queries ===== */
 @media (max-width: 768px) {
   .product-card img {
-    height: 40vh;
+    height: 10rem;
   }
 }
-#header {
-  transition: all 0.3s ease;
+
+/* ===== Badge pulsant ===== */
+.animate-pulse {
+  animation: pulse 2s infinite;
 }
-#header.scrolled {
-  padding: 0.5rem 1rem;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-}
-header {
-  transition: all 0.3s ease;
-}
-header.scrolled {
-  padding: 0.5rem 1rem;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-}
-header ul li a:hover {
-  transform: scale(1.05);
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.8; }
 }
