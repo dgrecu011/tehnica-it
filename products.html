@@ -3,19 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TechZone - Produse</title>
+  <title>Produse - TechZone</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="style.css">
   <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
 </head>
-<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans">
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans min-h-screen flex flex-col">
 
   <!-- Header -->
-  <header class="bg-gradient-to-r from-indigo-600 to-blue-500 dark:from-gray-800 dark:to-gray-900 text-white shadow-lg sticky top-0 z-50 p-4 flex justify-between items-center">
-    <h1 class="text-2xl font-bold">TechZone</h1>
+  <header class="bg-gradient-to-r from-indigo-600 to-blue-500 dark:from-gray-800 dark:to-gray-900 text-white shadow-lg sticky top-0 z-50 p-4 flex justify-between items-center" data-aos="fade-down">
+    <h1 class="text-2xl font-bold text-yellow-400">TechZone</h1>
     <nav class="flex items-center space-x-4">
       <a href="index.html" class="hover:text-yellow-400 transition">Acasă</a>
-      <a href="products.html" class="hover:text-yellow-400 transition">Produse</a>
+      <a href="products.html" class="hover:text-yellow-400 transition font-semibold underline">Produse</a>
       <a href="#about" class="hover:text-yellow-400 transition">Despre</a>
       <a href="#contact" class="hover:text-yellow-400 transition">Contact</a>
       <a href="cart.html" class="relative">🛒
@@ -25,43 +24,55 @@
     </nav>
   </header>
 
-  <!-- Hero -->
-  <section class="py-20 bg-gradient-to-r from-blue-400 to-indigo-600 text-white text-center" data-aos="fade-down">
-    <h2 class="text-4xl font-bold mb-4">Produsele noastre</h2>
-    <p class="text-lg mb-6">Alege din cele mai bune produse IT pentru gaming și muncă</p>
-    <a href="cart.html" class="px-6 py-3 bg-yellow-400 text-black rounded-xl font-semibold hover:bg-yellow-300 transition">Vezi coșul</a>
-  </section>
+  <main class="flex-1">
 
-  <!-- Lista Produse -->
-  <section class="py-20 max-w-7xl mx-auto px-6" data-aos="fade-up">
-    <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-      <!-- Produse populate prin JS -->
-    </div>
-  </section>
+    <!-- Hero -->
+    <section class="py-20 bg-gradient-to-r from-blue-400 to-indigo-600 text-white text-center" data-aos="zoom-in">
+      <h2 class="text-4xl font-bold mb-4">Produsele noastre</h2>
+      <p class="text-lg mb-6">Alege din cele mai bune produse IT pentru gaming și muncă</p>
+      <a href="cart.html" class="px-6 py-3 bg-yellow-400 text-black rounded-xl font-semibold hover:bg-yellow-300 transition">Vezi coșul 🛒</a>
+    </section>
+
+    <!-- Lista Produse -->
+    <section class="py-20 max-w-7xl mx-auto px-6">
+      <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+    </section>
+
+    <!-- About -->
+    <section id="about" class="py-20 max-w-5xl mx-auto px-6 text-center" data-aos="fade-up">
+      <h2 class="text-4xl font-bold mb-6">Despre TechZone</h2>
+      <p class="text-lg text-gray-600 dark:text-gray-300">
+        Suntem pasionați de tehnologie și gaming și oferim cele mai bune produse IT din piață.
+      </p>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="py-20 bg-gray-200 dark:bg-gray-800 text-center" data-aos="fade-up">
+      <h2 class="text-4xl font-bold mb-6">Contactează-ne</h2>
+      <p class="text-lg mb-8 text-gray-600 dark:text-gray-300">Ai întrebări? Trimite-ne un mesaj!</p>
+      <a href="mailto:contact@techzone.ro" class="px-6 py-3 bg-yellow-400 text-black font-semibold rounded-lg hover:bg-yellow-300 transition">📧 contact@techzone.ro</a>
+    </section>
+
+  </main>
 
   <!-- Footer -->
-  <footer class="bg-gradient-to-r from-indigo-600 to-blue-500 dark:from-gray-800 dark:to-gray-900 text-white py-8 mt-10">
-    <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
-      <p>&copy; 2025 TechZone. Toate drepturile rezervate.</p>
-      <div class="flex space-x-6 mt-4 md:mt-0">
-        <a href="index.html" class="hover:text-yellow-400 transition">Acasă</a>
-        <a href="products.html" class="hover:text-yellow-400 transition">Produse</a>
-        <a href="#about" class="hover:text-yellow-400 transition">Despre</a>
-        <a href="#contact" class="hover:text-yellow-400 transition">Contact</a>
-      </div>
-    </div>
+  <footer class="bg-gradient-to-r from-indigo-600 to-blue-500 dark:from-gray-800 dark:to-gray-900 text-white py-8 mt-auto text-center" data-aos="fade-up">
+    &copy; 2025 TechZone. Toate drepturile rezervate.
   </footer>
 
-  <script src="products.js"></script>
-  <script src="script.js"></script>
+  <!-- Scripturi -->
   <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script src="products.js"></script>
   <script>
     AOS.init({ duration: 1000, once: true });
 
+    // Dark mode
     const darkToggle = document.getElementById('dark-toggle');
-    darkToggle.addEventListener('click', () => {
-      document.documentElement.classList.toggle('dark');
-    });
+    if (darkToggle) {
+      darkToggle.addEventListener('click', () => {
+        document.documentElement.classList.toggle('dark');
+      });
+    }
   </script>
 </body>
 </html>

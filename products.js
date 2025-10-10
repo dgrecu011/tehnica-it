@@ -1,58 +1,45 @@
-// Lista de produse
-const products = [
-  { id: 1, name: "Laptop Gaming X", price: 1500, img: "images/laptop1.jpg" },
-  { id: 2, name: "Laptop Office Y", price: 1200, img: "images/laptop2.jpg" },
-  { id: 3, name: "Mouse RGB Z", price: 50, img: "images/mouse1.jpg" },
-  { id: 4, name: "Tastatură Mecanică A", price: 100, img: "images/keyboard1.jpg" },
-  { id: 5, name: "Căști Gaming B", price: 80, img: "images/headset1.jpg" },
-  { id: 6, name: "Placă Video RTX 4090", price: 2000, img: "images/gpu1.jpg" },
-];
+document.addEventListener('DOMContentLoaded', () => {
+  const productsGrid = document.getElementById('products-grid');
+  if (!productsGrid) return;
 
-// Salvează coșul în localStorage
-let cart = JSON.parse(localStorage.getItem('cart')) || [];
+  const products = [
+    { id: 1, name: "Laptop ASUS TUF Gaming F15", price: 4499.00, image: "https://source.unsplash.com/300x200/?laptop" },
+    { id: 2, name: "Mouse Logitech G502 HERO", price: 349.00, image: "https://source.unsplash.com/300x200/?mouse" },
+    { id: 3, name: "Căști HyperX Cloud II", price: 499.00, image: "https://source.unsplash.com/300x200/?headphones" },
+    { id: 4, name: "Monitor Samsung Odyssey G5", price: 1299.00, image: "https://source.unsplash.com/300x200/?monitor" },
+    { id: 5, name: "Tastatură mecanică Redragon Kumara", price: 279.00, image: "https://source.unsplash.com/300x200/?keyboard" },
+    { id: 6, name: "Placă video MSI GeForce RTX 4070", price: 3799.00, image: "https://source.unsplash.com/300x200/?gpu" }
+  ];
 
-// Funcție pentru a actualiza numărul de produse în coș
-function updateCartCount() {
-  const count = cart.reduce((sum, item) => sum + item.quantity, 0);
-  document.getElementById('cart-count').textContent = count;
-}
-updateCartCount();
+  productsGrid.innerHTML = products.map((p, index) => `
+    <div class="product-card text-center p-5 rounded-lg shadow-md bg-white dark:bg-gray-800 transform transition duration-300 hover:-translate-y-2 hover:shadow-2xl hover:scale-105"
+         data-aos="fade-up" data-aos-delay="${index * 100}">
+      <img src="${p.image}" alt="${p.name}" class="w-full h-52 object-cover rounded-lg mb-4">
+      <h3 class="text-lg font-bold mb-2">${p.name}</h3>
+      <p class="text-yellow-500 font-semibold mb-3">${p.price.toFixed(2)} €</p>
+      <button onclick="addToCart(${p.id})" class="px-4 py-2 bg-yellow-400 text-black font-semibold rounded-lg hover:bg-yellow-300 transition">Adaugă în coș</button>
+    </div>
+  `).join('');
 
-// Funcție pentru a genera cardurile de produse
-function displayProducts() {
-  const grid = document.getElementById('products-grid') || document.getElementById('recommended-products');
-  if (!grid) return;
-
-  products.forEach(product => {
-    const card = document.createElement('div');
-    card.className = "product-card bg-white dark:bg-gray-800 p-6 rounded-2xl shadow hover:scale-105 transition text-center";
-
-    card.innerHTML = `
-      <img src="${product.img}" alt="${product.name}" class="w-full h-48 object-cover mb-4 rounded-lg">
-      <h4 class="font-semibold text-xl mb-2">${product.name}</h4>
-      <p class="text-lg font-bold mb-4">$${product.price}</p>
-      <button class="px-4 py-2 bg-blue-600 dark:bg-blue-700 text-white rounded-xl hover:bg-blue-500 dark:hover:bg-blue-600 transition add-to-cart">Adaugă în coș</button>
-    `;
-
-    const button = card.querySelector('.add-to-cart');
-    button.addEventListener('click', () => addToCart(product.id));
-
-    grid.appendChild(card);
-  });
-}
-
-// Adaugă produs în coș
-function addToCart(productId) {
-  const product = products.find(p => p.id === productId);
-  const cartItem = cart.find(item => item.id === productId);
-  if (cartItem) {
-    cartItem.quantity += 1;
-  } else {
-    cart.push({ ...product, quantity: 1 });
-  }
-  localStorage.setItem('cart', JSON.stringify(cart));
   updateCartCount();
-  alert(`${product.name} a fost adăugat în coș!`);
-}
 
-displayProducts();
+  function addToCart(productId) {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const product = products.find(p => p.id === productId);
+    const existing = cart.find(item => item.id === productId);
+    if (existing) existing.quantity += 1;
+    else cart.push({ ...product, quantity: 1 });
+    localStorage.setItem('cart', JSON.stringify(cart));
+    updateCartCount();
+    alert(`${product.name} a fost adăugat în coș ✅`);
+  }
+
+  function updateCartCount() {
+    const cartCountEl = document.getElementById('cart-count');
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+    if (cartCountEl) cartCountEl.textContent = totalCount;
+  }
+
+  window.addToCart = addToCart;
+});

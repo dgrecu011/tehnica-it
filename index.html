@@ -5,16 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TechZone - Acasă</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="style.css">
   <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
 </head>
-<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans">
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans min-h-screen flex flex-col">
 
   <!-- Header -->
-  <header class="bg-gradient-to-r from-indigo-600 to-blue-500 dark:from-gray-800 dark:to-gray-900 text-white shadow-lg sticky top-0 z-50 p-4 flex justify-between items-center">
-    <h1 class="text-2xl font-bold">TechZone</h1>
+  <header class="bg-gradient-to-r from-indigo-600 to-blue-500 dark:from-gray-800 dark:to-gray-900 text-white shadow-lg sticky top-0 z-50 p-4 flex justify-between items-center" data-aos="fade-down">
+    <h1 class="text-2xl font-bold text-yellow-400">TechZone</h1>
     <nav class="flex items-center space-x-4">
-      <a href="index.html" class="hover:text-yellow-400 transition">Acasă</a>
+      <a href="index.html" class="hover:text-yellow-400 transition font-semibold underline">Acasă</a>
       <a href="products.html" class="hover:text-yellow-400 transition">Produse</a>
       <a href="#about" class="hover:text-yellow-400 transition">Despre</a>
       <a href="#contact" class="hover:text-yellow-400 transition">Contact</a>
@@ -25,84 +24,95 @@
     </nav>
   </header>
 
-  <!-- Hero Section -->
-  <section class="relative bg-gradient-to-r from-blue-400 to-indigo-600 text-white py-28 text-center" data-aos="fade-down">
-    <h2 class="text-5xl font-bold mb-4">Bun venit la TechZone</h2>
-    <p class="text-xl mb-6">Gama completă de produse IT pentru gaming și muncă</p>
-    <a href="products.html" class="px-6 py-3 bg-yellow-400 text-black rounded-xl font-semibold hover:bg-yellow-300 transition">Vezi Produse</a>
-    <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full h-24 bg-gradient-to-t from-gray-100 dark:from-gray-900 to-transparent"></div>
-  </section>
+  <main class="flex-1">
 
-  <!-- Servicii -->
-  <section class="py-20 max-w-7xl mx-auto px-6" data-aos="fade-up">
-    <h3 class="text-3xl font-bold mb-12 text-center">Serviciile noastre</h3>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-      <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow hover:scale-105 transition text-center">
-        <h4 class="font-semibold text-xl mb-3">Consultanță IT</h4>
-        <p>Oferim soluții personalizate pentru afacerea ta.</p>
+    <!-- Hero -->
+    <section class="py-24 bg-gradient-to-r from-blue-400 to-indigo-600 text-white text-center" data-aos="zoom-in">
+      <h2 class="text-5xl font-bold mb-4">Bine ai venit la TechZone!</h2>
+      <p class="text-xl mb-8">Găsește cele mai bune produse IT pentru gaming și muncă</p>
+      <a href="products.html" class="px-8 py-4 bg-yellow-400 text-black rounded-xl font-semibold hover:bg-yellow-300 transition">Vezi produsele 🖥️</a>
+    </section>
+
+    <!-- Featured Products -->
+    <section class="py-20 max-w-7xl mx-auto px-6" data-aos="fade-up">
+      <h2 class="text-4xl font-bold mb-10 text-center">Produse recomandate</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8" id="featured-products">
+        <!-- Produse populate prin JS -->
       </div>
-      <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow hover:scale-105 transition text-center">
-        <h4 class="font-semibold text-xl mb-3">Vânzare produse</h4>
-        <p>Laptopuri, componente, periferice și accesorii IT.</p>
-      </div>
-      <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow hover:scale-105 transition text-center">
-        <h4 class="font-semibold text-xl mb-3">Suport Tehnic</h4>
-        <p>Instalare, depanare și mentenanță hardware/software.</p>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Produse Recomandate -->
-  <section class="py-20 max-w-7xl mx-auto px-6" data-aos="fade-up">
-    <h3 class="text-3xl font-bold mb-8 text-center">Produse Recomandate</h3>
-    <div id="recommended-products" class="flex overflow-x-auto scrollbar-hide space-x-6">
-      <!-- JS va popula produsele -->
-    </div>
-  </section>
+    <!-- About -->
+    <section id="about" class="py-20 max-w-5xl mx-auto px-6 text-center" data-aos="fade-up">
+      <h2 class="text-4xl font-bold mb-6">Despre TechZone</h2>
+      <p class="text-lg text-gray-600 dark:text-gray-300">
+        Suntem pasionați de tehnologie și gaming și oferim cele mai bune produse IT din piață. Calitate, preț corect și livrare rapidă.
+      </p>
+    </section>
 
-  <!-- Despre -->
-  <section id="about" class="py-20 bg-gray-200 dark:bg-gray-800" data-aos="fade-up">
-    <div class="max-w-5xl mx-auto text-center">
-      <h3 class="text-3xl font-bold mb-6">Despre TechZone</h3>
-      <p class="text-lg">Suntem pasionați de tehnologie și oferim clienților noștri cele mai bune produse IT, cu suport complet și livrare rapidă.</p>
-    </div>
-  </section>
+    <!-- Contact -->
+    <section id="contact" class="py-20 bg-gray-200 dark:bg-gray-800 text-center" data-aos="fade-up">
+      <h2 class="text-4xl font-bold mb-6">Contactează-ne</h2>
+      <p class="text-lg mb-8 text-gray-600 dark:text-gray-300">Ai întrebări? Trimite-ne un mesaj!</p>
+      <a href="mailto:contact@techzone.ro" class="px-6 py-3 bg-yellow-400 text-black font-semibold rounded-lg hover:bg-yellow-300 transition">📧 contact@techzone.ro</a>
+    </section>
 
-  <!-- Contact -->
-  <section id="contact" class="py-20 max-w-7xl mx-auto px-6" data-aos="fade-up">
-    <h3 class="text-3xl font-bold mb-8 text-center">Contactează-ne</h3>
-    <form class="max-w-2xl mx-auto grid grid-cols-1 gap-6">
-      <input type="text" placeholder="Nume" class="p-4 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
-      <input type="email" placeholder="Email" class="p-4 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
-      <textarea placeholder="Mesaj" rows="5" class="p-4 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"></textarea>
-      <button type="submit" class="px-6 py-3 bg-blue-600 dark:bg-blue-700 text-white rounded-xl hover:bg-blue-500 dark:hover:bg-blue-600 transition">Trimite</button>
-    </form>
-  </section>
+  </main>
 
   <!-- Footer -->
-  <footer class="bg-gradient-to-r from-indigo-600 to-blue-500 dark:from-gray-800 dark:to-gray-900 text-white py-8 mt-10">
-    <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
-      <p>&copy; 2025 TechZone. Toate drepturile rezervate.</p>
-      <div class="flex space-x-6 mt-4 md:mt-0">
-        <a href="index.html" class="hover:text-yellow-400 transition">Acasă</a>
-        <a href="products.html" class="hover:text-yellow-400 transition">Produse</a>
-        <a href="#about" class="hover:text-yellow-400 transition">Despre</a>
-        <a href="#contact" class="hover:text-yellow-400 transition">Contact</a>
-      </div>
-    </div>
+  <footer class="bg-gradient-to-r from-indigo-600 to-blue-500 dark:from-gray-800 dark:to-gray-900 text-white py-8 mt-auto text-center" data-aos="fade-up">
+    &copy; 2025 TechZone. Toate drepturile rezervate.
   </footer>
 
-  <script src="products.js"></script>
-  <script src="script.js"></script>
+  <!-- Scripturi -->
   <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
   <script>
     AOS.init({ duration: 1000, once: true });
 
-    // Dark mode toggle
     const darkToggle = document.getElementById('dark-toggle');
-    darkToggle.addEventListener('click', () => {
-      document.documentElement.classList.toggle('dark');
-    });
+    if (darkToggle) {
+      darkToggle.addEventListener('click', () => {
+        document.documentElement.classList.toggle('dark');
+      });
+    }
+
+    // Featured products (re-use produse din products.js)
+    const featuredProducts = [
+      { id: 1, name: "Laptop ASUS TUF Gaming F15", price: 4499.00, image: "https://source.unsplash.com/300x200/?laptop" },
+      { id: 2, name: "Mouse Logitech G502 HERO", price: 349.00, image: "https://source.unsplash.com/300x200/?mouse" },
+      { id: 3, name: "Căști HyperX Cloud II", price: 499.00, image: "https://source.unsplash.com/300x200/?headphones" }
+    ];
+
+    const featuredGrid = document.getElementById('featured-products');
+    featuredGrid.innerHTML = featuredProducts.map((p, index) => `
+      <div class="product-card text-center p-5 rounded-lg shadow-md bg-white dark:bg-gray-800 transform transition duration-300 hover:-translate-y-2 hover:shadow-2xl hover:scale-105"
+           data-aos="fade-up" data-aos-delay="${index * 100}">
+        <img src="${p.image}" alt="${p.name}" class="w-full h-52 object-cover rounded-lg mb-4">
+        <h3 class="text-lg font-bold mb-2">${p.name}</h3>
+        <p class="text-yellow-500 font-semibold mb-3">${p.price.toFixed(2)} €</p>
+        <button onclick="addToCart(${p.id})" class="px-4 py-2 bg-yellow-400 text-black font-semibold rounded-lg hover:bg-yellow-300 transition">Adaugă în coș</button>
+      </div>
+    `).join('');
+
+    function addToCart(productId) {
+      let cart = JSON.parse(localStorage.getItem('cart')) || [];
+      const product = featuredProducts.find(p => p.id === productId);
+      const existing = cart.find(item => item.id === productId);
+      if (existing) existing.quantity += 1;
+      else cart.push({ ...product, quantity: 1 });
+      localStorage.setItem('cart', JSON.stringify(cart));
+      updateCartCount();
+      alert(`${product.name} a fost adăugat în coș ✅`);
+    }
+
+    function updateCartCount() {
+      const cartCountEl = document.getElementById('cart-count');
+      let cart = JSON.parse(localStorage.getItem('cart')) || [];
+      const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+      if (cartCountEl) cartCountEl.textContent = totalCount;
+    }
+
+    updateCartCount();
+    window.addToCart = addToCart;
   </script>
 </body>
 </html>
