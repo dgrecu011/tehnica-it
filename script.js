@@ -50,3 +50,25 @@ window.addEventListener("scroll", () => {
 
 // --- RESETARE COȘ (pentru debugging, opțional) ---
 // localStorage.removeItem("cart");
+
+const loginLogoutLink = document.getElementById('login-logout');
+
+function updateLoginState() {
+  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+  if (isLoggedIn) {
+    loginLogoutLink.textContent = 'Logout';
+    loginLogoutLink.href = '#';
+    loginLogoutLink.onclick = () => {
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('userEmail');
+      alert("Ai fost delogat!");
+      window.location.href = 'index.html';
+    };
+  } else {
+    loginLogoutLink.textContent = 'Login';
+    loginLogoutLink.href = 'login.html';
+    loginLogoutLink.onclick = null;
+  }
+}
+
+updateLoginState();

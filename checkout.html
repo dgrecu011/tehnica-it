@@ -70,6 +70,12 @@
   <script>
     AOS.init({ duration: 1000, once: true });
 
+    if (localStorage.getItem('isLoggedIn') !== 'true') {
+  alert("Trebuie să te autentifici pentru a continua la checkout!");
+  window.location.href = 'login.html';
+}
+
+
     // Dark mode
     const darkToggle = document.getElementById('dark-toggle');
     if (darkToggle) {

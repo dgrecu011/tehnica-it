@@ -2,14 +2,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const productsGrid = document.getElementById('products-grid');
   if (!productsGrid) return;
 
-  const products = [
-    { id: 1, name: "Laptop ASUS TUF Gaming F15", price: 4499.00, image: "https://source.unsplash.com/300x200/?laptop" },
-    { id: 2, name: "Mouse Logitech G502 HERO", price: 349.00, image: "https://source.unsplash.com/300x200/?mouse" },
-    { id: 3, name: "Căști HyperX Cloud II", price: 499.00, image: "https://source.unsplash.com/300x200/?headphones" },
-    { id: 4, name: "Monitor Samsung Odyssey G5", price: 1299.00, image: "https://source.unsplash.com/300x200/?monitor" },
-    { id: 5, name: "Tastatură mecanică Redragon Kumara", price: 279.00, image: "https://source.unsplash.com/300x200/?keyboard" },
-    { id: 6, name: "Placă video MSI GeForce RTX 4070", price: 3799.00, image: "https://source.unsplash.com/300x200/?gpu" }
-  ];
+ // Daca nu exista produse in localStorage, le initializam
+let products = JSON.parse(localStorage.getItem('products')) || [
+  { id: 1, name: "Monitor Samsung", price: 199.99, image: "https://via.placeholder.com/300x200?text=Monitor+Samsung" },
+  { id: 2, name: "Laptop Dell", price: 599.99, image: "https://via.placeholder.com/300x200?text=Laptop+Dell" },
+  { id: 3, name: "Mouse Gaming", price: 29.99, image: "https://via.placeholder.com/300x200?text=Mouse+Gaming" }
+];
+
+localStorage.setItem('products', JSON.stringify(products));
+
 
   productsGrid.innerHTML = products.map((p, index) => `
     <div class="product-card text-center p-5 rounded-lg shadow-md bg-white dark:bg-gray-800 transform transition duration-300 hover:-translate-y-2 hover:shadow-2xl hover:scale-105"
