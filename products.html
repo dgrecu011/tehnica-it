@@ -35,7 +35,9 @@
 
     <!-- Lista Produse -->
     <section class="py-20 max-w-7xl mx-auto px-6">
-      <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+      <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Produse populate prin products.js -->
+      </div>
     </section>
 
     <!-- About -->
@@ -73,6 +75,13 @@
         document.documentElement.classList.toggle('dark');
       });
     }
+
+    // La load, folosim produse din products.js
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof renderProducts === 'function') {
+        renderProducts('products-grid');
+      }
+    });
   </script>
 </body>
 </html>
