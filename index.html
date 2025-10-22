@@ -1,89 +1,186 @@
 <!DOCTYPE html>
-<html lang="ro" class="dark">
+<html lang="ro">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TechZone - Acasă</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TechStore - Magazin IT</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans min-h-screen flex flex-col">
+<body class="bg-gray-900 text-gray-100 font-sans">
 
-  <!-- Header -->
-  <header class="bg-gradient-to-r from-indigo-600 to-blue-500 dark:from-gray-800 dark:to-gray-900 text-white shadow-lg sticky top-0 z-50 p-4 flex justify-between items-center" data-aos="fade-down">
-    <h1 class="text-2xl font-bold text-yellow-400">TechZone</h1>
-    <nav class="flex items-center space-x-4">
-      <a href="index.html" class="hover:text-yellow-400 transition font-semibold underline">Acasă</a>
-      <a href="products.html" class="hover:text-yellow-400 transition">Produse</a>
-      <a href="#about" class="hover:text-yellow-400 transition">Despre</a>
-      <a href="#contact" class="hover:text-yellow-400 transition">Contact</a>
-      <a href="cart.html" class="relative">🛒
-        <span id="cart-count" class="absolute -top-2 -right-2 bg-yellow-400 text-black text-xs font-bold px-2 py-0.5 rounded-full">0</span>
-      </a>
-      <button id="dark-toggle" class="ml-4 px-3 py-1 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition">🌙</button>
-    </nav>
-  </header>
+<!-- HEADER -->
+<header class="flex flex-col md:flex-row justify-between items-center p-6 bg-black shadow-lg sticky top-0 z-50">
+  <h1 class="text-4xl font-extrabold text-white mb-4 md:mb-0">TechStore</h1>
+  <nav class="flex space-x-6 mb-4 md:mb-0">
+    <a href="#about" class="hover:text-yellow-400 transition font-medium">Despre Noi</a>
+    <a href="#productsSection" class="hover:text-yellow-400 transition font-medium">Produse</a>
+    <a href="#categories" class="hover:text-yellow-400 transition font-medium">Categorii</a>
+    <a href="#promotions" class="hover:text-yellow-400 transition font-medium">Promoții</a>
+    <a href="#testimonials" class="hover:text-yellow-400 transition font-medium">Testimoniale</a>
+    <a href="#blog" class="hover:text-yellow-400 transition font-medium">Blog</a>
+    <a href="#contact" class="hover:text-yellow-400 transition font-medium">Contact</a>
+  </nav>
+  <div class="flex items-center space-x-3">
+    <button id="loginBtn" class="bg-yellow-400 text-black px-4 py-2 rounded font-semibold hover:bg-yellow-300 transition">Logare</button>
+    <button id="logoutBtn" class="bg-yellow-400 text-black px-4 py-2 rounded font-semibold hover:bg-yellow-300 transition hidden">Logout</button>
+    <button id="cartBtn" class="bg-yellow-400 text-black px-4 py-2 rounded font-semibold hover:bg-yellow-300 transition">Coș (<span id="cartCount">0</span>)</button>
+  </div>
+</header>
 
-  <main class="flex-1">
+<!-- HERO -->
+<section class="relative bg-gradient-to-b from-black via-gray-900 to-gray-800 text-center text-white py-28 px-6">
+  <h2 class="text-5xl md:text-6xl font-extrabold mb-6 fade-in">Tehnologie la un click distanță</h2>
+  <p class="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-8 fade-in" style="transition-delay:0.2s">
+    Cele mai noi gadgeturi, componente și accesorii IT. Livrare rapidă și suport premium.
+  </p>
+  <a href="#productsSection" class="bg-yellow-400 text-black px-8 py-3 rounded-full font-bold hover:bg-yellow-300 transition text-lg fade-in" style="transition-delay:0.4s">Vezi Produse</a>
+</section>
 
-    <!-- Hero -->
-    <section class="py-24 bg-gradient-to-r from-blue-400 to-indigo-600 text-white text-center" data-aos="zoom-in">
-      <h2 class="text-5xl font-bold mb-4">Bine ai venit la TechZone!</h2>
-      <p class="text-xl mb-8">Găsește cele mai bune produse IT pentru gaming și muncă</p>
-      <a href="products.html" class="px-8 py-4 bg-yellow-400 text-black rounded-xl font-semibold hover:bg-yellow-300 transition">Vezi produsele 🖥️</a>
-    </section>
+<!-- DESPRE NOI -->
+<section id="about" class="max-w-6xl mx-auto py-20 px-6 fade-in">
+  <h3 class="text-4xl font-bold text-yellow-400 mb-6 text-center slide-left">Despre Noi</h3>
+  <p class="text-gray-300 text-lg md:text-xl text-center slide-right">
+    TechStore este un magazin online pentru pasionații de tehnologie. Oferim produse IT de calitate: componente performante, laptopuri, gadgeturi inovative și accesorii. Prioritizăm calitatea, prețul corect și livrarea rapidă.
+  </p>
+</section>
 
-    <!-- Featured Products -->
-    <section class="py-20 max-w-7xl mx-auto px-6" data-aos="fade-up">
-      <h2 class="text-4xl font-bold mb-10 text-center">Produse recomandate</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8" id="featured-products">
-        <!-- Produse populate din products.js -->
-      </div>
-    </section>
+<!-- PRODUSE POPULARE -->
+<section id="productsSection" class="max-w-6xl mx-auto py-20 px-6 fade-in">
+  <h3 class="text-4xl font-bold text-yellow-400 mb-6 text-center slide-left">Produse Populare</h3>
+  <div class="flex flex-col md:flex-row justify-between mb-8 gap-4">
+    <input id="search" class="p-3 rounded bg-gray-700 border border-gray-600 flex-1" placeholder="Caută produs...">
+    <select id="categoryFilter" class="p-3 rounded bg-gray-700 border border-gray-600">
+      <option value="">Toate categoriile</option>
+    </select>
+    <select id="sortFilter" class="p-3 rounded bg-gray-700 border border-gray-600">
+      <option value="new">Cele mai noi</option>
+      <option value="priceAsc">Preț ↑</option>
+      <option value="priceDesc">Preț ↓</option>
+    </select>
+  </div>
+  <div id="products" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 fade-in"></div>
+</section>
 
-    <!-- About -->
-    <section id="about" class="py-20 max-w-5xl mx-auto px-6 text-center" data-aos="fade-up">
-      <h2 class="text-4xl font-bold mb-6">Despre TechZone</h2>
-      <p class="text-lg text-gray-600 dark:text-gray-300">
-        Suntem pasionați de tehnologie și gaming și oferim cele mai bune produse IT din piață. Calitate, preț corect și livrare rapidă.
-      </p>
-    </section>
+<!-- CATEGORII RECOMANDATE -->
+<section id="categories" class="max-w-6xl mx-auto py-20 px-6 fade-in">
+  <h3 class="text-4xl font-bold text-yellow-400 mb-6 text-center slide-left">Categorii Recomandate</h3>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div class="category-card bg-gray-800 p-6 rounded-lg text-center hover:scale-105 transition shadow-lg slide-right">
+      <img src="https://via.placeholder.com/150" class="mx-auto mb-4">
+      <h4 class="font-bold text-yellow-400 text-xl">Laptopuri</h4>
+    </div>
+    <div class="category-card bg-gray-800 p-6 rounded-lg text-center hover:scale-105 transition shadow-lg slide-left">
+      <img src="https://via.placeholder.com/150" class="mx-auto mb-4">
+      <h4 class="font-bold text-yellow-400 text-xl">Componente</h4>
+    </div>
+    <div class="category-card bg-gray-800 p-6 rounded-lg text-center hover:scale-105 transition shadow-lg slide-right">
+      <img src="https://via.placeholder.com/150" class="mx-auto mb-4">
+      <h4 class="font-bold text-yellow-400 text-xl">Gadgeturi</h4>
+    </div>
+    <div class="category-card bg-gray-800 p-6 rounded-lg text-center hover:scale-105 transition shadow-lg slide-left">
+      <img src="https://via.placeholder.com/150" class="mx-auto mb-4">
+      <h4 class="font-bold text-yellow-400 text-xl">Accesorii</h4>
+    </div>
+  </div>
+</section>
 
-    <!-- Contact -->
-    <section id="contact" class="py-20 bg-gray-200 dark:bg-gray-800 text-center" data-aos="fade-up">
-      <h2 class="text-4xl font-bold mb-6">Contactează-ne</h2>
-      <p class="text-lg mb-8 text-gray-600 dark:text-gray-300">Ai întrebări? Trimite-ne un mesaj!</p>
-      <a href="mailto:contact@techzone.ro" class="px-6 py-3 bg-yellow-400 text-black font-semibold rounded-lg hover:bg-yellow-300 transition">📧 contact@techzone.ro</a>
-    </section>
+<!-- PROMOȚII / OFERTE -->
+<section id="promotions" class="max-w-6xl mx-auto py-20 px-6 fade-in">
+  <h3 class="text-4xl font-bold text-yellow-400 mb-6 text-center slide-left">Promoții Speciale</h3>
+  <div class="slider"></div>
+</section>
 
-  </main>
+<!-- TESTIMONIALE -->
+<section id="testimonials" class="max-w-6xl mx-auto py-20 px-6 fade-in">
+  <h3 class="text-4xl font-bold text-yellow-400 mb-6 text-center slide-left">Ce spun clienții noștri</h3>
+  <div class="slider">
+    <div class="slider-item bg-gray-800 p-6 rounded-lg shadow-lg hover:scale-105 transition">
+      <p class="text-gray-300 mb-4">“Produsele sunt de calitate, livrarea rapidă și suportul excelent. Recomand cu încredere!”</p>
+      <h4 class="font-bold text-yellow-400">Ion C.</h4>
+    </div>
+    <div class="slider-item bg-gray-800 p-6 rounded-lg shadow-lg hover:scale-105 transition">
+      <p class="text-gray-300 mb-4">“Am găsit toate componentele pentru PC-ul meu. Prețuri corecte și oferte bune.”</p>
+      <h4 class="font-bold text-yellow-400">Maria P.</h4>
+    </div>
+    <div class="slider-item bg-gray-800 p-6 rounded-lg shadow-lg hover:scale-105 transition">
+      <p class="text-gray-300 mb-4">“Site-ul arată modern și coșul de cumpărături funcționează perfect.”</p>
+      <h4 class="font-bold text-yellow-400">Alex D.</h4>
+    </div>
+  </div>
+</section>
 
-  <!-- Footer -->
- <footer class="bg-gradient-to-r from-indigo-600 to-blue-500 dark:from-gray-800 dark:to-gray-900 text-white py-8 mt-auto text-center" data-aos="fade-up">
-  &copy; 2025 TechZone. Toate drepturile rezervate.
+<!-- BLOG -->
+<section id="blog" class="max-w-6xl mx-auto py-20 px-6 fade-in">
+  <h3 class="text-4xl font-bold text-yellow-400 mb-6 text-center slide-left">Blog & Știri IT</h3>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="bg-gray-800 p-6 rounded-lg shadow-lg hover:scale-105 transition slide-right">
+      <h4 class="font-bold text-yellow-400 text-xl mb-2">Top 5 laptopuri 2025</h4>
+      <p class="text-gray-300 mb-2">Află cele mai performante laptopuri pentru gaming și muncă.</p>
+      <a href="#" class="text-yellow-400 hover:underline">Citește mai mult →</a>
+    </div>
+    <div class="bg-gray-800 p-6 rounded-lg shadow-lg hover:scale-105 transition slide-left">
+      <h4 class="font-bold text-yellow-400 text-xl mb-2">Upgrade SSD</h4>
+      <p class="text-gray-300 mb-2">Cum să-ți îmbunătățești viteza PC-ului cu un SSD modern.</p>
+      <a href="#" class="text-yellow-400 hover:underline">Citește mai mult →</a>
+    </div>
+    <div class="bg-gray-800 p-6 rounded-lg shadow-lg hover:scale-105 transition slide-right">
+      <h4 class="font-bold text-yellow-400 text-xl mb-2">Gadgeturi inovative</h4>
+      <p class="text-gray-300 mb-2">Cele mai noi gadgeturi tech pe care trebuie să le ai.</p>
+      <a href="#" class="text-yellow-400 hover:underline">Citește mai mult →</a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="max-w-6xl mx-auto py-20 px-6 text-center fade-in">
+  <h3 class="text-4xl font-bold text-yellow-400 mb-6 slide-left">Contact & Newsletter</h3>
+  <p class="text-gray-400 mb-4 slide-right">Abonează-te pentru oferte și noutăți IT:</p>
+  <form class="flex flex-col md:flex-row justify-center items-center gap-4 mb-8">
+    <input type="email" placeholder="Emailul tău" class="p-3 rounded bg-gray-700 border border-gray-600 w-full md:w-1/2">
+    <button class="bg-yellow-400 text-black px-6 py-3 rounded font-bold hover:bg-yellow-300 transition">Abonează-te</button>
+  </form>
+  <p class="text-gray-400">Email: contact@techstore.ro | Telefon: +373 123 456 789 | Adresă: Str. Exemplu 12, Chișinău</p>
+</section>
+
+<!-- FOOTER -->
+<footer class="bg-black text-gray-400 text-center py-6">
+  &copy; 2025 TechStore. Toate drepturile rezervate.
 </footer>
 
+<!-- COȘ -->
+<div id="cart" class="fixed top-0 right-[-400px] w-96 h-full bg-gray-800 text-white p-6 shadow-lg transition-all z-50">
+  <h3 class="text-2xl font-bold mb-4">Coș Produse</h3>
+  <div id="cartItems" class="space-y-4"></div>
+  <hr class="my-4 border-gray-600">
+  <div class="flex justify-between mb-4"><strong>Total:</strong> <span id="cartTotal">0 €</span></div>
+  <button id="checkoutBtn" class="w-full bg-yellow-400 text-black px-4 py-2 rounded font-semibold hover:bg-yellow-300 transition mb-2">Checkout</button>
+  <button id="closeCart" class="w-full bg-gray-700 text-white px-4 py-2 rounded font-semibold hover:bg-gray-600 transition">Închide</button>
+</div>
 
-  <!-- Scripturi -->
-  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
-  <script src="products.js"></script>
-  <script>
-    AOS.init({ duration: 1000, once: true });
+<!-- ADMIN PANEL -->
+<section id="adminPanel" class="max-w-6xl mx-auto py-12 px-6 hidden">
+  <h3 class="text-3xl font-bold text-yellow-400 mb-6">Panou Admin</h3>
+  
+  <div class="bg-gray-800 p-6 rounded-lg mb-8">
+    <h4 class="font-bold text-xl mb-4">Adaugă Produs</h4>
+    <input id="adminTitle" type="text" placeholder="Titlu" class="mb-2 p-2 rounded w-full">
+    <input id="adminDesc" type="text" placeholder="Descriere" class="mb-2 p-2 rounded w-full">
+    <input id="adminPrice" type="number" placeholder="Preț (€)" class="mb-2 p-2 rounded w-full">
+    <input id="adminStock" type="number" placeholder="Stoc" class="mb-2 p-2 rounded w-full">
+    <input id="adminImage" type="text" placeholder="URL imagine" class="mb-4 p-2 rounded w-full">
+    <button id="addProductBtn" class="bg-yellow-400 text-black px-4 py-2 rounded hover:bg-yellow-300 transition">Adaugă Produs</button>
+  </div>
 
-    // Dark mode toggle
-    const darkToggle = document.getElementById('dark-toggle');
-    if (darkToggle) {
-      darkToggle.addEventListener('click', () => {
-        document.documentElement.classList.toggle('dark');
-      });
-    }
+  <input id="adminSearch" type="text" placeholder="Caută produs admin..." class="mb-4 p-2 rounded w-full">
 
-    // La load, folosim produse din products.js
-    document.addEventListener('DOMContentLoaded', () => {
-      if (typeof renderProducts === 'function') {
-        renderProducts('featured-products');
-      }
-    });
-  </script>
+  <div>
+    <h4 class="font-bold text-xl mb-4">Produse Existente</h4>
+    <div id="adminProducts" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+  </div>
+</section>
+
+<script type="module" src="animations.js"></script>
+<script type="module" src="app.js"></script>
 </body>
 </html>

@@ -1,101 +1,71 @@
-/* --- Resetări fine --- */
-html {
-  scroll-behavior: smooth;
-}
+/* FONT */
+body { font-family: 'Inter', sans-serif; }
 
-body {
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
+/* ===========================
+   SCROLL ANIMATIONS
+=========================== */
+.fade-in { opacity:0; transform: translateY(20px); transition: opacity 0.8s ease, transform 0.8s ease; }
+.fade-in.show { opacity:1; transform: translateY(0); }
+.slide-left { opacity:0; transform: translateX(-30px); transition: opacity 0.8s ease, transform 0.8s ease; }
+.slide-left.show { opacity:1; transform: translateX(0); }
+.slide-right { opacity:0; transform: translateX(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
+.slide-right.show { opacity:1; transform: translateX(0); }
 
-/* --- Linkuri --- */
-a {
-  transition: color 0.25s ease, transform 0.2s ease;
-}
+/* ===========================
+   PRODUCT CARD FLIP
+=========================== */
+.perspective { perspective: 1000px; }
+.product-card { width:100%; height:24rem; perspective: 1000px; }
+.product-card-inner { position: relative; width:100%; height:100%; transition: transform 0.6s; transform-style: preserve-3d; }
+.product-card:hover .product-card-inner { transform: rotateY(180deg); }
+.product-card-front,
+.product-card-back { backface-visibility: hidden; position:absolute; width:100%; height:100%; top:0; left:0; border-radius:0.75rem; }
+.product-card-front { background-color:#1F2937; display:flex; flex-direction:column; }
+.product-card-front img { object-fit:cover; border-radius:0.75rem 0.75rem 0 0; }
+.product-card-back { transform: rotateY(180deg); background-color:#111827; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:1rem; }
 
-a:hover {
-  transform: translateY(-2px);
-}
+/* ===========================
+   SLIDER
+=========================== */
+.slider { display:flex; overflow-x:auto; scroll-snap-type:x mandatory; gap:1rem; padding-bottom:1rem; }
+.slider::-webkit-scrollbar { display:none; }
+.slider-item { flex:0 0 300px; scroll-snap-align:start; border-radius:0.75rem; background-color:#1F2937; padding:1rem; }
 
-/* --- Carduri de produs --- */
-.product-card {
-  background: white;
-  border-radius: 1rem;
-  overflow: hidden;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-  transition: transform 0.25s ease, box-shadow 0.3s ease;
-}
+/* ===========================
+   CATEGORY CARD
+=========================== */
+.category-card img { width:100px; height:100px; object-fit:cover; border-radius:0.5rem; }
 
-.product-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
-}
+/* ===========================
+   CART
+=========================== */
+#cart { transition: right 0.3s ease; }
 
-.dark .product-card {
-  background: #1f2937;
-  color: #f3f4f6;
-  box-shadow: 0 6px 18px rgba(255, 255, 255, 0.05);
-}
+/* ===========================
+   ADMIN PANEL
+=========================== */
+#adminPanel input, #adminPanel select { background-color:#1F2937; color:white; border:1px solid #374151; }
+#adminPanel button { cursor:pointer; }
 
-/* --- Butoane --- */
-.btn {
-  display: inline-block;
-  padding: 0.75rem 1.5rem;
-  font-weight: 600;
-  border-radius: 0.75rem;
-  transition: all 0.3s ease;
-}
+/* ===========================
+   MOBILE OPTIMIZED
+=========================== */
+@media (max-width: 768px){
+  /* Hero text */
+  .hero h2 { font-size: 2.5rem; }
+  .hero p { font-size: 16px; }
+  .hero a { padding: 0.8rem 2rem; font-size: 16px; }
 
-.btn-yellow {
-  background: #facc15;
-  color: #111;
-}
+  /* Product cards */
+  .product-card { height:auto; margin-bottom:1rem; }
+  .product-card-front img { height:200px; }
+  .product-card-back { padding:0.5rem; }
+  .product-card-back button { padding:0.5rem 1rem; font-size:14px; }
 
-.btn-yellow:hover {
-  background: #fde047;
-}
+  /* Admin Panel */
+  #adminPanel .grid { grid-template-columns:1fr !important; }
+  #adminPanel input, #adminPanel button { width:100%; font-size:14px; }
 
-.dark .btn-yellow {
-  background: #fbbf24;
-  color: #111;
-}
-
-/* --- Coș --- */
-#cart-count {
-  transition: all 0.2s ease;
-}
-
-#cart-count:hover {
-  transform: scale(1.15);
-}
-
-/* --- Header sticky effect --- */
-header {
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-/* --- Footer --- */
-footer {
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* --- Scrollbar personalizat --- */
-::-webkit-scrollbar {
-  width: 10px;
-}
-
-::-webkit-scrollbar-track {
-  background: #e5e7eb;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #9ca3af;
-  border-radius: 10px;
-}
-
-.dark ::-webkit-scrollbar-track {
-  background: #111827;
-}
-
-.dark ::-webkit-scrollbar-thumb {
-  background: #4b5563;
+  /* Header menu */
+  #navMenu { flex-direction: column !important; }
 }
