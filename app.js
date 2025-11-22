@@ -56,15 +56,6 @@ const cartItemsEl = document.getElementById("cartItems");
 const cartTotalEl = document.getElementById("cartTotal");
 const cartCountEl = document.getElementById("cartCount");
 
-// bottom nav
-const tabPromo = document.getElementById("tabPromo");
-const tabCatalog = document.getElementById("tabCatalog");
-const tabCart = document.getElementById("tabCart");
-const tabAccount = document.getElementById("tabAccount");
-const tabMore = document.getElementById("tabMore");
-const moreSheet = document.getElementById("moreSheet");
-const moreClose = document.getElementById("moreClose");
-
 // Auth modal
 const authModal = document.getElementById("authModal");
 const authClose = document.getElementById("authClose");
@@ -100,6 +91,25 @@ const ckNotes = document.getElementById("ckNotes");
 
 const checkoutBtn = document.getElementById("checkoutBtn");
 
+// Bottom nav
+const bottomPromoBtn    = document.getElementById("bottomPromoBtn");
+const bottomCatalogBtn  = document.getElementById("bottomCatalogBtn");
+const bottomCartBtn     = document.getElementById("bottomCartBtn");
+const bottomAccountBtn  = document.getElementById("bottomAccountBtn");
+const bottomMoreBtn     = document.getElementById("bottomMoreBtn");
+
+// Quick menu
+const quickOverlay      = document.getElementById("quickOverlay");
+const quickMenu         = document.getElementById("quickMenu");
+const quickClose        = document.getElementById("quickClose");
+const quickAbout        = document.getElementById("quickAbout");
+const quickPromo        = document.getElementById("quickPromo");
+const quickBlog         = document.getElementById("quickBlog");
+const quickContact      = document.getElementById("quickContact");
+const quickCategories   = document.getElementById("quickCategories");
+const quickTestimonials = document.getElementById("quickTestimonials");
+const quickAdmin        = document.getElementById("quickAdmin");
+
 // ===========================
 // STATE
 // ===========================
@@ -109,6 +119,7 @@ let isAdmin = false;
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+// restaurăm coșul din localStorage, dacă există
 const savedCart = localStorage.getItem("cartItems");
 if (savedCart) {
   try {
@@ -146,11 +157,11 @@ const closeAuthModal = () => {
   authModal.classList.add("hidden");
 };
 
-const smoothScrollTo = (selector) => {
-  const el = document.querySelector(selector);
-  if (el) {
-    el.scrollIntoView({ behavior: "smooth", block: "start" });
-  }
+// helper scroll
+const scrollToSection = (id) => {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.scrollIntoView({ behavior: "smooth", block: "start" });
 };
 
 // ===========================
@@ -271,6 +282,7 @@ const updateCart = () => {
   localStorage.setItem("cartItems", JSON.stringify(cartItems));
 };
 
+// grupăm produsele din coș pentru checkout
 const getCartSummaryItems = () => {
   const map = {};
   cartItems.forEach((p) => {
@@ -291,15 +303,9 @@ const getCartSummaryItems = () => {
 // ===========================
 // AUTH
 // ===========================
-if (loginBtn) {
-  loginBtn.onclick = () => openAuthModal("login");
-}
-if (logoutBtn) {
-  logoutBtn.onclick = () => signOut(auth);
-}
-if (authClose) {
-  authClose.onclick = closeAuthModal;
-}
+loginBtn.onclick = () => openAuthModal("login");
+logoutBtn.onclick = () => signOut(auth);
+authClose.onclick = closeAuthModal;
 
 tabLogin.onclick = () => openAuthModal("login");
 tabRegister.onclick = () => openAuthModal("register");
@@ -371,29 +377,35 @@ if (forgotPasswordBtn) {
 
 onAuthStateChanged(auth, async (user) => {
   if (user) {
-    if (loginBtn) loginBtn.classList.add("hidden");
-    if (logoutBtn) logoutBtn.classList.remove("hidden");
+    loginBtn.classList.add("hidden");
+    logoutBtn.classList.remove("hidden");
     profileLink.classList.remove("hidden");
 
     try {
+      // verificăm dacă userul este admin (document cu id = uid în colecția "admins")
       const adminDoc = await getDoc(doc(db, "admins", user.uid));
       isAdmin = adminDoc.exists();
+
       if (isAdmin) {
         adminLink.classList.remove("hidden");
+        if (quickAdmin) quickAdmin.classList.remove("hidden");
       } else {
         adminLink.classList.add("hidden");
+        if (quickAdmin) quickAdmin.classList.add("hidden");
       }
     } catch (err) {
       console.error("Eroare la verificarea rolului de admin:", err);
       isAdmin = false;
       adminLink.classList.add("hidden");
+      if (quickAdmin) quickAdmin.classList.add("hidden");
     }
   } else {
     isAdmin = false;
-    if (loginBtn) loginBtn.classList.remove("hidden");
-    if (logoutBtn) logoutBtn.classList.add("hidden");
+    loginBtn.classList.remove("hidden");
+    logoutBtn.classList.add("hidden");
     profileLink.classList.add("hidden");
     adminLink.classList.add("hidden");
+    if (quickAdmin) quickAdmin.classList.add("hidden");
   }
 });
 
@@ -486,6 +498,7 @@ checkoutForm.onsubmit = async (e) => {
   }
 
   const items = getCartSummaryItems();
+
   const invalidItem = items.find(
     (i) =>
       !Number.isFinite(i.price) ||
@@ -554,7 +567,61 @@ checkoutForm.onsubmit = async (e) => {
 };
 
 // ===========================
-// EVENT LISTENERS
+// BOTTOM NAV & QUICK MENU
+// ===========================
+if (bottomPromoBtn) {
+  bottomPromoBtn.addEventListener("click", () => scrollToSection("promotions"));
+}
+if (bottomCatalogBtn) {
+  bottomCatalogBtn.addEventListener("click", () => scrollToSection("productsSection"));
+}
+if (bottomCartBtn) {
+  bottomCartBtn.addEventListener("click", () => {
+    cart.style.right = "0";
+  });
+}
+if (bottomAccountBtn) {
+  bottomAccountBtn.addEventListener("click", () => openAuthModal("login"));
+}
+
+// quick menu open/close
+if (bottomMoreBtn && quickOverlay) {
+  bottomMoreBtn.addEventListener("click", () => {
+    quickOverlay.classList.remove("hidden");
+  });
+}
+if (quickClose && quickOverlay) {
+  quickClose.addEventListener("click", () => {
+    quickOverlay.classList.add("hidden");
+  });
+}
+if (quickOverlay) {
+  quickOverlay.addEventListener("click", (e) => {
+    if (e.target === quickOverlay) {
+      quickOverlay.classList.add("hidden");
+    }
+  });
+}
+
+// butoane meniul rapid
+if (quickAbout) quickAbout.addEventListener("click", () => { quickOverlay.classList.add("hidden"); scrollToSection("about"); });
+if (quickPromo) quickPromo.addEventListener("click", () => { quickOverlay.classList.add("hidden"); scrollToSection("promotions"); });
+if (quickBlog) quickBlog.addEventListener("click", () => { quickOverlay.classList.add("hidden"); scrollToSection("blog"); });
+if (quickContact) quickContact.addEventListener("click", () => { quickOverlay.classList.add("hidden"); scrollToSection("contact"); });
+if (quickCategories) quickCategories.addEventListener("click", () => { quickOverlay.classList.add("hidden"); scrollToSection("categories"); });
+if (quickTestimonials) quickTestimonials.addEventListener("click", () => { quickOverlay.classList.add("hidden"); scrollToSection("testimonials"); });
+
+if (quickAdmin) {
+  quickAdmin.addEventListener("click", () => {
+    quickOverlay.classList.add("hidden");
+    if (isAdmin) {
+      window.location.href = "admin.html";
+    }
+  });
+}
+
+// ===========================
+// EVENT LISTENERS GENERALE
 // ===========================
 searchInput.oninput = renderProductList;
 categoryFilter.onchange = renderProductList;
@@ -562,62 +629,19 @@ sortFilter.onchange = renderProductList;
 minPriceInput.oninput = renderProductList;
 maxPriceInput.oninput = renderProductList;
 
-if (cartBtn) {
-  cartBtn.onclick = () => {
-    cart.style.right = "0";
-  };
-}
+cartBtn.onclick = () => {
+  cart.style.right = "0";
+};
 closeCart.onclick = () => {
   cart.style.right = "-400px";
 };
 
-[minPriceInput, maxPriceInput].forEach((input) => {
+// curățare input numeric (opțional)
+const numericInputs = [minPriceInput, maxPriceInput];
+numericInputs.forEach((input) => {
   if (!input) return;
   input.addEventListener("input", () => {
     input.value = input.value.replace(/[^0-9.,]/g, "");
-  });
-});
-
-// ===========================
-// BOTTOM NAV FUNCTIONALITY
-// ===========================
-if (tabPromo) {
-  tabPromo.addEventListener("click", () => smoothScrollTo("#promotions"));
-}
-if (tabCatalog) {
-  tabCatalog.addEventListener("click", () => smoothScrollTo("#productsSection"));
-}
-if (tabCart) {
-  tabCart.addEventListener("click", () => {
-    cart.style.right = "0";
-  });
-}
-if (tabAccount) {
-  tabAccount.addEventListener("click", () => {
-    if (auth.currentUser) {
-      window.location.href = "profile.html";
-    } else {
-      openAuthModal("login");
-    }
-  });
-}
-if (tabMore && moreSheet) {
-  tabMore.addEventListener("click", () => {
-    moreSheet.classList.toggle("translate-y-full");
-  });
-}
-if (moreClose && moreSheet) {
-  moreClose.addEventListener("click", () => {
-    moreSheet.classList.add("translate-y-full");
-  });
-}
-
-// linkurile din sheet
-document.querySelectorAll(".more-link").forEach((btn) => {
-  btn.addEventListener("click", () => {
-    const target = btn.getAttribute("data-target");
-    if (target) smoothScrollTo(target);
-    if (moreSheet) moreSheet.classList.add("translate-y-full");
   });
 });
 
