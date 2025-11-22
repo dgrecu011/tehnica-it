@@ -107,34 +107,36 @@ body {
 }
 
 /* ===========================
-   CATEGORY CARD
+   CATEGORY CARD – GLOW / HOVER
 =========================== */
-.category-card img {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  border-radius: 0.5rem;
+
+.category-card {
+  position: relative;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+  transform: translateY(0);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-/* ===========================
-   CART
-=========================== */
-#cart {
-  transition: right 0.3s ease;
+.category-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 25px 45px rgba(0, 0, 0, 0.7);
 }
 
-/* ===========================
-   ADMIN PANEL
-=========================== */
-#adminPanel input,
-#adminPanel select {
-  background-color: #1F2937;
-  color: white;
-  border: 1px solid #374151;
+/* mic chip în colțul dreapta-sus */
+.category-chip {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: rgba(250, 204, 21, 0.95); /* galben */
+  color: #000;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-weight: 700;
 }
-#adminPanel button {
-  cursor: pointer;
-}
+
 
 /* ===========================
    AUTH MODAL
@@ -175,13 +177,27 @@ body {
     padding: 0.5rem 1rem;
     font-size: 14px;
   }
-
-  #adminPanel .grid {
-    grid-template-columns: 1fr !important;
-  }
-  #adminPanel input,
-  #adminPanel button {
-    width: 100%;
-    font-size: 14px;
-  }
 }
+/* =====================================
+   PROMO CARD
+===================================== */
+.promo-card {
+  box-shadow: 0 20px 25px rgba(0,0,0,0.4);
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.promo-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 30px 40px rgba(0,0,0,0.6);
+}
+
+/* =====================================
+   TESTIMONIAL CARD
+===================================== */
+.testimonial-card {
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.testimonial-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 30px rgba(0,0,0,0.6);
+}
+

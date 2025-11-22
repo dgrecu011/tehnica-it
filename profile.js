@@ -11,7 +11,7 @@ import {
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-auth.js";
 
-// aceeași config ca în app.js
+// aceeași configurație
 const firebaseConfig = {
   apiKey: "AIzaSyAKe4zLHem2_1LSOkTc4StNVqJJFCB9_Uc",
   authDomain: "it-store-2da3a.firebaseapp.com",
@@ -31,13 +31,21 @@ const userIdEl = document.getElementById("userId");
 const verifiedEl = document.getElementById("verified");
 const myOrdersEl = document.getElementById("myOrders");
 
-const renderOrder = (order) => {
+const renderOrderCard = (order) => {
   const div = document.createElement("div");
   div.className = "bg-gray-800 p-4 rounded-lg shadow-lg";
 
-  const d = order.createdAt?.seconds
+  const created = order.createdAt?.seconds
     ? new Date(order.createdAt.seconds * 1000).toLocaleString()
-    : "necunoscut";
+    : "necunoscută";
+
+  let total = typeof order.total === "number" ? order.total : 0;
+  if (!total && Array.isArray(order.items)) {
+    total = order.items.reduce(
+      (s, i) => s + Number(i.price || 0) * Number(i.quantity || 1),
+      0
+    );
+  }
 
   let itemsHtml = "";
   if (Array.isArray(order.items)) {
@@ -45,22 +53,29 @@ const renderOrder = (order) => {
       .map(
         (i) =>
           `<li class="flex justify-between text-sm">
-             <span>${i.title} x${i.quantity}</span>
-             <span>${(i.price * i.quantity).toFixed(2)} €</span>
+             <span>${i.title} <span class="text-gray-400">x${i.quantity}</span></span>
+             <span>${(Number(i.price) * Number(i.quantity)).toFixed(2)} €</span>
            </li>`
       )
       .join("");
   }
 
   div.innerHTML = `
-    <p class="text-yellow-400 font-bold mb-2">Comanda #${order.id}</p>
-    <p class="text-gray-300 mb-1">Status: <strong>${order.status}</strong></p>
-    <p class="text-gray-300 mb-3">Plasată la: ${d}</p>
+    <a href="order.html?id=${order.id}"
+       class="text-yellow-400 font-semibold mb-1 inline-block underline hover:text-yellow-300">
+       Comandă #${order.id}
+    </a>
+    <p class="text-gray-300 mb-1">Status: <strong>${order.status || "nouă"}</strong></p>
+    <p class="text-gray-400 text-xs mb-3">Plasată la: ${created}</p>
 
-    <p class="font-semibold mb-2">Produse:</p>
-    <ul class="mb-3">${itemsHtml}</ul>
+    ${
+      itemsHtml
+        ? `<p class="font-semibold mb-1">Produse:</p>
+           <ul class="mb-3">${itemsHtml}</ul>`
+        : ""
+    }
 
-    <p class="text-lg font-bold text-yellow-400">Total: ${order.total.toFixed(2)} €</p>
+    <p class="text-lg font-bold text-yellow-400">Total: ${total.toFixed(2)} €</p>
   `;
 
   return div;
@@ -73,7 +88,7 @@ onAuthStateChanged(auth, async (user) => {
     return;
   }
 
-  userEmailEl.textContent = user.email;
+  userEmailEl.textContent = user.email || "-";
   userIdEl.textContent = user.uid;
   verifiedEl.textContent = user.emailVerified ? "Da ✔" : "Nu ❌";
 
@@ -91,6 +106,12 @@ onAuthStateChanged(auth, async (user) => {
     return;
   }
 
+  orders.sort((a, b) => {
+    const ta = a.createdAt?.seconds || 0;
+    const tb = b.createdAt?.seconds || 0;
+    return tb - ta;
+  });
+
   myOrdersEl.innerHTML = "";
-  orders.forEach((o) => myOrdersEl.appendChild(renderOrder(o)));
+  orders.forEach((o) => myOrdersEl.appendChild(renderOrderCard(o)));
 });
