@@ -28,7 +28,7 @@ const handleScrollAnimation = () => {
 window.addEventListener("scroll", handleScrollAnimation);
 window.addEventListener("load", handleScrollAnimation);
 
-// Hamburger menu toggle
+// Hamburger menu toggle (pentru nav sus pe mobil)
 const hamburgerBtn = document.getElementById("hamburgerBtn");
 const navMenu = document.getElementById("navMenu");
 
