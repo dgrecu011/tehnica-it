@@ -1,0 +1,10 @@
+/* Updated style.css with bottom nav fix */
+.mobile-bottom-nav {
+  height: 72px;
+}
+
+@media (max-width: 768px) {
+  body {
+    padding-bottom: 72px;
+  }
+}
