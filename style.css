@@ -1,6 +1,6 @@
 /* FONT */
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 /* ===========================
@@ -66,7 +66,7 @@ body {
   border-radius: 0.75rem;
 }
 .product-card-front {
-  background-color: #1F2937;
+  background-color: #1f2937;
   display: flex;
   flex-direction: column;
 }
@@ -102,7 +102,7 @@ body {
   flex: 0 0 300px;
   scroll-snap-align: start;
   border-radius: 0.75rem;
-  background-color: #1F2937;
+  background-color: #1f2937;
   padding: 1rem;
 }
 
@@ -137,45 +137,84 @@ body {
 }
 
 /* AUTH MODAL */
-#authModal input { outline: none; }
-#authModal button { cursor: pointer; }
+#authModal input {
+  outline: none;
+}
+#authModal button {
+  cursor: pointer;
+}
 
 /* MOBILE OPTIMIZED */
 @media (max-width: 768px) {
-  .hero h2 { font-size: 2.5rem; }
-  .hero p { font-size:16px; }
+  .hero h2 {
+    font-size: 2.5rem;
+  }
+  .hero p {
+    font-size: 16px;
+  }
   .hero a {
-    padding:0.8rem 2rem;
-    font-size:16px;
+    padding: 0.8rem 2rem;
+    font-size: 16px;
   }
 
   .product-card {
-    height:auto;
-    margin-bottom:1rem;
+    height: auto;
+    margin-bottom: 1rem;
   }
-  .product-card-front img { height:200px; }
-  .product-card-back { padding:0.5rem; }
+  .product-card-front img {
+    height: 200px;
+  }
+  .product-card-back {
+    padding: 0.5rem;
+  }
   .product-card-back button {
-    padding:0.5rem 1rem;
-    font-size:14px;
+    padding: 0.5rem 1rem;
+    font-size: 14px;
   }
 }
 
 /* PROMO CARD */
 .promo-card {
-  box-shadow:0 20px 25px rgba(0,0,0,0.4);
-  transition:transform .25s ease, box-shadow .25s ease;
+  box-shadow: 0 20px 25px rgba(0, 0, 0, 0.4);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 .promo-card:hover {
-  transform:translateY(-6px);
-  box-shadow:0 30px 40px rgba(0,0,0,0.6);
+  transform: translateY(-6px);
+  box-shadow: 0 30px 40px rgba(0, 0, 0, 0.6);
 }
 
 /* TESTIMONIAL CARD */
 .testimonial-card {
-  transition:transform .25s ease, box-shadow .25s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 .testimonial-card:hover {
-  transform:translateY(-5px);
-  box-shadow:0 20px 30px rgba(0,0,0,0.6);
+  transform: translateY(-5px);
+  box-shadow: 0 20px 30px rgba(0, 0, 0, 0.6);
+}
+
+/* =====================================
+   BOTTOM NAV
+===================================== */
+
+.bottom-nav-item {
+  min-width: 56px;
+  transition: color 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+  opacity: 0.8;
+}
+
+.bottom-nav-item svg {
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.bottom-nav-item-active {
+  color: #facc15; /* yellow-400 */
+  opacity: 1;
+}
+
+.bottom-nav-item-active svg {
+  transform: translateY(-1px) scale(1.08);
+}
+
+#bottomNav {
+  box-shadow: 0 -8px 25px rgba(0, 0, 0, 0.85);
 }
