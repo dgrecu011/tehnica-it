@@ -1,14 +1,9 @@
 // Scroll animations
-const scrollElements = document.querySelectorAll(
-  ".fade-in, .slide-left, .slide-right"
-);
+const scrollElements = document.querySelectorAll(".fade-in, .slide-left, .slide-right");
 
 const elementInView = (el, offset = 0) => {
   const elementTop = el.getBoundingClientRect().top;
-  return (
-    elementTop <=
-    (window.innerHeight || document.documentElement.clientHeight) - offset
-  );
+  return elementTop <= (window.innerHeight || document.documentElement.clientHeight) - offset;
 };
 
 const displayScrollElement = (element) => {
@@ -28,12 +23,4 @@ const handleScrollAnimation = () => {
 window.addEventListener("scroll", handleScrollAnimation);
 window.addEventListener("load", handleScrollAnimation);
 
-// Hamburger menu toggle (pentru nav sus pe mobil)
-const hamburgerBtn = document.getElementById("hamburgerBtn");
-const navMenu = document.getElementById("navMenu");
-
-if (hamburgerBtn && navMenu) {
-  hamburgerBtn.addEventListener("click", () => {
-    navMenu.classList.toggle("hidden");
-  });
-}
+// (hamburger nu mai este folosit aici – headerul mare e doar pe desktop)
