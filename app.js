@@ -114,27 +114,37 @@ if (savedCart) {
 // UI UTILS
 // ===========================
 const openAuthModal = (mode = "login") => {
+  if (!authModal) return;
   authModal.classList.remove("hidden");
   if (mode === "login") {
-    authTitle.textContent = "Logare";
-    loginForm.classList.remove("hidden");
-    registerForm.classList.add("hidden");
-    tabLogin.classList.add("border-yellow-400", "text-white");
-    tabLogin.classList.remove("text-gray-400");
-    tabRegister.classList.remove("border-yellow-400");
-    tabRegister.classList.add("text-gray-400");
+    if (authTitle) authTitle.textContent = "Logare";
+    if (loginForm) loginForm.classList.remove("hidden");
+    if (registerForm) registerForm.classList.add("hidden");
+    if (tabLogin) {
+      tabLogin.classList.add("border-yellow-400", "text-white");
+      tabLogin.classList.remove("text-gray-400");
+    }
+    if (tabRegister) {
+      tabRegister.classList.remove("border-yellow-400");
+      tabRegister.classList.add("text-gray-400");
+    }
   } else {
-    authTitle.textContent = "Înregistrare";
-    loginForm.classList.add("hidden");
-    registerForm.classList.remove("hidden");
-    tabRegister.classList.add("border-yellow-400", "text-white");
-    tabRegister.classList.remove("text-gray-400");
-    tabLogin.classList.remove("border-yellow-400");
-    tabLogin.classList.add("text-gray-400");
+    if (authTitle) authTitle.textContent = "Înregistrare";
+    if (loginForm) loginForm.classList.add("hidden");
+    if (registerForm) registerForm.classList.remove("hidden");
+    if (tabRegister) {
+      tabRegister.classList.add("border-yellow-400", "text-white");
+      tabRegister.classList.remove("text-gray-400");
+    }
+    if (tabLogin) {
+      tabLogin.classList.remove("border-yellow-400");
+      tabLogin.classList.add("text-gray-400");
+    }
   }
 };
 
 const closeAuthModal = () => {
+  if (!authModal) return;
   authModal.classList.add("hidden");
 };
 
@@ -170,6 +180,7 @@ const renderProduct = (product) => {
 };
 
 const populateCategoryFilter = () => {
+  if (!categoryFilter) return;
   const currentValue = categoryFilter.value;
   categoryFilter.innerHTML = `<option value="">Toate categoriile</option>`;
   const categories = [...new Set(allProducts.map((p) => p.category).filter(Boolean))];
@@ -183,38 +194,46 @@ const populateCategoryFilter = () => {
 };
 
 const loadProducts = async () => {
-  const snapshot = await getDocs(collection(db, "products"));
-  allProducts = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+  if (!productsEl) return;
 
-  populateCategoryFilter();
-  renderProductList();
+  try {
+    const snapshot = await getDocs(collection(db, "products"));
+    allProducts = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+    populateCategoryFilter();
+    renderProductList();
+  } catch (err) {
+    console.error("Eroare la încărcarea produselor:", err);
+    productsEl.innerHTML =
+      '<p class="text-red-400 text-center w-full">Nu s-au putut încărca produsele. Încearcă din nou mai târziu.</p>';
+  }
 };
 
 const renderProductList = () => {
+  if (!productsEl) return;
   productsEl.innerHTML = "";
   let filtered = [...allProducts];
 
-  if (searchInput.value) {
+  if (searchInput && searchInput.value) {
     filtered = filtered.filter((p) =>
       p.title.toLowerCase().includes(searchInput.value.toLowerCase())
     );
   }
-  if (categoryFilter.value) {
+  if (categoryFilter && categoryFilter.value) {
     filtered = filtered.filter((p) => p.category === categoryFilter.value);
   }
 
-  if (minPriceInput.value) {
+  if (minPriceInput && minPriceInput.value) {
     const min = Number(minPriceInput.value);
     filtered = filtered.filter((p) => Number(p.price) >= min);
   }
-  if (maxPriceInput.value) {
+  if (maxPriceInput && maxPriceInput.value) {
     const max = Number(maxPriceInput.value);
     filtered = filtered.filter((p) => Number(p.price) <= max);
   }
 
-  if (sortFilter.value === "priceAsc") {
+  if (sortFilter && sortFilter.value === "priceAsc") {
     filtered.sort((a, b) => Number(a.price) - Number(b.price));
-  } else if (sortFilter.value === "priceDesc") {
+  } else if (sortFilter && sortFilter.value === "priceDesc") {
     filtered.sort((a, b) => Number(b.price) - Number(a.price));
   }
 
@@ -230,6 +249,7 @@ const renderProductList = () => {
 // COȘ
 // ===========================
 const updateCart = () => {
+  if (!cartItemsEl || !cartTotalEl || !cartCountEl) return;
   cartItemsEl.innerHTML = "";
   let total = 0;
   cartItems.forEach((item, index) => {
@@ -277,60 +297,73 @@ const getCartSummaryItems = () => {
 // ===========================
 // AUTH
 // ===========================
-loginBtn.onclick = () => openAuthModal("login");
-logoutBtn.onclick = () => signOut(auth);
-authClose.onclick = closeAuthModal;
+if (loginBtn) {
+  loginBtn.onclick = () => openAuthModal("login");
+}
+if (logoutBtn) {
+  logoutBtn.onclick = () => signOut(auth);
+}
+if (authClose) {
+  authClose.onclick = closeAuthModal;
+}
+if (tabLogin) {
+  tabLogin.onclick = () => openAuthModal("login");
+}
+if (tabRegister) {
+  tabRegister.onclick = () => openAuthModal("register");
+}
 
-tabLogin.onclick = () => openAuthModal("login");
-tabRegister.onclick = () => openAuthModal("register");
+if (loginForm) {
+  loginForm.onsubmit = async (e) => {
+    e.preventDefault();
+    const email = loginEmail.value.trim();
+    const pass = loginPassword.value.trim();
+    if (!emailRegex.test(email)) {
+      alert("Email invalid.");
+      return;
+    }
+    if (pass.length < 6) {
+      alert("Parola trebuie să aibă minim 6 caractere.");
+      return;
+    }
+    try {
+      await signInWithEmailAndPassword(auth, email, pass);
+      closeAuthModal();
+    } catch (err) {
+      alert("Eroare la logare: " + err.message);
+    }
+  };
+}
 
-loginForm.onsubmit = async (e) => {
-  e.preventDefault();
-  const email = loginEmail.value.trim();
-  const pass = loginPassword.value.trim();
-  if (!emailRegex.test(email)) {
-    alert("Email invalid.");
-    return;
-  }
-  if (pass.length < 6) {
-    alert("Parola trebuie să aibă minim 6 caractere.");
-    return;
-  }
-  try {
-    await signInWithEmailAndPassword(auth, email, pass);
-    closeAuthModal();
-  } catch (err) {
-    alert("Eroare la logare: " + err.message);
-  }
-};
+if (registerForm) {
+  registerForm.onsubmit = async (e) => {
+    e.preventDefault();
+    const email = registerEmail.value.trim();
+    const pass1 = registerPassword.value.trim();
+    const pass2 = registerPassword2.value.trim();
 
-registerForm.onsubmit = async (e) => {
-  e.preventDefault();
-  const email = registerEmail.value.trim();
-  const pass1 = registerPassword.value.trim();
-  const pass2 = registerPassword2.value.trim();
+    if (!emailRegex.test(email)) {
+      alert("Email invalid.");
+      return;
+    }
+    if (pass1.length < 6) {
+      alert("Parola trebuie să aibă minim 6 caractere.");
+      return;
+    }
+    if (pass1 !== pass2) {
+      alert("Parolele nu coincid.");
+      return;
+    }
 
-  if (!emailRegex.test(email)) {
-    alert("Email invalid.");
-    return;
-  }
-  if (pass1.length < 6) {
-    alert("Parola trebuie să aibă minim 6 caractere.");
-    return;
-  }
-  if (pass1 !== pass2) {
-    alert("Parolele nu coincid.");
-    return;
-  }
-
-  try {
-    await createUserWithEmailAndPassword(auth, email, pass1);
-    alert("Cont creat cu succes! Te poți loga acum.");
-    closeAuthModal();
-  } catch (err) {
-    alert("Eroare la înregistrare: " + err.message);
-  }
-};
+    try {
+      await createUserWithEmailAndPassword(auth, email, pass1);
+      alert("Cont creat cu succes! Te poți loga acum.");
+      closeAuthModal();
+    } catch (err) {
+      alert("Eroare la înregistrare: " + err.message);
+    }
+  };
+}
 
 if (forgotPasswordBtn) {
   forgotPasswordBtn.onclick = async () => {
@@ -351,205 +384,220 @@ if (forgotPasswordBtn) {
 
 onAuthStateChanged(auth, async (user) => {
   if (user) {
-    loginBtn.classList.add("hidden");
-    logoutBtn.classList.remove("hidden");
-    profileLink.classList.remove("hidden");
+    if (loginBtn) loginBtn.classList.add("hidden");
+    if (logoutBtn) logoutBtn.classList.remove("hidden");
+    if (profileLink) profileLink.classList.remove("hidden");
 
     try {
-      // verificăm dacă userul este admin
+      // verificăm dacă userul este admin (colecția "admins", doc cu uid)
       const adminDoc = await getDoc(doc(db, "admins", user.uid));
       isAdmin = adminDoc.exists();
-      if (isAdmin) {
-        adminLink.classList.remove("hidden");
-      } else {
-        adminLink.classList.add("hidden");
+      if (adminLink) {
+        if (isAdmin) adminLink.classList.remove("hidden");
+        else adminLink.classList.add("hidden");
       }
     } catch (err) {
       console.error("Eroare la verificarea rolului de admin:", err);
       isAdmin = false;
-      adminLink.classList.add("hidden");
+      if (adminLink) adminLink.classList.add("hidden");
     }
   } else {
     isAdmin = false;
-    loginBtn.classList.remove("hidden");
-    logoutBtn.classList.add("hidden");
-    profileLink.classList.add("hidden");
-    adminLink.classList.add("hidden");
+    if (loginBtn) loginBtn.classList.remove("hidden");
+    if (logoutBtn) logoutBtn.classList.add("hidden");
+    if (profileLink) profileLink.classList.add("hidden");
+    if (adminLink) adminLink.classList.add("hidden");
   }
 });
 
 // ===========================
 // CHECKOUT
 // ===========================
-checkoutBtn.onclick = () => {
-  if (!cartItems.length) {
-    alert("Coșul este gol.");
-    return;
-  }
+if (checkoutBtn) {
+  checkoutBtn.onclick = () => {
+    if (!cartItems.length) {
+      alert("Coșul este gol.");
+      return;
+    }
 
-  const items = getCartSummaryItems();
-  checkoutSummaryEl.innerHTML = "";
-  let total = 0;
+    const items = getCartSummaryItems();
+    if (!checkoutSummaryEl || !checkoutTotalText || !checkoutModal) return;
 
-  items.forEach((item) => {
-    const row = document.createElement("div");
-    row.className = "flex justify-between text-sm";
-    row.innerHTML = `
-      <span>${item.title} <span class="text-gray-400">x${item.quantity}</span></span>
-      <span>${(item.price * item.quantity).toFixed(2)} €</span>
-    `;
-    checkoutSummaryEl.appendChild(row);
-    total += item.price * item.quantity;
-  });
+    checkoutSummaryEl.innerHTML = "";
+    let total = 0;
 
-  checkoutTotalText.textContent = total.toFixed(2) + " €";
-
-  const user = auth.currentUser;
-  if (user) {
-    ckEmail.value = user.email || "";
-  }
-
-  checkoutMessage.textContent = "";
-  checkoutMessage.className = "text-sm mt-2 text-center";
-
-  checkoutModal.classList.remove("hidden");
-  cart.style.right = "-400px";
-};
-
-checkoutClose.onclick = () => {
-  checkoutModal.classList.add("hidden");
-};
-
-checkoutModal.addEventListener("click", (e) => {
-  if (e.target === checkoutModal) {
-    checkoutModal.classList.add("hidden");
-  }
-});
-
-checkoutForm.onsubmit = async (e) => {
-  e.preventDefault();
-
-  if (!cartItems.length) {
-    checkoutMessage.textContent = "Coșul este gol.";
-    checkoutMessage.classList.add("text-red-400");
-    return;
-  }
-
-  const name = ckName.value.trim();
-  const email = ckEmail.value.trim();
-  const phone = ckPhone.value.trim();
-  const city = ckCity.value.trim();
-  const address = ckAddress.value.trim();
-  const delivery = ckDelivery.value;
-  const payment = ckPayment.value;
-  const notes = ckNotes.value.trim();
-
-  if (!name || !city || !address || !delivery || !payment) {
-    checkoutMessage.textContent = "Completează toate câmpurile obligatorii.";
-    checkoutMessage.classList.remove("text-green-400");
-    checkoutMessage.classList.add("text-red-400");
-    return;
-  }
-
-  if (!emailRegex.test(email)) {
-    checkoutMessage.textContent = "Email invalid.";
-    checkoutMessage.classList.remove("text-green-400");
-    checkoutMessage.classList.add("text-red-400");
-    return;
-  }
-
-  const phoneDigits = phone.replace(/\D/g, "");
-  if (phoneDigits.length < 6) {
-    checkoutMessage.textContent = "Telefon invalid.";
-    checkoutMessage.classList.remove("text-green-400");
-    checkoutMessage.classList.add("text-red-400");
-    return;
-  }
-
-  const items = getCartSummaryItems();
-
-  const invalidItem = items.find(
-    (i) =>
-      !Number.isFinite(i.price) ||
-      i.price <= 0 ||
-      !Number.isInteger(i.quantity) ||
-      i.quantity <= 0
-  );
-  if (invalidItem) {
-    checkoutMessage.textContent = "Există produse cu preț sau cantitate invalidă.";
-    checkoutMessage.classList.remove("text-green-400");
-    checkoutMessage.classList.add("text-red-400");
-    return;
-  }
-
-  let total = 0;
-  items.forEach((i) => (total += i.price * i.quantity));
-
-  checkoutSubmitBtn.disabled = true;
-  checkoutSubmitBtn.textContent = "Se procesează comanda...";
-  checkoutMessage.textContent = "";
-  checkoutMessage.className = "text-sm mt-2 text-center";
-
-  try {
-    const orderRef = await addDoc(collection(db, "orders"), {
-      items,
-      total,
-      customer: {
-        name,
-        email,
-        phone,
-        city,
-        address,
-        delivery,
-        payment,
-        notes
-      },
-      status: "nouă",
-      createdAt: serverTimestamp(),
-      userId: auth.currentUser ? auth.currentUser.uid : null
+    items.forEach((item) => {
+      const row = document.createElement("div");
+      row.className = "flex justify_between text-sm".replace("_", "-");
+      row.innerHTML = `
+        <span>${item.title} <span class="text-gray-400">x${item.quantity}</span></span>
+        <span>${(item.price * item.quantity).toFixed(2)} €</span>
+      `;
+      checkoutSummaryEl.appendChild(row);
+      total += item.price * item.quantity;
     });
 
-    checkoutMessage.textContent =
-      "Comanda a fost plasată cu succes! ID comandă: " + orderRef.id;
-    checkoutMessage.classList.remove("text-red-400");
-    checkoutMessage.classList.add("text-green-400");
+    checkoutTotalText.textContent = total.toFixed(2) + " €";
 
-    cartItems = [];
-    updateCart();
-    localStorage.removeItem("cartItems");
+    const user = auth.currentUser;
+    if (user && ckEmail) {
+      ckEmail.value = user.email || "";
+    }
 
-    setTimeout(() => {
+    if (checkoutMessage) {
+      checkoutMessage.textContent = "";
+      checkoutMessage.className = "text-sm mt-2 text-center";
+    }
+
+    checkoutModal.classList.remove("hidden");
+    if (cart) cart.style.right = "-400px";
+  };
+}
+
+if (checkoutClose && checkoutModal) {
+  checkoutClose.onclick = () => {
+    checkoutModal.classList.add("hidden");
+  };
+
+  checkoutModal.addEventListener("click", (e) => {
+    if (e.target === checkoutModal) {
       checkoutModal.classList.add("hidden");
-      checkoutForm.reset();
+    }
+  });
+}
+
+if (checkoutForm) {
+  checkoutForm.onsubmit = async (e) => {
+    e.preventDefault();
+
+    if (!cartItems.length) {
+      if (checkoutMessage) {
+        checkoutMessage.textContent = "Coșul este gol.";
+        checkoutMessage.classList.add("text-red-400");
+      }
+      return;
+    }
+
+    const name = ckName.value.trim();
+    const email = ckEmail.value.trim();
+    const phone = ckPhone.value.trim();
+    const city = ckCity.value.trim();
+    const address = ckAddress.value.trim();
+    const delivery = ckDelivery.value;
+    const payment = ckPayment.value;
+    const notes = ckNotes.value.trim();
+
+    if (!name || !city || !address || !delivery || !payment) {
+      checkoutMessage.textContent = "Completează toate câmpurile obligatorii.";
+      checkoutMessage.classList.remove("text-green-400");
+      checkoutMessage.classList.add("text-red-400");
+      return;
+    }
+
+    if (!emailRegex.test(email)) {
+      checkoutMessage.textContent = "Email invalid.";
+      checkoutMessage.classList.remove("text-green-400");
+      checkoutMessage.classList.add("text-red-400");
+      return;
+    }
+
+    const phoneDigits = phone.replace(/\D/g, "");
+    if (phoneDigits.length < 6) {
+      checkoutMessage.textContent = "Telefon invalid.";
+      checkoutMessage.classList.remove("text-green-400");
+      checkoutMessage.classList.add("text-red-400");
+      return;
+    }
+
+    const items = getCartSummaryItems();
+
+    const invalidItem = items.find(
+      (i) =>
+        !Number.isFinite(i.price) ||
+        i.price <= 0 ||
+        !Number.isInteger(i.quantity) ||
+        i.quantity <= 0
+    );
+    if (invalidItem) {
+      checkoutMessage.textContent = "Există produse cu preț sau cantitate invalidă.";
+      checkoutMessage.classList.remove("text-green-400");
+      checkoutMessage.classList.add("text-red-400");
+      return;
+    }
+
+    let total = 0;
+    items.forEach((i) => (total += i.price * i.quantity));
+
+    checkoutSubmitBtn.disabled = true;
+    checkoutSubmitBtn.textContent = "Se procesează comanda...";
+    checkoutMessage.textContent = "";
+    checkoutMessage.className = "text-sm mt-2 text-center";
+
+    try {
+      const orderRef = await addDoc(collection(db, "orders"), {
+        items,
+        total,
+        customer: {
+          name,
+          email,
+          phone,
+          city,
+          address,
+          delivery,
+          payment,
+          notes
+        },
+        status: "nouă",
+        createdAt: serverTimestamp(),
+        userId: auth.currentUser ? auth.currentUser.uid : null
+      });
+
+      checkoutMessage.textContent =
+        "Comanda a fost plasată cu succes! ID comandă: " + orderRef.id;
+      checkoutMessage.classList.remove("text-red-400");
+      checkoutMessage.classList.add("text-green-400");
+
+      cartItems = [];
+      updateCart();
+      localStorage.removeItem("cartItems");
+
+      setTimeout(() => {
+        checkoutModal.classList.add("hidden");
+        checkoutForm.reset();
+        checkoutSubmitBtn.disabled = false;
+        checkoutSubmitBtn.textContent = "Plasează comanda";
+        checkoutMessage.textContent = "";
+      }, 2500);
+    } catch (err) {
+      console.error(err);
+      checkoutMessage.textContent = "A apărut o eroare la salvarea comenzii.";
+      checkoutMessage.classList.remove("text-green-400");
+      checkoutMessage.classList.add("text-red-400");
       checkoutSubmitBtn.disabled = false;
       checkoutSubmitBtn.textContent = "Plasează comanda";
-      checkoutMessage.textContent = "";
-    }, 2500);
-  } catch (err) {
-    console.error(err);
-    checkoutMessage.textContent = "A apărut o eroare la salvarea comenzii.";
-    checkoutMessage.classList.remove("text-green-400");
-    checkoutMessage.classList.add("text-red-400");
-    checkoutSubmitBtn.disabled = false;
-    checkoutSubmitBtn.textContent = "Plasează comanda";
-  }
-};
+    }
+  };
+}
 
 // ===========================
 // EVENT LISTENERS
 // ===========================
-searchInput.oninput = renderProductList;
-categoryFilter.onchange = renderProductList;
-sortFilter.onchange = renderProductList;
-minPriceInput.oninput = renderProductList;
-maxPriceInput.oninput = renderProductList;
+if (searchInput) searchInput.oninput = renderProductList;
+if (categoryFilter) categoryFilter.onchange = renderProductList;
+if (sortFilter) sortFilter.onchange = renderProductList;
+if (minPriceInput) minPriceInput.oninput = renderProductList;
+if (maxPriceInput) maxPriceInput.oninput = renderProductList;
 
-cartBtn.onclick = () => {
-  cart.style.right = "0";
-};
-closeCart.onclick = () => {
-  cart.style.right = "-400px";
-};
+if (cartBtn && cart) {
+  cartBtn.onclick = () => {
+    cart.style.right = "0";
+  };
+}
+if (closeCart && cart) {
+  closeCart.onclick = () => {
+    cart.style.right = "-400px";
+  };
+}
 
 // 🧹 curățare input numeric (opțional)
 const numericInputs = [minPriceInput, maxPriceInput];
