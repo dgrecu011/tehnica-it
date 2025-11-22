@@ -1,560 +1,412 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TechStore - Magazin IT</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- SEO -->
-  <meta name="description" content="TechStore - magazin IT cu laptopuri, componente, gadgeturi și accesorii. Livrare rapidă și suport prietenos." />
+  <!-- SEO BASIC -->
+  <meta name="description" content="TechStore - magazin IT cu laptopuri, componente, gadgeturi și accesorii. Livrare rapidă și suport premium.">
+  <meta property="og:title" content="TechStore - Magazin IT">
+  <meta property="og:description" content="Laptopuri, componente și gadgeturi la prețuri corecte.">
+  <meta property="og:type" content="website">
 
-  <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Custom CSS -->
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-slate-950 text-slate-100">
-  <!-- WRAPPER -->
-  <div class="min-h-screen flex flex-col">
+<body class="bg-gray-900 text-gray-100 font-sans">
 
-    <!-- HEADER -->
-    <header class="bg-slate-900/95 border-b border-slate-800 sticky top-0 z-40">
-      <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
-        <!-- LOGO + NAME -->
-        <div class="flex items-center gap-2">
-          <div class="w-9 h-9 rounded-lg bg-yellow-400 flex items-center justify-center text-slate-900 font-black text-xl">
-            T
-          </div>
-          <div class="leading-tight">
-            <div class="font-extrabold text-lg tracking-tight">TechStore</div>
-            <div class="text-[11px] text-slate-400 uppercase tracking-[0.16em] hidden sm:block">
-              Laptopuri &amp; componente
+  <!-- HEADER (desktop) -->
+  <header class="hidden md:flex items-center justify-between p-4 md:p-6 bg-black/90 backdrop-blur shadow-lg sticky top-0 z-40">
+    <h1 class="text-3xl md:text-4xl font-extrabold text-yellow-400 tracking-tight">TechStore</h1>
+
+    <nav class="flex items-center space-x-6 text-sm md:text-base">
+      <a href="#about" class="hover:text-yellow-400 transition font-medium">Despre Noi</a>
+      <a href="#productsSection" class="hover:text-yellow-400 transition font-medium">Produse</a>
+      <a href="#categories" class="hover:text-yellow-400 transition font-medium">Categorii</a>
+      <a href="#promotions" class="hover:text-yellow-400 transition font-medium">Promoții</a>
+      <a href="#testimonials" class="hover:text-yellow-400 transition font-medium">Testimoniale</a>
+      <a href="#blog" class="hover:text-yellow-400 transition font-medium">Blog</a>
+      <a href="#contact" class="hover:text-yellow-400 transition font-medium">Contact</a>
+      <a href="profile.html" class="hover:text-yellow-400 transition font-medium hidden" id="profileLink">Profil</a>
+      <a href="admin.html" class="hover:text-yellow-400 transition font-medium hidden" id="adminLink">Admin</a>
+    </nav>
+
+    <div class="flex items-center space-x-3 ml-4">
+      <button id="loginBtn" class="bg-yellow-400 text-black px-4 py-2 rounded-full font-semibold hover:bg-yellow-300 transition text-sm md:text-base">
+        Logare / Cont nou
+      </button>
+      <button id="logoutBtn" class="bg-yellow-400 text-black px-4 py-2 rounded-full font-semibold hover:bg-yellow-300 transition hidden text-sm md:text-base">
+        Logout
+      </button>
+      <button id="cartBtn" class="bg-yellow-400 text-black px-4 py-2 rounded-full font-semibold hover:bg-yellow-300 transition text-sm md:text-base">
+        Coș (<span id="cartCount">0</span>)
+      </button>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero relative bg-gradient-to-b from-black via-gray-900 to-gray-800 text-center text-white py-24 md:py-32 px-6">
+    <h2 class="text-4xl md:text-6xl font-extrabold mb-6 fade-in tracking-tight">
+      Tehnologie la un click distanță
+    </h2>
+    <p class="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-8 fade-in" style="transition-delay:0.2s">
+      Cele mai noi gadgeturi, componente și accesorii IT. Livrare rapidă, prețuri corecte și suport premium.
+    </p>
+    <a href="#productsSection" class="inline-block bg-yellow-400 text-black px-8 py-3 rounded-full font-bold hover:bg-yellow-300 transition text-lg fade-in shadow-lg" style="transition-delay:0.4s">
+      Vezi Produse
+    </a>
+  </section>
+
+  <!-- DESPRE NOI -->
+  <section id="about" class="max-w-6xl mx-auto py-20 px-6 fade-in">
+    <h3 class="text-4xl font-bold text-yellow-400 mb-6 text-center slide-left">Despre Noi</h3>
+    <p class="text-gray-300 text-lg md:text-xl text-center slide-right">
+      TechStore este un magazin online pentru pasionații de tehnologie. Oferim produse IT de calitate:
+      componente performante, laptopuri, gadgeturi inovative și accesorii. Prioritizăm calitatea, prețul
+      corect și livrarea rapidă.
+    </p>
+  </section>
+
+  <!-- PRODUSE POPULARE -->
+  <section id="productsSection" class="max-w-6xl mx-auto py-20 px-6 fade-in">
+    <h3 class="text-4xl font-bold text-yellow-400 mb-6 text-center slide-left">Produse Populare</h3>
+
+    <div class="flex flex-col md:flex-row justify-between mb-4 gap-4">
+      <input id="search" class="p-3 rounded bg-gray-800 border border-gray-700 flex-1" placeholder="Caută produs...">
+      <select id="categoryFilter" class="p-3 rounded bg-gray-800 border border-gray-700">
+        <option value="">Toate categoriile</option>
+      </select>
+      <select id="sortFilter" class="p-3 rounded bg-gray-800 border border-gray-700">
+        <option value="new">Cele mai noi</option>
+        <option value="priceAsc">Preț ↑</option>
+        <option value="priceDesc">Preț ↓</option>
+      </select>
+    </div>
+
+    <div class="flex flex-col md:flex-row gap-4 mb-8">
+      <input id="minPrice" type="number" class="p-2 rounded bg-gray-800 border border-gray-700 w-full md:w-1/2" placeholder="Preț minim (€)">
+      <input id="maxPrice" type="number" class="p-2 rounded bg-gray-800 border border-gray-700 w-full md:w-1/2" placeholder="Preț maxim (€)">
+    </div>
+
+    <div id="products" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 fade-in"></div>
+  </section>
+
+  <!-- CATEGORII -->
+  <section id="categories" class="max-w-6xl mx-auto py-20 px-6 fade-in">
+    <h3 class="text-4xl font-bold text-yellow-400 mb-10 text-center slide-left">
+      Categorii Recomandate
+    </h3>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <!-- Laptopuri -->
+      <div class="category-card relative overflow-hidden bg-gray-800 rounded-xl p-4 cursor-pointer group">
+        <img
+          src="https://images.pexels.com/photos/18105/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=800"
+          alt="Laptopuri"
+          class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition"
+        >
+        <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80"></div>
+
+        <div class="relative flex flex-col h-full justify-between">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-full bg-yellow-400/90 flex items-center justify-center text-black font-bold text-lg">
+              💻
+            </div>
+            <div>
+              <h4 class="font-bold text-yellow-400 text-lg">Laptopuri</h4>
+              <p class="text-xs text-gray-300">Office, gaming, ultrabook</p>
             </div>
           </div>
+          <p class="text-xs text-gray-300">
+            De la <span class="font-semibold text-yellow-300">399 €</span> · modele pentru muncă, școală și gaming.
+          </p>
         </div>
 
-        <!-- SEARCH (DESKTOP) -->
-        <div class="hidden md:flex flex-1 max-w-md items-center">
-          <div class="relative w-full">
-            <span class="absolute left-3 top-2.5 text-slate-500 text-sm">🔍</span>
-            <input
-              id="search"
-              type="text"
-              placeholder="Caută laptop, placă video, SSD..."
-              class="w-full pl-9 pr-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-yellow-400/70 focus:border-yellow-400/70"
-            />
+        <span class="category-chip">Nou</span>
+      </div>
+
+      <!-- Componente -->
+      <div class="category-card relative overflow-hidden bg-gray-800 rounded-xl p-4 cursor-pointer group">
+        <img
+          src="https://images.pexels.com/photos/1714208/pexels-photo-1714208.jpeg?auto=compress&cs=tinysrgb&w=800"
+          alt="Componente PC"
+          class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition"
+        >
+        <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80"></div>
+
+        <div class="relative flex flex-col h-full justify-between">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-full bg-yellow-400/90 flex items-center justify-center text-black font-bold text-lg">
+              🖥️
+            </div>
+            <div>
+              <h4 class="font-bold text-yellow-400 text-lg">Componente</h4>
+              <p class="text-xs text-gray-300">Procesoare, plăci video, SSD</p>
+            </div>
           </div>
+          <p class="text-xs text-gray-300">
+            Construiește-ți PC-ul ideal: piese compatibile și performante.
+          </p>
         </div>
 
-        <!-- NAV LINKS (DESKTOP) -->
-        <nav class="hidden lg:flex items-center gap-5 text-sm">
-          <a href="#productsSection" class="hover:text-yellow-400 transition">Produse</a>
-          <a href="#categories" class="hover:text-yellow-400 transition">Categorii</a>
-          <a href="#promotions" class="hover:text-yellow-400 transition">Promoții</a>
-          <a href="#contact" class="hover:text-yellow-400 transition">Contact</a>
-        </nav>
+        <span class="category-chip">Popular</span>
+      </div>
 
-        <!-- ACTIONS -->
-        <div class="flex items-center gap-2">
-          <button
-            id="loginBtn"
-            class="hidden sm:inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-semibold bg-slate-800 hover:bg-slate-700 border border-slate-600"
-          >
-            <span>👤</span><span>Logare</span>
-          </button>
-          <button
-            id="logoutBtn"
-            class="hidden sm:inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-semibold bg-slate-800 hover:bg-slate-700 border border-slate-600"
-          >
-            <span>↩</span><span>Logout</span>
-          </button>
+      <!-- Gadgeturi -->
+      <div class="category-card relative overflow-hidden bg-gray-800 rounded-xl p-4 cursor-pointer group">
+        <img
+          src="https://images.pexels.com/photos/1092644/pexels-photo-1092644.jpeg?auto=compress&cs=tinysrgb&w=800"
+          alt="Gadgeturi"
+          class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition"
+        >
+        <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80"></div>
 
-          <a
-            id="profileLink"
-            href="profile.html"
-            class="hidden sm:inline-flex text-xs px-2 py-1 rounded-full border border-slate-600 hover:border-yellow-400 hover:text-yellow-400"
-          >
-            Profil
-          </a>
+        <div class="relative flex flex-col h-full justify-between">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-full bg-yellow-400/90 flex items-center justify-center text-black font-bold text-lg">
+              📱
+            </div>
+            <div>
+              <h4 class="font-bold text-yellow-400 text-lg">Gadgeturi</h4>
+              <p class="text-xs text-gray-300">Căști, smartwatch, smart home</p>
+            </div>
+          </div>
+          <p class="text-xs text-gray-300">
+            Gadgeturi care îți fac viața mai simplă și mai smart.
+          </p>
+        </div>
 
-          <a
-            id="adminLink"
-            href="admin.html"
-            class="hidden sm:inline-flex text-xs px-2 py-1 rounded-full border border-yellow-400 text-yellow-400"
-          >
-            Admin
-          </a>
+        <span class="category-chip">Recomandat</span>
+      </div>
 
-          <!-- CART BTN -->
-          <button
-            id="cartBtn"
-            class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-semibold bg-yellow-400 text-slate-950 hover:bg-yellow-300"
-          >
-            🛒
-            <span>Coș</span>
-            (<span id="cartCount">0</span>)
-          </button>
+      <!-- Accesorii -->
+      <div class="category-card relative overflow-hidden bg-gray-800 rounded-xl p-4 cursor-pointer group">
+        <img
+          src="https://images.pexels.com/photos/1420701/pexels-photo-1420701.jpeg?auto=compress&cs=tinysrgb&w=800"
+          alt="Accesorii"
+          class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition"
+        >
+        <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80"></div>
 
-          <!-- MOBILE MENU ICON (dummy, doar pt. look) -->
-          <button class="md:hidden inline-flex items-center justify-center w-9 h-9 rounded-full bg-slate-900 border border-slate-700">
-            ☰
-          </button>
+        <div class="relative flex flex-col h-full justify-between">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-full bg-yellow-400/90 flex items-center justify-center text-black font-bold text-lg">
+              🎧
+            </div>
+            <div>
+              <h4 class="font-bold text-yellow-400 text-lg">Accesorii</h4>
+              <p class="text-xs text-gray-300">Mouse, tastaturi, periferice</p>
+            </div>
+          </div>
+          <p class="text-xs text-gray-300">
+            Completează-ți setup-ul cu accesorii confortabile și fiabile.
+          </p>
+        </div>
+
+        <span class="category-chip">-10%</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROMOȚII -->
+  <section id="promotions" class="max-w-6xl mx-auto py-20 px-6 fade-in">
+    <h3 class="text-4xl font-bold text-yellow-400 mb-10 text-center slide-left">
+      Promoții Speciale
+    </h3>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="promo-card relative overflow-hidden rounded-xl p-6 cursor-pointer group">
+        <img src="https://images.pexels.com/photos/374074/pexels-photo-374074.jpeg?auto=compress&cs=tinysrgb&w=1200"
+             class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-70 transition">
+        <div class="absolute inset-0 bg-gradient-to-br from-black/70 via-black/40 to-black/80"></div>
+        <div class="relative z-10">
+          <h4 class="text-yellow-400 font-bold text-xl mb-2">🔥 -15% la Laptopuri Gaming</h4>
+          <p class="text-gray-200">Doar până la finalul lunii. Modele ASUS ROG, Acer Nitro, MSI.</p>
         </div>
       </div>
-    </header>
 
-    <!-- MAIN -->
-    <main class="flex-1">
-      <!-- HERO -->
-      <section class="bg-slate-950 border-b border-slate-900">
-        <div class="max-w-6xl mx-auto px-4 py-8 md:py-10 flex flex-col md:flex-row gap-8 items-center">
-          <!-- LEFT -->
-          <div class="flex-1 space-y-4 fade-in">
-            <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-slate-900 border border-slate-700 text-[11px] text-slate-300 uppercase tracking-[0.16em]">
-              <span class="text-yellow-400 text-base">★</span>
-              <span>Ofertă de iarnă</span>
-              <span class="hidden sm:inline text-slate-500">– laptopuri &amp; componente cu reducere</span>
-            </div>
-            <h1 class="text-3xl md:text-4xl font-extrabold leading-tight">
-              Configurează-ți <span class="text-yellow-400">PC-ul ideal</span> sau alege
-              un <span class="text-yellow-400">laptop gata de lucru</span>.
-            </h1>
-            <p class="text-slate-400 text-sm md:text-base max-w-xl">
-              Laptopuri pentru facultate, gaming sau birou, plus componente și accesorii verificate.
-              Livrare rapidă și suport prietenos.
-            </p>
-            <div class="flex flex-wrap gap-3 text-xs">
-              <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900 border border-slate-700">
-                <span>🚚</span> <span>Livrare în 24-48h</span>
-              </div>
-              <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900 border border-slate-700">
-                <span>🛠️</span> <span>Produse testate</span>
-              </div>
-              <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900 border border-slate-700">
-                <span>💬</span> <span>Consultanță gratuită</span>
-              </div>
-            </div>
-            <div class="flex flex-wrap gap-3 pt-1">
-              <a href="#productsSection" class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-yellow-400 text-slate-950 text-sm font-semibold hover:bg-yellow-300">
-                Vezi produsele
-                <span>→</span>
-              </a>
-              <a href="#categories" class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-900 text-slate-200 text-sm border border-slate-700 hover:border-yellow-400 hover:text-yellow-400">
-                Vezi categoriile
-              </a>
-            </div>
-          </div>
-
-          <!-- RIGHT - SIMPLE HIGHLIGHT BOX -->
-          <div class="w-full md:w-80 fade-in">
-            <div class="rounded-2xl bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800 border border-slate-700 p-4 shadow-2xl">
-              <div class="flex items-center justify-between mb-2">
-                <h2 class="text-sm font-semibold text-slate-200">Recomandare rapidă</h2>
-                <span class="text-[11px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/40">
-                  Cel mai căutat
-                </span>
-              </div>
-              <p class="text-xs text-slate-400 mb-3">
-                Cauți un laptop pentru facultate și muncă? Alege un model cu SSD, 16GB RAM și procesor i5 / Ryzen 5.
-              </p>
-              <ul class="text-xs text-slate-300 space-y-1 mb-3">
-                <li>• Pornire rapidă și fără lag</li>
-                <li>• Autonomie bună la baterie</li>
-                <li>• Tastatură confortabilă</li>
-              </ul>
-              <button
-                type="button"
-                id="navCatalog"
-                class="w-full mt-1 inline-flex items-center justify-center gap-2 px-3 py-1.5 rounded-lg bg-yellow-400 text-slate-950 text-sm font-semibold hover:bg-yellow-300"
-              >
-                Deschide catalogul
-                <span>🛒</span>
-              </button>
-            </div>
-          </div>
+      <div class="promo-card relative overflow-hidden rounded-xl p-6 cursor-pointer group">
+        <img src="https://images.pexels.com/photos/4792718/pexels-photo-4792718.jpeg?auto=compress&cs=tinysrgb&w=1200"
+             class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-70 transition">
+        <div class="absolute inset-0 bg-gradient-to-br from-black/70 via-black/40 to-black/80"></div>
+        <div class="relative z-10">
+          <h4 class="text-yellow-400 font-bold text-xl mb-2">⚡ SSD + Montaj Gratuit</h4>
+          <p class="text-gray-200">La orice SSD peste 500GB – montajul este inclus.</p>
         </div>
-      </section>
-
-      <!-- PRODUSE -->
-      <section id="productsSection" class="max-w-6xl mx-auto px-4 py-8 fade-in">
-        <div class="flex items-center justify-between gap-3 mb-4">
-          <div>
-            <h2 class="text-xl md:text-2xl font-bold">Produse populare</h2>
-            <p class="text-xs text-slate-400">Filtrează rapid produsele în funcție de buget și categorie.</p>
-          </div>
-          <div class="hidden md:block text-[11px] text-slate-500">
-            Date reale din Firestore · actualizat în timp real
-          </div>
-        </div>
-
-        <!-- FILTERS -->
-        <div class="space-y-3 mb-5">
-          <!-- row 1 -->
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-            <div class="md:hidden">
-              <input
-                id="search-mobile"
-                type="text"
-                placeholder="Caută produs..."
-                class="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-yellow-400/70 focus:border-yellow-400/70"
-              />
-            </div>
-            <div>
-              <select
-                id="categoryFilter"
-                class="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400/70 focus:border-yellow-400/70"
-              >
-                <option value="">Toate categoriile</option>
-              </select>
-            </div>
-            <div>
-              <select
-                id="sortFilter"
-                class="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400/70 focus:border-yellow-400/70"
-              >
-                <option value="new">Cele mai noi</option>
-                <option value="priceAsc">Preț crescător</option>
-                <option value="priceDesc">Preț descrescător</option>
-              </select>
-            </div>
-          </div>
-
-          <!-- row 2 -->
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-            <input
-              id="minPrice"
-              type="number"
-              min="0"
-              placeholder="Preț minim (€)"
-              class="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-xs placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-yellow-400/70 focus:border-yellow-400/70"
-            />
-            <input
-              id="maxPrice"
-              type="number"
-              min="0"
-              placeholder="Preț maxim (€)"
-              class="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-xs placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-yellow-400/70 focus:border-yellow-400/70"
-            />
-            <div class="hidden md:flex items-center justify-end text-[11px] text-slate-500 col-span-2">
-              Sfaturi: încearcă <span class="mx-1 text-yellow-300">500 - 1500 €</span> pentru laptopuri sau
-              <span class="mx-1 text-yellow-300">50 - 400 €</span> pentru componente.
-            </div>
-          </div>
-        </div>
-
-        <!-- PRODUCTS GRID -->
-        <div id="products" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
-      </section>
-
-      <!-- CATEGORII -->
-      <section id="categories" class="max-w-6xl mx-auto px-4 py-8 border-t border-slate-900 fade-in">
-        <div class="flex items-center justify-between mb-4">
-          <h2 class="text-xl md:text-2xl font-bold">Categorii principale</h2>
-          <span class="hidden md:inline text-[11px] text-slate-500">Alege categoria și apoi filtrează după buget.</span>
-        </div>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div class="category-card relative overflow-hidden p-4 cursor-pointer">
-            <div class="flex items-center gap-3 mb-3">
-              <div class="w-9 h-9 rounded-full bg-yellow-400/90 flex items-center justify-center text-slate-900 text-lg">
-                💻
-              </div>
-              <div>
-                <h3 class="font-semibold text-sm">Laptopuri</h3>
-                <p class="text-[11px] text-slate-400">Office, gaming, ultrabook</p>
-              </div>
-            </div>
-            <p class="text-[11px] text-slate-300">
-              Modele echilibrate pentru facultate, muncă și entertainment.
-            </p>
-            <span class="category-chip">Popular</span>
-          </div>
-
-          <div class="category-card relative overflow-hidden p-4 cursor-pointer">
-            <div class="flex items-center gap-3 mb-3">
-              <div class="w-9 h-9 rounded-full bg-yellow-400/90 flex items-center justify-center text-slate-900 text-lg">
-                🖥️
-              </div>
-              <div>
-                <h3 class="font-semibold text-sm">Componente</h3>
-                <p class="text-[11px] text-slate-400">GPU, CPU, SSD, RAM</p>
-              </div>
-            </div>
-            <p class="text-[11px] text-slate-300">
-              Construiește-ți propriul PC sau fă upgrade inteligent.
-            </p>
-            <span class="category-chip">Gaming</span>
-          </div>
-
-          <div class="category-card relative overflow-hidden p-4 cursor-pointer">
-            <div class="flex items-center gap-3 mb-3">
-              <div class="w-9 h-9 rounded-full bg-yellow-400/90 flex items-center justify-center text-slate-900 text-lg">
-                📱
-              </div>
-              <div>
-                <h3 class="font-semibold text-sm">Gadgeturi</h3>
-                <p class="text-[11px] text-slate-400">Căști, smartwatch, smart home</p>
-              </div>
-            </div>
-            <p class="text-[11px] text-slate-300">
-              Micile device-uri care-ți fac viața mai comodă.
-            </p>
-            <span class="category-chip">Nou</span>
-          </div>
-
-          <div class="category-card relative overflow-hidden p-4 cursor-pointer">
-            <div class="flex items-center gap-3 mb-3">
-              <div class="w-9 h-9 rounded-full bg-yellow-400/90 flex items-center justify-center text-slate-900 text-lg">
-                🎧
-              </div>
-              <div>
-                <h3 class="font-semibold text-sm">Accesorii</h3>
-                <p class="text-[11px] text-slate-400">Mouse, tastaturi, periferice</p>
-              </div>
-            </div>
-            <p class="text-[11px] text-slate-300">
-              Completează-ți setup-ul cu periferice confortabile.
-            </p>
-            <span class="category-chip">-10%</span>
-          </div>
-        </div>
-      </section>
-
-      <!-- PROMOTIONS -->
-      <section id="promotions" class="max-w-6xl mx-auto px-4 py-8 border-t border-slate-900 fade-in">
-        <div class="flex items-center justify-between mb-4">
-          <h2 class="text-xl md:text-2xl font-bold">Promoții active</h2>
-          <button
-            id="navPromo"
-            type="button"
-            class="hidden md:inline-flex items-center gap-1 text-xs px-3 py-1.5 rounded-full border border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-slate-950"
-          >
-            Vezi mai întâi promoțiile
-          </button>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <article class="promo-card relative overflow-hidden rounded-xl p-5 cursor-pointer">
-            <div class="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900/80 to-slate-950/95"></div>
-            <div class="relative space-y-2">
-              <p class="text-xs text-yellow-300 uppercase tracking-[0.18em]">-15% laptopuri</p>
-              <h3 class="text-lg font-semibold">Reduceri la laptopuri pentru facultate și office</h3>
-              <p class="text-xs text-slate-200 max-w-sm">
-                Modele cu SSD, 16GB RAM și ecran de 15.6", perfecte pentru lucru mixt și cursuri online.
-              </p>
-            </div>
-          </article>
-
-          <article class="promo-card relative overflow-hidden rounded-xl p-5 cursor-pointer">
-            <div class="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900/80 to-slate-950/95"></div>
-            <div class="relative space-y-2">
-              <p class="text-xs text-yellow-300 uppercase tracking-[0.18em]">SSD + montaj</p>
-              <h3 class="text-lg font-semibold">Upgrade rapid la SSD &amp; curățare sistem</h3>
-              <p class="text-xs text-slate-200 max-w-sm">
-                La orice SSD peste 500GB, montajul și migrarea datelor sunt incluse în pachet.
-              </p>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <!-- TESTIMONIALS -->
-      <section id="testimonials" class="max-w-6xl mx-auto px-4 py-8 border-t border-slate-900 fade-in">
-        <div class="flex items-center justify-between mb-4">
-          <h2 class="text-xl md:text-2xl font-bold">Ce spun clienții</h2>
-          <span class="hidden md:inline text-[11px] text-slate-500">Feedback real de la comenzi TechStore.</span>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <article class="testimonial-card p-4">
-            <div class="flex items-center gap-3 mb-3">
-              <div class="w-9 h-9 rounded-full bg-slate-800 flex items-center justify-center text-sm">IC</div>
-              <div class="leading-tight">
-                <p class="text-sm font-semibold">Ion C.</p>
-                <p class="text-[11px] text-slate-400">Laptop pentru facultate</p>
-              </div>
-            </div>
-            <p class="text-xs text-slate-200 italic">
-              „Mi-au recomandat un laptop echilibrat, nu cel mai scump. Livrare rapidă și suport ok pe chat.”
-            </p>
-          </article>
-
-          <article class="testimonial-card p-4">
-            <div class="flex items-center gap-3 mb-3">
-              <div class="w-9 h-9 rounded-full bg-slate-800 flex items-center justify-center text-sm">MP</div>
-              <div class="leading-tight">
-                <p class="text-sm font-semibold">Maria P.</p>
-                <p class="text-[11px] text-slate-400">Upgrade PC</p>
-              </div>
-            </div>
-            <p class="text-xs text-slate-200 italic">
-              „Am schimbat HDD cu SSD și am mai pus RAM. PC-ul pornește acum în câteva secunde. Recomand.”
-            </p>
-          </article>
-
-          <article class="testimonial-card p-4">
-            <div class="flex items-center gap-3 mb-3">
-              <div class="w-9 h-9 rounded-full bg-slate-800 flex items-center justify-center text-sm">AD</div>
-              <div class="leading-tight">
-                <p class="text-sm font-semibold">Alex D.</p>
-                <p class="text-[11px] text-slate-400">Setup complet</p>
-              </div>
-            </div>
-            <p class="text-xs text-slate-200 italic">
-              „Mi-au configurat un PC de gaming în buget. Clar, mai simplu decât să caut singur toate piesele.”
-            </p>
-          </article>
-        </div>
-      </section>
-
-      <!-- CONTACT -->
-      <section id="contact" class="max-w-6xl mx-auto px-4 py-8 border-t border-slate-900 fade-in">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-          <div>
-            <h2 class="text-xl md:text-2xl font-bold mb-2">Contact &amp; newsletter</h2>
-            <p class="text-sm text-slate-400 mb-4">
-              Lasă-ne emailul tău și te anunțăm când avem oferte la laptopuri sau componente.
-            </p>
-            <form class="space-y-3">
-              <input
-                type="email"
-                placeholder="Emailul tău"
-                class="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-yellow-400/70 focus:border-yellow-400/70"
-              />
-              <button
-                type="submit"
-                class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-yellow-400 text-slate-950 text-sm font-semibold hover:bg-yellow-300"
-              >
-                Abonează-te
-                <span>→</span>
-              </button>
-            </form>
-          </div>
-          <div class="text-sm text-slate-300 space-y-1">
-            <p><span class="text-slate-400">Email:</span> contact@techstore.ro</p>
-            <p><span class="text-slate-400">Telefon:</span> +373 123 456 789</p>
-            <p><span class="text-slate-400">Adresă:</span> Str. Exemplu 12, Chișinău</p>
-            <p class="text-[11px] text-slate-500 pt-2">
-              Program: Luni – Vineri, 09:00 – 18:00 · Sâmbătă, 10:00 – 14:00
-            </p>
-          </div>
-        </div>
-      </section>
-    </main>
-
-    <!-- FOOTER -->
-    <footer class="bg-slate-950 border-t border-slate-900 text-[11px] text-slate-500 text-center py-4">
-      &copy; 2025 TechStore. Toate drepturile rezervate.
-    </footer>
-  </div>
-
-  <!-- CART SIDEBAR -->
-  <div
-    id="cart"
-    class="fixed top-0 right-[-400px] w-80 max-w-full h-full bg-slate-900 text-slate-100 p-5 shadow-2xl border-l border-slate-800 transition-all z-40"
-  >
-    <div class="flex items-center justify-between mb-4">
-      <h3 class="text-lg font-bold">Coș produse</h3>
-      <button id="closeCart" class="text-slate-400 hover:text-slate-100 text-xl leading-none">&times;</button>
+      </div>
     </div>
-    <div id="cartItems" class="space-y-3 text-sm"></div>
-    <hr class="my-4 border-slate-800" />
-    <div class="flex justify-between items-center mb-4 text-sm">
-      <span class="font-semibold">Total:</span>
-      <span id="cartTotal" class="font-bold text-yellow-400">0 €</span>
+  </section>
+
+  <!-- TESTIMONIALE -->
+  <section id="testimonials" class="max-w-6xl mx-auto py-20 px-6 fade-in">
+    <h3 class="text-4xl font-bold text-yellow-400 mb-10 text-center slide-left">
+      Ce spun clienții noștri
+    </h3>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="testimonial-card relative overflow-hidden p-6 rounded-xl bg-gray-800/80 backdrop-blur group">
+        <div class="flex items-center gap-3 mb-4">
+          <img src="https://randomuser.me/api/portraits/men/32.jpg"
+               class="w-12 h-12 rounded-full border-2 border-yellow-400">
+          <div>
+            <p class="font-semibold text-yellow-300 text-sm">Ion C.</p>
+            <p class="text-gray-400 text-xs">Achiziție Laptop</p>
+          </div>
+        </div>
+        <p class="text-gray-300 italic">
+          „Produsele sunt de calitate, livrare rapidă și suport excelent. Recomand!”
+        </p>
+      </div>
+
+      <div class="testimonial-card relative overflow-hidden p-6 rounded-xl bg-gray-800/80 backdrop-blur group">
+        <div class="flex items-center gap-3 mb-4">
+          <img src="https://randomuser.me/api/portraits/women/42.jpg"
+               class="w-12 h-12 rounded-full border-2 border-yellow-400">
+          <div>
+            <p class="font-semibold text-yellow-300 text-sm">Maria P.</p>
+            <p class="text-gray-400 text-xs">Componente PC</p>
+          </div>
+        </div>
+        <p class="text-gray-300 italic">
+          „Am găsit toate componentele pentru PC-ul meu. Prețuri corecte și livrare rapidă.”
+        </p>
+      </div>
+
+      <div class="testimonial-card relative overflow-hidden p-6 rounded-xl bg-gray-800/80 backdrop-blur group">
+        <div class="flex items-center gap-3 mb-4">
+          <img src="https://randomuser.me/api/portraits/men/85.jpg"
+               class="w-12 h-12 rounded-full border-2 border-yellow-400">
+          <div>
+            <p class="font-semibold text-yellow-300 text-sm">Alex D.</p>
+            <p class="text-gray-400 text-xs">Smartphone</p>
+          </div>
+        </div>
+        <p class="text-gray-300 italic">
+          „Site-ul arată modern și comanda a ajuns în 24h. Super experiență!”
+        </p>
+      </div>
     </div>
-    <button
-      id="checkoutBtn"
-      class="w-full mb-2 px-4 py-2 rounded-lg bg-yellow-400 text-slate-950 text-sm font-semibold hover:bg-yellow-300"
-    >
-      Mergi la checkout
-    </button>
-    <p class="text-[11px] text-slate-500">
-      Plata se procesează ulterior, după confirmarea comenzii de către un operator.
+  </section>
+
+  <!-- BLOG -->
+  <section id="blog" class="max-w-6xl mx-auto py-20 px-6 fade-in">
+    <h3 class="text-4xl font-bold text-yellow-400 mb-6 text-center slide-left">Blog & Știri IT</h3>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="bg-gray-800 p-6 rounded-lg shadow-lg hover:scale-105 transition slide-right">
+        <h4 class="font-bold text-yellow-400 text-xl mb-2">Top 5 laptopuri 2025</h4>
+        <p class="text-gray-300 mb-2">Află cele mai performante laptopuri pentru gaming și muncă.</p>
+        <a href="#" class="text-yellow-400 hover:underline">Citește mai mult →</a>
+      </div>
+      <div class="bg-gray-800 p-6 rounded-lg shadow-lg hover:scale-105 transition slide-left">
+        <h4 class="font-bold text-yellow-400 text-xl mb-2">Upgrade SSD</h4>
+        <p class="text-gray-300 mb-2">Cum să-ți îmbunătățești viteza PC-ului cu un SSD modern.</p>
+        <a href="#" class="text-yellow-400 hover:underline">Citește mai mult →</a>
+      </div>
+      <div class="bg-gray-800 p-6 rounded-lg shadow-lg hover:scale-105 transition slide-right">
+        <h4 class="font-bold text-yellow-400 text-xl mb-2">Gadgeturi inovative</h4>
+        <p class="text-gray-300 mb-2">Cele mai noi gadgeturi tech pe care trebuie să le ai.</p>
+        <a href="#" class="text-yellow-400 hover:underline">Citește mai mult →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="max-w-6xl mx-auto py-20 px-6 text-center fade-in">
+    <h3 class="text-4xl font-bold text-yellow-400 mb-6 slide-left">Contact & Newsletter</h3>
+    <p class="text-gray-400 mb-4 slide-right">Abonează-te pentru oferte și noutăți IT:</p>
+    <form class="flex flex-col md:flex-row justify-center items-center gap-4 mb-8">
+      <input type="email" placeholder="Emailul tău" class="p-3 rounded bg-gray-800 border border-gray-700 w-full md:w-1/2">
+      <button class="bg-yellow-400 text-black px-6 py-3 rounded font-bold hover:bg-yellow-300 transition">
+        Abonează-te
+      </button>
+    </form>
+    <p class="text-gray-400">
+      Email: contact@techstore.ro | Telefon: +373 123 456 789 | Adresă: Str. Exemplu 12, Chișinău
     </p>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-black text-gray-400 text-center py-6">
+    &copy; 2025 TechStore. Toate drepturile rezervate.
+  </footer>
+
+  <!-- COȘ -->
+  <div id="cart"
+       class="fixed top-0 right-[-400px] w-96 max-w-full h-full bg-gray-800 text-white p-6 shadow-lg transition-all z-50">
+    <h3 class="text-2xl font-bold mb-4">Coș Produse</h3>
+    <div id="cartItems" class="space-y-4"></div>
+    <hr class="my-4 border-gray-600">
+    <div class="flex justify-between mb-4">
+      <strong>Total:</strong>
+      <span id="cartTotal">0 €</span>
+    </div>
+    <button id="checkoutBtn" class="w-full bg-yellow-400 text-black px-4 py-2 rounded font-semibold hover:bg-yellow-300 transition mb-2">
+      Checkout
+    </button>
+    <button id="closeCart" class="w-full bg-gray-700 text-white px-4 py-2 rounded font-semibold hover:bg-gray-600 transition">
+      Închide
+    </button>
   </div>
 
   <!-- CHECKOUT MODAL -->
-  <div id="checkoutModal" class="fixed inset-0 bg-black/70 hidden z-50 flex items-center justify-center">
-    <div class="modal-card w-full max-w-2xl max-h-[90vh] overflow-y-auto p-5">
-      <div class="flex items-center justify-between mb-3">
-        <h3 class="text-lg font-bold text-yellow-400">Finalizare comandă</h3>
-        <button id="checkoutClose" class="text-slate-400 hover:text-slate-100 text-xl leading-none">&times;</button>
+  <div id="checkoutModal" class="fixed inset-0 bg-black/60 flex items-center justify-center hidden z-50">
+    <div class="bg-gray-900 rounded-xl shadow-xl w-full max-w-2xl p-6 max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-2xl font-bold text-yellow-400">Finalizare comandă</h3>
+        <button id="checkoutClose" class="text-gray-400 hover:text-white text-2xl leading-none">&times;</button>
       </div>
 
-      <div class="mb-4 border border-slate-800 rounded-lg p-3 bg-slate-950/80">
-        <h4 class="text-sm font-semibold mb-2">Produsele tale</h4>
-        <div id="checkoutSummary" class="space-y-1 text-xs text-slate-200"></div>
-        <div class="mt-3 flex justify-between text-sm font-semibold text-yellow-400">
+      <!-- SUMAR COMANDĂ -->
+      <div class="mb-4 border border-gray-700 rounded-lg p-3 bg-gray-800">
+        <h4 class="font-semibold text-lg mb-2">Produsele tale</h4>
+        <div id="checkoutSummary" class="space-y-1 text-sm text-gray-200"></div>
+        <div class="mt-3 flex justify-between font-semibold text-yellow-400">
           <span>Total:</span>
           <span id="checkoutTotalText">0 €</span>
         </div>
       </div>
 
-      <form id="checkoutForm" class="space-y-3 text-xs">
+      <!-- FORMULAR DATE CLIENT -->
+      <form id="checkoutForm" class="space-y-3">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
           <div>
-            <label class="block mb-1 text-slate-300">Nume complet *</label>
-            <input
-              id="ckName"
-              type="text"
-              class="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700"
-            />
+            <label class="block text-sm mb-1">Nume complet *</label>
+            <input id="ckName" type="text" class="w-full p-2 rounded bg-gray-800 border border-gray-700" required>
           </div>
           <div>
-            <label class="block mb-1 text-slate-300">Email *</label>
-            <input
-              id="ckEmail"
-              type="email"
-              class="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700"
-            />
+            <label class="block text-sm mb-1">Email *</label>
+            <input id="ckEmail" type="email" class="w-full p-2 rounded bg-gray-800 border border-gray-700" required>
           </div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
           <div>
-            <label class="block mb-1 text-slate-300">Telefon *</label>
-            <input
-              id="ckPhone"
-              type="tel"
-              class="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700"
-            />
+            <label class="block text-sm mb-1">Telefon *</label>
+            <input id="ckPhone" type="tel" class="w-full p-2 rounded bg-gray-800 border border-gray-700" required>
           </div>
           <div>
-            <label class="block mb-1 text-slate-300">Oraș *</label>
-            <input
-              id="ckCity"
-              type="text"
-              class="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700"
-            />
+            <label class="block text-sm mb-1">Oraș *</label>
+            <input id="ckCity" type="text" class="w-full p-2 rounded bg-gray-800 border border-gray-700" required>
           </div>
         </div>
 
         <div>
-          <label class="block mb-1 text-slate-300">Adresă completă *</label>
-          <input
-            id="ckAddress"
-            type="text"
-            class="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700"
-          />
+          <label class="block text-sm mb-1">Adresă completă *</label>
+          <input id="ckAddress" type="text" class="w-full p-2 rounded bg-gray-800 border border-gray-700" required>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
           <div>
-            <label class="block mb-1 text-slate-300">Metodă de livrare *</label>
-            <select
-              id="ckDelivery"
-              class="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700"
-            >
+            <label class="block text-sm mb-1">Metodă de livrare *</label>
+            <select id="ckDelivery" class="w-full p-2 rounded bg-gray-800 border border-gray-700" required>
               <option value="curier">Curier rapid</option>
               <option value="pickup">Ridicare din magazin</option>
             </select>
           </div>
           <div>
-            <label class="block mb-1 text-slate-300">Metodă de plată *</label>
-            <select
-              id="ckPayment"
-              class="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700"
-            >
+            <label class="block text-sm mb-1">Metodă de plată *</label>
+            <select id="ckPayment" class="w-full p-2 rounded bg-gray-800 border border-gray-700" required>
               <option value="ramburs">Ramburs la curier</option>
               <option value="card_curier">Card la curier</option>
               <option value="transfer_bancar">Transfer bancar</option>
@@ -563,110 +415,116 @@
         </div>
 
         <div>
-          <label class="block mb-1 text-slate-300">Observații (opțional)</label>
-          <textarea
-            id="ckNotes"
-            rows="3"
-            class="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700"
-          ></textarea>
+          <label class="block text-sm mb-1">Observații (opțional)</label>
+          <textarea id="ckNotes" rows="3" class="w-full p-2 rounded bg-gray-800 border border-gray-700"></textarea>
         </div>
 
         <button
           id="checkoutSubmitBtn"
           type="submit"
-          class="w-full mt-1 px-4 py-2 rounded-lg bg-yellow-400 text-slate-950 text-sm font-semibold hover:bg-yellow-300"
+          class="w-full bg-yellow-400 text-black py-2 rounded font-semibold hover:bg-yellow-300 transition mt-2"
         >
           Plasează comanda
         </button>
 
-        <p id="checkoutMessage" class="text-center text-xs mt-2"></p>
+        <p id="checkoutMessage" class="text-sm mt-2 text-center"></p>
       </form>
     </div>
   </div>
 
   <!-- AUTH MODAL -->
-  <div id="authModal" class="fixed inset-0 bg-black/70 hidden z-50 flex items-center justify-center">
-    <div class="modal-card w-full max-w-md p-5">
-      <div class="flex items-center justify-between mb-3">
-        <h3 id="authTitle" class="text-lg font-bold text-yellow-400">Logare</h3>
-        <button id="authClose" class="text-slate-400 hover:text-slate-100 text-xl leading-none">&times;</button>
+  <div id="authModal" class="fixed inset-0 bg-black/60 flex items-center justify-center hidden z-50">
+    <div class="bg-gray-900 rounded-xl shadow-xl w-full max-w-md p-6">
+      <div class="flex justify-between items-center mb-4">
+        <h3 id="authTitle" class="text-2xl font-bold text-yellow-400">Logare</h3>
+        <button id="authClose" class="text-gray-400 hover:text-white text-xl">&times;</button>
       </div>
 
-      <div class="flex border-b border-slate-800 text-xs mb-4">
-        <button
-          id="tabLogin"
-          class="flex-1 py-2 text-center border-b-2 border-yellow-400 font-semibold"
-        >
+      <div class="flex mb-4 border-b border-gray-700 text-sm">
+        <button id="tabLogin" class="flex-1 py-2 text-center border-b-2 border-yellow-400 font-semibold">
           Logare
         </button>
-        <button
-          id="tabRegister"
-          class="flex-1 py-2 text-center text-slate-400 hover:text-yellow-400"
-        >
+        <button id="tabRegister" class="flex-1 py-2 text-center text-gray-400 hover:text-yellow-400">
           Înregistrare
         </button>
       </div>
 
-      <!-- LOGIN -->
-      <form id="loginForm" class="space-y-3 text-xs">
-        <input
-          type="email"
-          id="loginEmail"
-          class="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700"
-          placeholder="Email"
-        />
-        <input
-          type="password"
-          id="loginPassword"
-          class="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700"
-          placeholder="Parolă"
-        />
-        <button
-          type="submit"
-          class="w-full px-3 py-2 rounded-lg bg-yellow-400 text-slate-950 text-sm font-semibold hover:bg-yellow-300"
-        >
+      <!-- FORM LOGIN -->
+      <form id="loginForm" class="space-y-4">
+        <input type="email" id="loginEmail" class="w-full p-2 rounded bg-gray-800 border border-gray-700"
+               placeholder="Email">
+        <input type="password" id="loginPassword" class="w-full p-2 rounded bg-gray-800 border border-gray-700"
+               placeholder="Parolă">
+        <button type="submit" class="w-full bg-yellow-400 text-black py-2 rounded font-semibold hover:bg-yellow-300">
           Logare
         </button>
-        <button
-          type="button"
-          id="forgotPasswordBtn"
-          class="w-full text-yellow-400 text-[11px] mt-1 hover:underline"
-        >
+        <button type="button" id="forgotPasswordBtn" class="w-full text-yellow-400 text-sm mt-1 hover:underline">
           Ai uitat parola?
         </button>
       </form>
 
-      <!-- REGISTER -->
-      <form id="registerForm" class="space-y-3 text-xs hidden">
-        <input
-          type="email"
-          id="registerEmail"
-          class="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700"
-          placeholder="Email"
-        />
-        <input
-          type="password"
-          id="registerPassword"
-          class="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700"
-          placeholder="Parolă"
-        />
-        <input
-          type="password"
-          id="registerPassword2"
-          class="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700"
-          placeholder="Confirmă parola"
-        />
-        <button
-          type="submit"
-          class="w-full px-3 py-2 rounded-lg bg-yellow-400 text-slate-950 text-sm font-semibold hover:bg-yellow-300"
-        >
+      <!-- FORM REGISTER -->
+      <form id="registerForm" class="space-y-4 hidden">
+        <input type="email" id="registerEmail" class="w-full p-2 rounded bg-gray-800 border border-gray-700"
+               placeholder="Email">
+        <input type="password" id="registerPassword" class="w-full p-2 rounded bg-gray-800 border border-gray-700"
+               placeholder="Parolă">
+        <input type="password" id="registerPassword2" class="w-full p-2 rounded bg-gray-800 border border-gray-700"
+               placeholder="Confirmă parola">
+        <button type="submit" class="w-full bg-yellow-400 text-black py-2 rounded font-semibold hover:bg-yellow-300">
           Creează cont
         </button>
       </form>
     </div>
   </div>
 
-  <!-- SCRIPTS -->
+  <!-- NAVBAR JOS (MOBILE) -->
+  <nav class="fixed bottom-0 left-0 w-full bg-black/95 text-white py-2 border-t border-gray-700 flex justify-around md:hidden z-40">
+    <button id="navPromo" class="flex flex-col items-center text-xs">
+      <span class="text-xl">%</span>
+      <span>Promo</span>
+    </button>
+
+    <button id="navCatalog" class="flex flex-col items-center text-xs">
+      <span class="text-xl">📄</span>
+      <span>Catalog</span>
+    </button>
+
+    <button id="bottomCartBtn" class="flex flex-col items-center text-xs">
+      <span class="text-xl">🛒</span>
+      <span>Coș</span>
+    </button>
+
+    <button id="bottomProfileBtn" class="flex flex-col items-center text-xs">
+      <span class="text-xl">👤</span>
+      <span>Cont</span>
+    </button>
+  </nav>
+
+  <!-- MENIU CONT (MOBILE) -->
+  <div id="mobileAccountMenu" class="fixed inset-x-0 bottom-12 mx-4 mb-4 bg-gray-900 border border-gray-700 rounded-xl shadow-xl p-4 hidden z-40">
+    <!-- ne-logat -->
+    <div id="notLogged" class="space-y-2">
+      <p class="text-sm text-gray-200">Nu ești logat.</p>
+      <button id="openLogin" class="w-full bg-yellow-400 text-black py-2 rounded font-semibold hover:bg-yellow-300">
+        Logare / Cont nou
+      </button>
+    </div>
+
+    <!-- logat -->
+    <div id="loggedUser" class="space-y-2 hidden">
+      <button id="goToProfile" class="w-full bg-gray-800 text-white py-2 rounded hover:bg-gray-700 text-sm">
+        Profil & comenzi
+      </button>
+      <button id="adminPanelBtn" class="w-full bg-gray-800 text-white py-2 rounded hover:bg-gray-700 text-sm hidden">
+        Admin Panel
+      </button>
+      <button id="logoutBtnMobile" class="w-full bg-red-500 text-white py-2 rounded hover:bg-red-400 text-sm">
+        Logout
+      </button>
+    </div>
+  </div>
+
   <script type="module" src="app.js"></script>
   <script src="animations.js"></script>
 </body>
