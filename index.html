@@ -489,29 +489,32 @@
   </div>
 
   <!-- BOTTOM NAV (MOBILE) -->
-  <nav
-    class="fixed bottom-0 left-0 right-0 bg-black/95 border-t border-gray-800 text-gray-200 py-1 px-4 flex justify-between md:hidden z-40">
-    <button id="bottomPromoBtn" class="flex flex-col items-center text-xs">
-      <span class="text-xl mb-0.5">%</span>
-      <span>Promo</span>
-    </button>
-    <button id="bottomCatalogBtn" class="flex flex-col items-center text-xs">
-      <span class="text-xl mb-0.5">📄</span>
-      <span>Catalog</span>
-    </button>
-    <button id="bottomCartBtn" class="flex flex-col items-center text-xs">
-      <span class="text-xl mb-0.5">🛒</span>
-      <span>Coș</span>
-    </button>
-    <button id="bottomAccountBtn" class="flex flex-col items-center text-xs">
-      <span class="text-xl mb-0.5">👤</span>
-      <span>Cont</span>
-    </button>
-    <button id="bottomMoreBtn" class="flex flex-col items-center text-xs">
-      <span class="text-2xl leading-none">⋯</span>
-      <span>Mai multe</span>
-    </button>
-  </nav>
+ <nav class="fixed bottom-0 left-0 w-full bg-black/95 text-white py-2 border-t border-gray-700 flex justify-around md:hidden z-50">
+    <div class="flex flex-col items-center">
+        <span class="text-xl">%</span>
+        <span class="text-sm">Promo</span>
+    </div>
+
+    <div class="flex flex-col items-center">
+        <span class="text-xl">📄</span>
+        <span class="text-sm">Catalog</span>
+    </div>
+
+    <div id="bottomCartBtn" class="flex flex-col items-center">
+        <span class="text-xl">🛒</span>
+        <span class="text-sm">Coș</span>
+    </div>
+
+    <div id="bottomProfileBtn" class="flex flex-col items-center">
+        <span class="text-xl">👤</span>
+        <span class="text-sm">Cont</span>
+    </div>
+
+    <div id="bottomMoreBtn" class="flex flex-col items-center">
+        <span class="text-xl">⋯</span>
+        <span class="text-sm">Mai multe</span>
+    </div>
+</nav>
 
   <!-- OVERLAY + MENIU RAPID -->
   <div
