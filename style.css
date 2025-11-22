@@ -218,3 +218,17 @@ body {
 #bottomNav {
   box-shadow: 0 -8px 25px rgba(0, 0, 0, 0.85);
 }
+/* ===========================
+   LAYOUT MOBILE – ascundem headerul de sus,
+   păstrăm doar bara de jos
+=========================== */
+@media (max-width: 768px) {
+  .site-header {
+    display: none;
+  }
+
+  /* rezervăm spațiu să nu se suprapună conținutul cu bara de jos */
+  body {
+    padding-bottom: 4.5rem;
+  }
+}
