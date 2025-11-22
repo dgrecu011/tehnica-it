@@ -19,47 +19,31 @@
 <body class="bg-gray-900 text-gray-100 font-sans">
 
   <!-- HEADER TOP -->
-  <header class="flex items-center justify-between p-4 md:p-6 bg-black/95 backdrop-blur shadow-lg sticky top-0 z-40">
-    <div class="flex items-center gap-4">
-      <h1 class="text-3xl md:text-4xl font-extrabold text-yellow-400 tracking-tight">
-        TechStore
-      </h1>
+  <header class="hidden md:flex items-center justify-between px-6 py-4 bg-black/90 backdrop-blur shadow-lg sticky top-0 z-50">
+    <a href="#" class="text-3xl font-extrabold text-yellow-400">TechStore</a>
 
-      <!-- HAMBURGER (doar mobil) -->
-      <button id="hamburgerBtn" class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg bg-gray-800 text-gray-100">
+    <button id="hamburgerBtn" class="text-white text-2xl bg-gray-800 px-3 py-2 rounded-md">
         ☰
-      </button>
-    </div>
+    </button>
 
-    <!-- NAV DESKTOP -->
-    <nav
-      id="navMenu"
-      class="hidden md:flex flex-col md:flex-row md:items-center md:space-x-6 gap-2 md:gap-0 mt-4 md:mt-0 text-sm md:text-base"
-    >
-      <a href="#about" class="hover:text-yellow-400 transition font-medium">Despre Noi</a>
-      <a href="#productsSection" class="hover:text-yellow-400 transition font-medium">Produse</a>
-      <a href="#categories" class="hover:text-yellow-400 transition font-medium">Categorii</a>
-      <a href="#promotions" class="hover:text-yellow-400 transition font-medium">Promoții</a>
-      <a href="#testimonials" class="hover:text-yellow-400 transition font-medium">Testimoniale</a>
-      <a href="#blog" class="hover:text-yellow-400 transition font-medium">Blog</a>
-      <a href="#contact" class="hover:text-yellow-400 transition font-medium">Contact</a>
-      <a href="profile.html" class="hover:text-yellow-400 transition font-medium hidden" id="profileLink">Profil</a>
-      <a href="admin.html" class="hover:text-yellow-400 transition font-medium hidden" id="adminLink">Admin</a>
-    </nav>
+    <div id="navMenu" class="flex gap-4 items-center">
+        <a href="#products" class="text-white hover:text-yellow-400">Produse</a>
 
-    <!-- RIGHT BUTTONS -->
-    <div class="flex items-center space-x-3 ml-4">
-      <button id="loginBtn" class="bg-yellow-400 text-black px-4 py-2 rounded-full font-semibold hover:bg-yellow-300 transition text-sm md:text-base">
-        Logare / Cont nou
-      </button>
-      <button id="logoutBtn" class="bg-yellow-400 text-black px-4 py-2 rounded-full font-semibold hover:bg-yellow-300 transition hidden text-sm md:text-base">
-        Logout
-      </button>
-      <button id="cartBtn" class="bg-yellow-400 text-black px-4 py-2 rounded-full font-semibold hover:bg-yellow-300 transition text-sm md:text-base">
-        Coș (<span id="cartCount">0</span>)
-      </button>
+        <a id="adminLink" href="/admin.html" class="text-yellow-400 font-bold hidden">Admin</a>
+
+        <button id="loginBtn" class="bg-yellow-400 text-black px-4 py-2 rounded-full font-semibold">
+            Logare / Cont nou
+        </button>
+
+        <button id="logoutBtn" class="hidden bg-yellow-400 text-black px-4 py-2 rounded-full font-semibold">
+            Logout
+        </button>
+
+        <button id="cartBtn" class="bg-yellow-400 text-black px-4 py-2 rounded-full font-semibold flex items-center gap-1">
+            Coș (<span id="cartCount">0</span>)
+        </button>
     </div>
-  </header>
+</header>
 
   <!-- HERO -->
   <section class="hero relative bg-gradient-to-b from-black via-gray-900 to-gray-800 text-center text-white py-24 md:py-32 px-6">
