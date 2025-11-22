@@ -2,20 +2,122 @@
 <html lang="ro">
 <head>
   <meta charset="UTF-8">
-  <title>TechStore - Admin</title>
+  <title>Admin Panel - TechStore</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
 <body class="bg-gray-900 text-gray-100">
-  <header class="p-4 bg-black flex justify-between items-center">
-    <h1 class="text-2xl font-bold text-yellow-400">Admin Panel</h1>
-    <a href="index.html" class="text-sm text-gray-300 hover:text-yellow-400">← Înapoi la magazin</a>
+
+  <!-- HEADER ADMIN -->
+  <header class="bg-black p-4 shadow-lg">
+    <div class="max-w-6xl mx-auto flex items-center justify-between">
+      <h1 class="text-2xl font-bold text-yellow-400">TechStore Admin</h1>
+      <a href="index.html" class="text-gray-300 hover:text-yellow-400 text-sm">← Înapoi la site</a>
+    </div>
   </header>
 
-  <main class="max-w-6xl mx-auto p-4">
-    <p class="text-gray-300 mb-4">Doar utilizatorii cu rol de admin (colecția <code>admins</code>) au acces la acest panou.</p>
-    <div id="adminContent" class="space-y-6"></div>
+  <main class="max-w-6xl mx-auto py-8 px-4">
+
+    <!-- GESTIONARE PRODUSE -->
+    <section class="mb-10">
+      <h2 class="text-2xl font-bold text-yellow-400 mb-4">Produse</h2>
+
+      <div class="bg-gray-800 p-4 rounded-lg mb-6">
+        <h3 class="font-semibold mb-3">Adaugă / editează produs</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <input id="adminTitle" type="text" placeholder="Titlu"
+                 class="p-2 rounded bg-gray-900 border border-gray-700">
+          <input id="adminPrice" type="number" placeholder="Preț (€)"
+                 class="p-2 rounded bg-gray-900 border border-gray-700" min="0" step="0.01">
+          <input id="adminStock" type="number" placeholder="Stoc"
+                 class="p-2 rounded bg-gray-900 border border-gray-700" min="0" step="1">
+          <input id="adminImage" type="text" placeholder="URL imagine"
+                 class="p-2 rounded bg-gray-900 border border-gray-700">
+        </div>
+        <textarea id="adminDesc" placeholder="Descriere"
+                  class="mt-3 w-full p-2 rounded bg-gray-900 border border-gray-700" rows="2"></textarea>
+
+        <div class="flex flex-col md:flex-row gap-3 mt-3 items-center">
+          <select id="adminCategory" class="p-2 rounded bg-gray-900 border border-gray-700">
+            <option value="Laptop">Laptop</option>
+            <option value="Component">Componentă</option>
+            <option value="Gadget">Gadget</option>
+            <option value="Accesoriu">Accesoriu</option>
+          </select>
+          <button id="addProductBtn"
+                  class="bg-yellow-400 text-black px-4 py-2 rounded font-semibold hover:bg-yellow-300">
+            Salvează produs
+          </button>
+          <span class="text-xs text-gray-400">Click pe „Editează” la un produs existent pentru a-l modifica.</span>
+        </div>
+      </div>
+
+      <input id="adminSearch" type="text" placeholder="Caută produs..."
+             class="w-full mb-4 p-2 rounded bg-gray-800 border border-gray-700">
+
+      <div id="adminProducts" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+    </section>
+
+    <hr class="border-gray-700 mb-8">
+
+    <!-- STATISTICI COMENZI -->
+    <section class="mb-8">
+      <h2 class="text-2xl font-bold text-yellow-400 mb-4">Comenzi</h2>
+
+      <!-- STATISTICI -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6" id="orderStats">
+        <div class="bg-gray-800 p-4 rounded-lg shadow">
+          <p class="text-gray-400 text-sm">Total comenzi</p>
+          <p id="statTotalOrders" class="text-2xl font-bold text-yellow-400">0</p>
+        </div>
+        <div class="bg-gray-800 p-4 rounded-lg shadow">
+          <p class="text-gray-400 text-sm">Venit total</p>
+          <p id="statTotalRevenue" class="text-2xl font-bold text-yellow-400">0 €</p>
+        </div>
+        <div class="bg-gray-800 p-4 rounded-lg shadow">
+          <p class="text-gray-400 text-sm">Comenzi noi</p>
+          <p id="statNewOrders" class="text-2xl font-bold text-yellow-400">0</p>
+        </div>
+      </div>
+
+      <!-- GRAFICE -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <div class="bg-gray-800 p-4 rounded-lg shadow h-72">
+          <h3 class="text-yellow-400 font-semibold mb-3">Vânzări pe zile (ultimele 7)</h3>
+          <canvas id="salesChart"></canvas>
+        </div>
+        <div class="bg-gray-800 p-4 rounded-lg shadow h-72">
+          <h3 class="text-yellow-400 font-semibold mb-3">Comenzi pe status</h3>
+          <canvas id="statusChart"></canvas>
+        </div>
+      </div>
+
+      <!-- TAB-uri STATUS -->
+      <div class="flex flex-wrap gap-2 mb-4">
+        <button class="order-status-tab bg-yellow-400 text-black px-3 py-1 rounded-full font-semibold" data-status="all">
+          Toate
+        </button>
+        <button class="order-status-tab bg-gray-800 text-gray-200 px-3 py-1 rounded-full" data-status="nouă">
+          Noi
+        </button>
+        <button class="order-status-tab bg-gray-800 text-gray-200 px-3 py-1 rounded-full" data-status="în procesare">
+          În procesare
+        </button>
+        <button class="order-status-tab bg-gray-800 text-gray-200 px-3 py-1 rounded-full" data-status="expediată">
+          Expediate
+        </button>
+        <button class="order-status-tab bg-gray-800 text-gray-200 px-3 py-1 rounded-full" data-status="livrată">
+          Livrate
+        </button>
+        <button class="order-status-tab bg-gray-800 text-gray-200 px-3 py-1 rounded-full" data-status="anulată">
+          Anulate
+        </button>
+      </div>
+
+      <div id="adminOrders" class="space-y-4"></div>
+    </section>
   </main>
 
   <script type="module" src="admin.js"></script>
