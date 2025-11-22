@@ -28,26 +28,12 @@ window.addEventListener("load", handleScrollAnimation);
 
 
 // ===============================
-// HAMBURGER MENU ANIMAT + SLIDE DOWN
-// ===============================
+// Mobile hamburger menu
 const hamburgerBtn = document.getElementById("hamburgerBtn");
 const navMenu = document.getElementById("navMenu");
 
 if (hamburgerBtn && navMenu) {
   hamburgerBtn.addEventListener("click", () => {
-    // animăm hamburger → X
-    hamburgerBtn.classList.toggle("open");
-
-    // animăm meniul
-    navMenu.classList.toggle("open");
-  });
-
-  // când apeși pe un link — închide meniul
-  const navLinks = navMenu.querySelectorAll("a");
-  navLinks.forEach((link) => {
-    link.addEventListener("click", () => {
-      hamburgerBtn.classList.remove("open");
-      navMenu.classList.remove("open");
-    });
+    navMenu.classList.toggle("active");
   });
 }
