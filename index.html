@@ -27,9 +27,9 @@
 </head>
 <body class="bg-gray-900 text-gray-100 font-sans">
 
-  <!-- HEADER (DESKTOP + TABLET, ASCUNS PE MOBIL) -->
+  <!-- HEADER SUS -->
   <header
-    class="site-header flex items-center justify-between p-4 md:p-6 bg-black/90 backdrop-blur shadow-lg sticky top-0 z-40"
+    class="flex items-center justify-between p-4 md:p-6 bg-black/90 backdrop-blur shadow-lg sticky top-0 z-40"
   >
     <div class="flex items-center gap-4">
       <h1
@@ -37,7 +37,7 @@
       >
         TechStore
       </h1>
-      <!-- HAMBURGER (doar pentru desktop mic / tabletă) -->
+      <!-- HAMBURGER (mobile) -->
       <button
         id="hamburgerBtn"
         class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded bg-gray-800 text-gray-100"
@@ -46,23 +46,55 @@
       </button>
     </div>
 
-    <!-- NAV SUS -->
+    <!-- NAV DESKTOP / COLLAPSABLE -->
     <nav
       id="navMenu"
       class="hidden md:flex flex-col md:flex-row md:items-center md:space-x-6 gap-2 md:gap-0 mt-4 md:mt-0 text-sm md:text-base"
     >
-      <a href="#about" class="hover:text-yellow-400 transition font-medium">Despre Noi</a>
-      <a href="#productsSection" class="hover:text-yellow-400 transition font-medium">Produse</a>
-      <a href="#categories" class="hover:text-yellow-400 transition font-medium">Categorii</a>
-      <a href="#promotions" class="hover:text-yellow-400 transition font-medium">Promoții</a>
-      <a href="#testimonials" class="hover:text-yellow-400 transition font-medium">Testimoniale</a>
-      <a href="#blog" class="hover:text-yellow-400 transition font-medium">Blog</a>
-      <a href="#contact" class="hover:text-yellow-400 transition font-medium">Contact</a>
-      <a href="profile.html" class="hover:text-yellow-400 transition font-medium hidden" id="profileLink">Profil</a>
-      <a href="admin.html" class="hover:text-yellow-400 transition font-medium hidden" id="adminLink">Admin</a>
+      <a href="#about" class="hover:text-yellow-400 transition font-medium"
+        >Despre Noi</a
+      >
+      <a
+        href="#productsSection"
+        class="hover:text-yellow-400 transition font-medium"
+        >Produse</a
+      >
+      <a
+        href="#categories"
+        class="hover:text-yellow-400 transition font-medium"
+        >Categorii</a
+      >
+      <a
+        href="#promotions"
+        class="hover:text-yellow-400 transition font-medium"
+        >Promoții</a
+      >
+      <a
+        href="#testimonials"
+        class="hover:text-yellow-400 transition font-medium"
+        >Testimoniale</a
+      >
+      <a href="#blog" class="hover:text-yellow-400 transition font-medium"
+        >Blog</a
+      >
+      <a href="#contact" class="hover:text-yellow-400 transition font-medium"
+        >Contact</a
+      >
+      <a
+        href="profile.html"
+        class="hover:text-yellow-400 transition font-medium hidden"
+        id="profileLink"
+        >Profil</a
+      >
+      <a
+        href="admin.html"
+        class="hover:text-yellow-400 transition font-medium hidden"
+        id="adminLink"
+        >Admin</a
+      >
     </nav>
 
-    <!-- BUTOANE DREAPTA -->
+    <!-- DREAPTA: AUTH + COS -->
     <div class="flex items-center space-x-3 ml-4">
       <button
         id="loginBtn"
@@ -105,9 +137,8 @@
       href="#productsSection"
       class="inline-block bg-yellow-400 text-black px-8 py-3 rounded-full font-bold hover:bg-yellow-300 transition text-lg fade-in shadow-lg"
       style="transition-delay: 0.4s"
+      >Vezi Produse</a
     >
-      Vezi Produse
-    </a>
   </section>
 
   <!-- DESPRE NOI -->
@@ -118,10 +149,10 @@
       Despre Noi
     </h3>
     <p class="text-gray-300 text-lg md:text-xl text-center slide-right">
-      TechStore este un magazin online pentru pasionații de tehnologie. Oferim
-      produse IT de calitate: componente performante, laptopuri, gadgeturi
-      inovative și accesorii. Prioritizăm calitatea, prețul corect și livrarea
-      rapidă.
+      TechStore este un magazin online pentru pasionații de tehnologie.
+      Oferim produse IT de calitate: componente performante, laptopuri,
+      gadgeturi inovative și accesorii. Prioritizăm calitatea, prețul
+      corect și livrarea rapidă.
     </p>
   </section>
 
@@ -212,8 +243,9 @@
             </div>
           </div>
           <p class="text-xs text-gray-300">
-            De la <span class="font-semibold text-yellow-300">399 €</span> ·
-            modele pentru muncă, școală și gaming.
+            De la
+            <span class="font-semibold text-yellow-300">399 €</span> · modele
+            pentru muncă, școală și gaming.
           </p>
         </div>
 
@@ -344,11 +376,9 @@
           src="https://images.pexels.com/photos/374074/pexels-photo-374074.jpeg?auto=compress&cs=tinysrgb&w=1200"
           class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-70 transition"
         />
-
         <div
           class="absolute inset-0 bg-gradient-to-br from-black/70 via-black/40 to-black/80"
         ></div>
-
         <div class="relative z-10">
           <h4 class="text-yellow-400 font-bold text-xl mb-2">
             🔥 -15% la Laptopuri Gaming
@@ -367,11 +397,9 @@
           src="https://images.pexels.com/photos/4792718/pexels-photo-4792718.jpeg?auto=compress&cs=tinysrgb&w=1200"
           class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-70 transition"
         />
-
         <div
           class="absolute inset-0 bg-gradient-to-br from-black/70 via-black/40 to-black/80"
         ></div>
-
         <div class="relative z-10">
           <h4 class="text-yellow-400 font-bold text-xl mb-2">
             ⚡ SSD + Montaj Gratuit
@@ -393,7 +421,6 @@
     </h3>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <!-- Testimonial 1 -->
       <div
         class="testimonial-card relative overflow-hidden p-6 rounded-xl bg-gray-800/80 backdrop-blur group"
       >
@@ -407,14 +434,12 @@
             <p class="text-gray-400 text-xs">Achiziție Laptop</p>
           </div>
         </div>
-
         <p class="text-gray-300 italic">
           “Produsele sunt de calitate, livrare rapidă și suport excelent.
           Recomand!”
         </p>
       </div>
 
-      <!-- Testimonial 2 -->
       <div
         class="testimonial-card relative overflow-hidden p-6 rounded-xl bg-gray-800/80 backdrop-blur group"
       >
@@ -428,14 +453,12 @@
             <p class="text-gray-400 text-xs">Componente PC</p>
           </div>
         </div>
-
         <p class="text-gray-300 italic">
           “Am găsit toate componentele pentru PC-ul meu. Prețuri corecte și
           livrare rapidă.”
         </p>
       </div>
 
-      <!-- Testimonial 3 -->
       <div
         class="testimonial-card relative overflow-hidden p-6 rounded-xl bg-gray-800/80 backdrop-blur group"
       >
@@ -449,7 +472,6 @@
             <p class="text-gray-400 text-xs">Smartphone</p>
           </div>
         </div>
-
         <p class="text-gray-300 italic">
           “Site-ul arată modern și comanda a ajuns în 24h. Super experiență!”
         </p>
@@ -510,9 +532,7 @@
     id="contact"
     class="max-w-6xl mx-auto py-20 px-6 text-center fade-in"
   >
-    <h3
-      class="text-4xl font-bold text-yellow-400 mb-6 slide-left"
-    >
+    <h3 class="text-4xl font-bold text-yellow-400 mb-6 slide-left">
       Contact & Newsletter
     </h3>
     <p class="text-gray-400 mb-4 slide-right">
@@ -543,10 +563,10 @@
     &copy; 2025 TechStore. Toate drepturile rezervate.
   </footer>
 
-  <!-- COȘ SIDEBAR -->
+  <!-- COȘ SIDE PANEL -->
   <div
     id="cart"
-    class="fixed top-0 right-[-400px] w-96 max-w-full h-full bg-gray-800 text-white p-6 shadow-lg transition-all z-50"
+    class="fixed top-0 right-[-400px] w-96 max-w-full h-full bg-gray-800 text-white p-6 shadow-lg transition-all z-40"
   >
     <h3 class="text-2xl font-bold mb-4">Coș Produse</h3>
     <div id="cartItems" class="space-y-4"></div>
@@ -589,7 +609,6 @@
         </button>
       </div>
 
-      <!-- SUMAR COMANDĂ -->
       <div class="mb-4 border border-gray-700 rounded-lg p-3 bg-gray-800">
         <h4 class="font-semibold text-lg mb-2">Produsele tale</h4>
         <div id="checkoutSummary" class="space-y-1 text-sm text-gray-200"></div>
@@ -599,7 +618,6 @@
         </div>
       </div>
 
-      <!-- FORMULAR DATE CLIENT -->
       <form id="checkoutForm" class="space-y-3">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
           <div>
@@ -659,7 +677,6 @@
             <select
               id="ckDelivery"
               class="w-full p-2 rounded bg-gray-800 border border-gray-700"
-              required
             >
               <option value="curier">Curier rapid</option>
               <option value="pickup">Ridicare din magazin</option>
@@ -670,7 +687,6 @@
             <select
               id="ckPayment"
               class="w-full p-2 rounded bg-gray-800 border border-gray-700"
-              required
             >
               <option value="ramburs">Ramburs la curier</option>
               <option value="card_curier">Card la curier</option>
@@ -716,22 +732,23 @@
         </button>
       </div>
 
-      <div class="flex mb-4 border-b border-gray-700 text-sm">
+      <div
+        class="flex mb-4 border-b border-gray-700 text-sm text-center"
+      >
         <button
           id="tabLogin"
-          class="flex-1 py-2 text-center border-b-2 border-yellow-400 font-semibold"
+          class="flex-1 py-2 border-b-2 border-yellow-400 font-semibold"
         >
           Logare
         </button>
         <button
           id="tabRegister"
-          class="flex-1 py-2 text-center text-gray-400 hover:text-yellow-400"
+          class="flex-1 py-2 text-gray-400 hover:text-yellow-400"
         >
           Înregistrare
         </button>
       </div>
 
-      <!-- FORM LOGIN -->
       <form id="loginForm" class="space-y-4">
         <input
           type="email"
@@ -760,7 +777,6 @@
         </button>
       </form>
 
-      <!-- FORM REGISTER -->
       <form id="registerForm" class="space-y-4 hidden">
         <input
           type="email"
@@ -790,71 +806,78 @@
     </div>
   </div>
 
-  <!-- BOTTOM NAV BAR (MOBILE ONLY) -->
+  <!-- BOTTOM NAV (CA ÎN MAGAZIN ELEFANT/EMAG) -->
   <nav
-    id="bottomBar"
-    class="fixed bottom-0 inset-x-0 bg-black/95 border-t border-gray-800 flex justify-around items-center h-16 md:hidden z-40"
+    class="fixed bottom-0 left-0 right-0 bg-black/95 text-gray-200 border-t border-gray-700 flex justify-around py-2 z-40 md:hidden"
   >
-    <button
-      id="bottomPromoBtn"
-      class="flex flex-col items-center text-xs text-gray-300"
-    >
-      <span class="text-lg">%</span>
+    <button id="bottomPromoBtn" class="flex flex-col items-center text-xs">
+      <span class="text-lg mb-1">%</span>
       <span>Promo</span>
     </button>
-    <button
-      id="bottomCatalogBtn"
-      class="flex flex-col items-center text-xs text-gray-300"
-    >
-      <span class="text-lg">📂</span>
+    <button id="bottomCatalogBtn" class="flex flex-col items-center text-xs">
+      <span class="text-lg mb-1">🧾</span>
       <span>Catalog</span>
     </button>
-    <button
-      id="bottomCartBtn"
-      class="flex flex-col items-center text-xs text-gray-300"
-    >
-      <span class="text-lg">🛒</span>
+    <button id="bottomCartBtn" class="flex flex-col items-center text-xs">
+      <span class="text-lg mb-1">🛒</span>
       <span>Coș</span>
     </button>
-    <button
-      id="bottomAccountBtn"
-      class="flex flex-col items-center text-xs text-gray-300"
-    >
-      <span class="text-lg">👤</span>
+    <button id="bottomAccountBtn" class="flex flex-col items-center text-xs">
+      <span class="text-lg mb-1">👤</span>
       <span>Cont</span>
     </button>
-    <button
-      id="bottomMoreBtn"
-      class="flex flex-col items-center text-xs text-gray-300"
-    >
-      <span class="text-lg">⋮</span>
+    <button id="bottomMoreBtn" class="flex flex-col items-center text-xs">
+      <span class="text-lg mb-1">☰</span>
       <span>Mai multe</span>
     </button>
   </nav>
 
-  <!-- SHEET PENTRU "MAI MULTE" -->
+  <!-- SHEET "MAI MULTE" -->
   <div
     id="moreSheet"
-    class="fixed inset-x-0 bottom-16 bg-gray-900/98 border-t border-gray-700 rounded-t-2xl shadow-2xl p-4 space-y-3 hidden z-40"
+    class="fixed inset-0 bg-black/60 flex items-end justify-center hidden z-50 md:hidden"
   >
-    <div class="flex justify-between items-center mb-2">
-      <span class="font-semibold text-gray-200 text-sm">
-        Mai multe opțiuni
-      </span>
-      <button id="moreCloseBtn" class="text-gray-400 text-xl">&times;</button>
-    </div>
-    <a href="#about" class="block text-sm text-gray-200">Despre noi</a>
-    <a href="#testimonials" class="block text-sm text-gray-200">Testimoniale</a>
-    <a href="#blog" class="block text-sm text-gray-200">Blog</a>
-    <a href="#contact" class="block text-sm text-gray-200">Contact</a>
-    <a
-      href="admin.html"
-      id="moreAdminLink"
-      class="block text-sm text-gray-200 hidden"
-      >Panou Admin</a
+    <div
+      class="bg-gray-900 w-full rounded-t-2xl p-5 max-h-[70vh] overflow-y-auto"
     >
+      <div class="flex justify-between items-center mb-4">
+        <h4 class="text-yellow-400 font-semibold text-lg">Meniu</h4>
+        <button id="moreCloseBtn" class="text-gray-400 text-xl">
+          &times;
+        </button>
+      </div>
+
+      <div class="space-y-2 text-sm">
+        <a href="#about" class="block py-2 border-b border-gray-800"
+          >Despre noi</a
+        >
+        <a href="#productsSection" class="block py-2 border-b border-gray-800"
+          >Produse</a
+        >
+        <a href="#categories" class="block py-2 border-b border-gray-800"
+          >Categorii</a
+        >
+        <a href="#promotions" class="block py-2 border-b border-gray-800"
+          >Promoții</a
+        >
+        <a href="#testimonials" class="block py-2 border-b border-gray-800"
+          >Testimoniale</a
+        >
+        <a href="#blog" class="block py-2 border-b border-gray-800">Blog</a>
+        <a href="#contact" class="block py-2 border-b border-gray-800"
+          >Contact</a
+        >
+        <a
+          id="moreAdminLink"
+          href="admin.html"
+          class="hidden py-2 text-yellow-400"
+          >Panou Admin</a
+        >
+      </div>
+    </div>
   </div>
 
+  <!-- SCRIPTS -->
   <script type="module" src="app.js"></script>
   <script src="animations.js"></script>
 </body>
