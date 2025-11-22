@@ -1,4 +1,6 @@
-// Scroll animations
+// ===============================
+// SCROLL ANIMATIONS
+// ===============================
 const scrollElements = document.querySelectorAll(".fade-in, .slide-left, .slide-right");
 
 const elementInView = (el, offset = 0) => {
@@ -9,6 +11,7 @@ const elementInView = (el, offset = 0) => {
 const displayScrollElement = (element) => {
   element.classList.add("show");
 };
+
 const hideScrollElement = (element) => {
   element.classList.remove("show");
 };
@@ -23,12 +26,24 @@ const handleScrollAnimation = () => {
 window.addEventListener("scroll", handleScrollAnimation);
 window.addEventListener("load", handleScrollAnimation);
 
-// Hamburger menu toggle
+
+// ===============================
+// HAMBURGER MENU ANIMAT
+// ===============================
 const hamburgerBtn = document.getElementById("hamburgerBtn");
 const navMenu = document.getElementById("navMenu");
 
 if (hamburgerBtn && navMenu) {
   hamburgerBtn.addEventListener("click", () => {
-    navMenu.classList.toggle("hidden");
+    hamburgerBtn.classList.toggle("open");
+    navMenu.classList.toggle("open");
+  });
+
+  // închide meniul când apeși pe un link
+  navMenu.querySelectorAll("a").forEach(link => {
+    link.addEventListener("click", () => {
+      hamburgerBtn.classList.remove("open");
+      navMenu.classList.remove("open");
+    });
   });
 }
