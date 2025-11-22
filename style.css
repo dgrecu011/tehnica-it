@@ -163,39 +163,57 @@ body {
 
 
 /* ===========================
-   MOBILE OPTIMIZED
-=========================== */
-@media (max-width: 768px) {
-  .hero h2 {
-    font-size: 2.5rem;
-  }
-  .hero p {
-    font-size: 16px;
-  }
-  .hero a {
-    padding: 0.8rem 2rem;
-    font-size: 16px;
-  }
+   /* ================
+   MOBILE NAV MENU FIX
+================ */
 
-  .product-card {
-    height: auto;
-    margin-bottom: 1rem;
-  }
-
-  .product-card-front img {
-    height: 200px;
-  }
-
-  .product-card-back {
-    padding: 0.5rem;
-  }
-
-  .product-card-back button {
-    padding: 0.5rem 1rem;
-    font-size: 14px;
-  }
+#navMenu {
+  transition: all .3s ease;
 }
 
+/* MOBILE STYLE ONLY */
+@media (max-width: 768px) {
+
+  /* Meniul devine un dropdown sub header */
+  #navMenu {
+    position: absolute;
+    top: 64px; /* sub navbar */
+    left: 0;
+    width: 100%;
+    background: rgba(0,0,0,0.95);
+    backdrop-filter: blur(8px);
+    padding: 20px 0;
+    display: none; /* ascuns implicit */
+    flex-direction: column;
+    gap: 16px;
+    z-index: 9999;
+  }
+
+  /* când e activ */
+  #navMenu.active {
+    display: flex;
+    animation: slideDown .25s ease;
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Links — frumos pe mobil */
+  #navMenu a {
+    text-align: center;
+    padding: 10px 0;
+    font-size: 18px;
+    font-weight: 600;
+  }
+}
 
 /* ===========================
    PROMO CARD HOVER
