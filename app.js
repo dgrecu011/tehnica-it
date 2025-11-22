@@ -1,6 +1,3 @@
-/* ==========================================================
-   IMPORTURI FIREBASE
-========================================================== */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
 import {
   getFirestore,
@@ -11,7 +8,6 @@ import {
   doc,
   getDoc
 } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-firestore.js";
-
 import {
   getAuth,
   signInWithEmailAndPassword,
@@ -21,9 +17,9 @@ import {
   sendPasswordResetEmail
 } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-auth.js";
 
-/* ==========================================================
-   CONFIG FIREBASE
-========================================================== */
+// ===========================
+// CONFIG FIREBASE
+// ===========================
 const firebaseConfig = {
   apiKey: "AIzaSyAKe4zLHem2_1LSOkTc4StNVqJJFCB9_Uc",
   authDomain: "it-store-2da3a.firebaseapp.com",
@@ -38,9 +34,9 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-/* ==========================================================
-   ELEMENTE DOM
-========================================================== */
+// ===========================
+// ELEMENTE DOM
+// ===========================
 const productsEl = document.getElementById("products");
 const searchInput = document.getElementById("search");
 const categoryFilter = document.getElementById("categoryFilter");
@@ -60,7 +56,16 @@ const cartItemsEl = document.getElementById("cartItems");
 const cartTotalEl = document.getElementById("cartTotal");
 const cartCountEl = document.getElementById("cartCount");
 
-/* AUTH MODAL */
+// bottom nav
+const tabPromo = document.getElementById("tabPromo");
+const tabCatalog = document.getElementById("tabCatalog");
+const tabCart = document.getElementById("tabCart");
+const tabAccount = document.getElementById("tabAccount");
+const tabMore = document.getElementById("tabMore");
+const moreSheet = document.getElementById("moreSheet");
+const moreClose = document.getElementById("moreClose");
+
+// Auth modal
 const authModal = document.getElementById("authModal");
 const authClose = document.getElementById("authClose");
 const authTitle = document.getElementById("authTitle");
@@ -75,7 +80,7 @@ const registerPassword = document.getElementById("registerPassword");
 const registerPassword2 = document.getElementById("registerPassword2");
 const forgotPasswordBtn = document.getElementById("forgotPasswordBtn");
 
-/* CHECKOUT */
+// CHECKOUT
 const checkoutModal = document.getElementById("checkoutModal");
 const checkoutClose = document.getElementById("checkoutClose");
 const checkoutForm = document.getElementById("checkoutForm");
@@ -95,27 +100,15 @@ const ckNotes = document.getElementById("ckNotes");
 
 const checkoutBtn = document.getElementById("checkoutBtn");
 
-/* ---------------- BOTTOM NAV ---------------- */
-const bottomPromoBtn = document.getElementById("bottomPromoBtn");
-const bottomCatalogBtn = document.getElementById("bottomCatalogBtn");
-const bottomCartBtn = document.getElementById("bottomCartBtn");
-const bottomAccountBtn = document.getElementById("bottomAccountBtn");
-const bottomMoreBtn = document.getElementById("bottomMoreBtn");
-
-const moreSheet = document.getElementById("moreSheet");
-const moreCloseBtn = document.getElementById("moreCloseBtn");
-const moreAdminLink = document.getElementById("moreAdminLink");
-
-/* ==========================================================
-   STATE
-========================================================== */
+// ===========================
+// STATE
+// ===========================
 let allProducts = [];
 let cartItems = [];
 let isAdmin = false;
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-/* Restaurăm coșul */
 const savedCart = localStorage.getItem("cartItems");
 if (savedCart) {
   try {
@@ -125,85 +118,88 @@ if (savedCart) {
   }
 }
 
-/* ==========================================================
-   UI UTILS
-========================================================== */
+// ===========================
+// UI UTILS
+// ===========================
 const openAuthModal = (mode = "login") => {
   authModal.classList.remove("hidden");
-
   if (mode === "login") {
     authTitle.textContent = "Logare";
     loginForm.classList.remove("hidden");
     registerForm.classList.add("hidden");
     tabLogin.classList.add("border-yellow-400", "text-white");
+    tabLogin.classList.remove("text-gray-400");
     tabRegister.classList.remove("border-yellow-400");
+    tabRegister.classList.add("text-gray-400");
   } else {
     authTitle.textContent = "Înregistrare";
     loginForm.classList.add("hidden");
     registerForm.classList.remove("hidden");
     tabRegister.classList.add("border-yellow-400", "text-white");
+    tabRegister.classList.remove("text-gray-400");
     tabLogin.classList.remove("border-yellow-400");
+    tabLogin.classList.add("text-gray-400");
   }
 };
 
-const closeAuthModal = () => authModal.classList.add("hidden");
+const closeAuthModal = () => {
+  authModal.classList.add("hidden");
+};
 
-/* ==========================================================
-   RENDER PRODUSE
-========================================================== */
+const smoothScrollTo = (selector) => {
+  const el = document.querySelector(selector);
+  if (el) {
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+};
+
+// ===========================
+// PRODUSE SHOP
+// ===========================
 const renderProduct = (product) => {
   const card = document.createElement("div");
   card.className = "product-card perspective";
-
   card.innerHTML = `
     <div class="product-card-inner">
       <div class="product-card-front p-3">
-        <img src="${product.imageURL}" class="w-full h-48 rounded mb-3 object-cover">
+        <img src="${product.imageURL}" alt="${product.title}" class="w-full h-48 mb-3 rounded">
         <h4 class="font-bold text-lg">${product.title}</h4>
         <p class="text-gray-400 mb-1">${product.price} €</p>
         <p class="text-xs text-gray-500">${product.category || ""}</p>
       </div>
-
       <div class="product-card-back p-3">
-        <h4 class="font-bold mb-2">${product.title}</h4>
-        <p class="text-gray-400 text-sm mb-2">${product.description || ""}</p>
+        <h4 class="font-bold text-lg mb-2">${product.title}</h4>
+        <p class="text-gray-400 mb-2 text-sm">${product.description || ""}</p>
         <button class="bg-yellow-400 text-black px-3 py-1 rounded add-to-cart">
           Adaugă în coș
         </button>
       </div>
     </div>
   `;
-
-  card.querySelector(".add-to-cart").onclick = () => {
+  const btn = card.querySelector(".add-to-cart");
+  btn.onclick = () => {
     cartItems.push(product);
     updateCart();
   };
-
   return card;
 };
 
 const populateCategoryFilter = () => {
-  const current = categoryFilter.value;
-
+  const currentValue = categoryFilter.value;
   categoryFilter.innerHTML = `<option value="">Toate categoriile</option>`;
-
-  const categories = [...new Set(allProducts.map(p => p.category).filter(Boolean))];
-
+  const categories = [...new Set(allProducts.map((p) => p.category).filter(Boolean))];
   categories.forEach((cat) => {
-    const o = document.createElement("option");
-    o.value = cat;
-    o.textContent = cat;
-    categoryFilter.appendChild(o);
+    const opt = document.createElement("option");
+    opt.value = cat;
+    opt.textContent = cat;
+    categoryFilter.appendChild(opt);
   });
-
-  if (categories.includes(current)) {
-    categoryFilter.value = current;
-  }
+  if (categories.includes(currentValue)) categoryFilter.value = currentValue;
 };
 
 const loadProducts = async () => {
-  const snap = await getDocs(collection(db, "products"));
-  allProducts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  const snapshot = await getDocs(collection(db, "products"));
+  allProducts = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
 
   populateCategoryFilter();
   renderProductList();
@@ -214,96 +210,97 @@ const renderProductList = () => {
   let filtered = [...allProducts];
 
   if (searchInput.value) {
-    filtered = filtered.filter(p =>
+    filtered = filtered.filter((p) =>
       p.title.toLowerCase().includes(searchInput.value.toLowerCase())
     );
   }
-
   if (categoryFilter.value) {
-    filtered = filtered.filter(p => p.category === categoryFilter.value);
+    filtered = filtered.filter((p) => p.category === categoryFilter.value);
   }
 
   if (minPriceInput.value) {
-    filtered = filtered.filter(
-      p => Number(p.price) >= Number(minPriceInput.value)
-    );
+    const min = Number(minPriceInput.value);
+    filtered = filtered.filter((p) => Number(p.price) >= min);
   }
-
   if (maxPriceInput.value) {
-    filtered = filtered.filter(
-      p => Number(p.price) <= Number(maxPriceInput.value)
-    );
+    const max = Number(maxPriceInput.value);
+    filtered = filtered.filter((p) => Number(p.price) <= max);
   }
 
   if (sortFilter.value === "priceAsc") {
     filtered.sort((a, b) => Number(a.price) - Number(b.price));
-  }
-  if (sortFilter.value === "priceDesc") {
+  } else if (sortFilter.value === "priceDesc") {
     filtered.sort((a, b) => Number(b.price) - Number(a.price));
   }
 
   if (!filtered.length) {
     productsEl.innerHTML =
-      `<p class="text-center text-gray-400 col-span-full">Nu s-au găsit produse.</p>`;
-    return;
+      '<p class="text-gray-400 col-span-full text-center">Nu s-au găsit produse.</p>';
+  } else {
+    filtered.forEach((p) => productsEl.appendChild(renderProduct(p)));
   }
-
-  filtered.forEach(p => productsEl.appendChild(renderProduct(p)));
 };
 
-/* ==========================================================
-   COȘ
-========================================================== */
+// ===========================
+// COȘ
+// ===========================
 const updateCart = () => {
   cartItemsEl.innerHTML = "";
   let total = 0;
-
-  cartItems.forEach((p, i) => {
-    const item = document.createElement("div");
-    item.className = "flex justify-between items-center mb-2";
-
-    item.innerHTML = `
+  cartItems.forEach((item, index) => {
+    const div = document.createElement("div");
+    div.className = "flex justify-between items-center mb-2";
+    div.innerHTML = `
       <div class="flex flex-col">
-        <span>${p.title}</span>
-        <span class="text-xs text-gray-400">${p.price} €</span>
+        <span>${item.title}</span>
+        <span class="text-xs text-gray-400">${item.price} €</span>
       </div>
-      <button class="text-red-400 text-sm" data-i="${i}">Șterge</button>
+      <button data-index="${index}" class="text-red-400 text-sm hover:text-red-200">Șterge</button>
     `;
-
-    item.querySelector("button").onclick = (e) => {
-      const index = Number(e.target.getAttribute("data-i"));
-      cartItems.splice(index, 1);
+    div.querySelector("button").onclick = (e) => {
+      const idx = Number(e.target.getAttribute("data-index"));
+      cartItems.splice(idx, 1);
       updateCart();
     };
-
-    cartItemsEl.appendChild(item);
-    total += Number(p.price);
+    cartItemsEl.appendChild(div);
+    total += Number(item.price);
   });
-
   cartTotalEl.textContent = total.toFixed(2) + " €";
   cartCountEl.textContent = cartItems.length;
 
   localStorage.setItem("cartItems", JSON.stringify(cartItems));
 };
 
-const getCartSummary = () => {
+const getCartSummaryItems = () => {
   const map = {};
-  cartItems.forEach(p => {
+  cartItems.forEach((p) => {
     const key = p.id || p.title;
     if (!map[key]) {
-      map[key] = { title: p.title, price: Number(p.price), quantity: 0 };
+      map[key] = {
+        productId: p.id || null,
+        title: p.title,
+        price: Number(p.price),
+        quantity: 0
+      };
     }
-    map[key].quantity++;
+    map[key].quantity += 1;
   });
   return Object.values(map);
 };
 
-/* ==========================================================
-   AUTH
-========================================================== */
-loginBtn.onclick = () => openAuthModal("login");
-logoutBtn.onclick = () => signOut(auth);
-authClose.onclick = closeAuthModal;
+// ===========================
+// AUTH
+// ===========================
+if (loginBtn) {
+  loginBtn.onclick = () => openAuthModal("login");
+}
+if (logoutBtn) {
+  logoutBtn.onclick = () => signOut(auth);
+}
+if (authClose) {
+  authClose.onclick = closeAuthModal;
+}
+
 tabLogin.onclick = () => openAuthModal("login");
 tabRegister.onclick = () => openAuthModal("register");
 
@@ -311,10 +308,14 @@ loginForm.onsubmit = async (e) => {
   e.preventDefault();
   const email = loginEmail.value.trim();
   const pass = loginPassword.value.trim();
-
-  if (!emailRegex.test(email)) return alert("Email invalid.");
-  if (pass.length < 6) return alert("Parola minim 6 caractere.");
-
+  if (!emailRegex.test(email)) {
+    alert("Email invalid.");
+    return;
+  }
+  if (pass.length < 6) {
+    alert("Parola trebuie să aibă minim 6 caractere.");
+    return;
+  }
   try {
     await signInWithEmailAndPassword(auth, email, pass);
     closeAuthModal();
@@ -325,112 +326,130 @@ loginForm.onsubmit = async (e) => {
 
 registerForm.onsubmit = async (e) => {
   e.preventDefault();
-
   const email = registerEmail.value.trim();
   const pass1 = registerPassword.value.trim();
   const pass2 = registerPassword2.value.trim();
 
-  if (!emailRegex.test(email)) return alert("Email invalid.");
-  if (pass1.length < 6) return alert("Parola minim 6 caractere.");
-  if (pass1 !== pass2) return alert("Parolele nu coincid.");
+  if (!emailRegex.test(email)) {
+    alert("Email invalid.");
+    return;
+  }
+  if (pass1.length < 6) {
+    alert("Parola trebuie să aibă minim 6 caractere.");
+    return;
+  }
+  if (pass1 !== pass2) {
+    alert("Parolele nu coincid.");
+    return;
+  }
 
   try {
     await createUserWithEmailAndPassword(auth, email, pass1);
-    alert("Cont creat! Te poți loga.");
+    alert("Cont creat cu succes! Te poți loga acum.");
     closeAuthModal();
   } catch (err) {
-    alert("Eroare: " + err.message);
+    alert("Eroare la înregistrare: " + err.message);
   }
 };
 
 if (forgotPasswordBtn) {
   forgotPasswordBtn.onclick = async () => {
-    const email = prompt("Introdu emailul tău:");
-    if (!email || !emailRegex.test(email)) return;
+    const email = prompt("Introdu emailul cu care te-ai înregistrat:");
+    if (!email) return;
+    if (!emailRegex.test(email)) {
+      alert("Email invalid.");
+      return;
+    }
     try {
       await sendPasswordResetEmail(auth, email);
-      alert("Email trimis.");
+      alert("Ți-am trimis un email cu link pentru resetarea parolei.");
     } catch (err) {
-      alert(err.message);
+      alert("Eroare: " + err.message);
     }
   };
 }
 
-/* ==========================================================
-   ON AUTH STATE CHANGED
-========================================================== */
 onAuthStateChanged(auth, async (user) => {
   if (user) {
-    loginBtn.classList.add("hidden");
-    logoutBtn.classList.remove("hidden");
+    if (loginBtn) loginBtn.classList.add("hidden");
+    if (logoutBtn) logoutBtn.classList.remove("hidden");
     profileLink.classList.remove("hidden");
 
-    // verificare admin
     try {
-      const ad = await getDoc(doc(db, "admins", user.uid));
-      isAdmin = ad.exists();
-    } catch {
+      const adminDoc = await getDoc(doc(db, "admins", user.uid));
+      isAdmin = adminDoc.exists();
+      if (isAdmin) {
+        adminLink.classList.remove("hidden");
+      } else {
+        adminLink.classList.add("hidden");
+      }
+    } catch (err) {
+      console.error("Eroare la verificarea rolului de admin:", err);
       isAdmin = false;
-    }
-
-    if (isAdmin) {
-      adminLink.classList.remove("hidden");
-      moreAdminLink?.classList.remove("hidden");
-    } else {
       adminLink.classList.add("hidden");
-      moreAdminLink?.classList.add("hidden");
     }
-
   } else {
-    loginBtn.classList.remove("hidden");
-    logoutBtn.classList.add("hidden");
+    isAdmin = false;
+    if (loginBtn) loginBtn.classList.remove("hidden");
+    if (logoutBtn) logoutBtn.classList.add("hidden");
     profileLink.classList.add("hidden");
     adminLink.classList.add("hidden");
-    moreAdminLink?.classList.add("hidden");
   }
 });
 
-/* ==========================================================
-   CHECKOUT
-========================================================== */
+// ===========================
+// CHECKOUT
+// ===========================
 checkoutBtn.onclick = () => {
-  if (!cartItems.length) return alert("Coș gol.");
+  if (!cartItems.length) {
+    alert("Coșul este gol.");
+    return;
+  }
 
-  const items = getCartSummary();
-
+  const items = getCartSummaryItems();
   checkoutSummaryEl.innerHTML = "";
   let total = 0;
 
-  items.forEach((i) => {
-    total += i.price * i.quantity;
+  items.forEach((item) => {
     const row = document.createElement("div");
     row.className = "flex justify-between text-sm";
     row.innerHTML = `
-      <span>${i.title} <span class="text-gray-400">x${i.quantity}</span></span>
-      <span>${(i.price * i.quantity).toFixed(2)} €</span>
+      <span>${item.title} <span class="text-gray-400">x${item.quantity}</span></span>
+      <span>${(item.price * item.quantity).toFixed(2)} €</span>
     `;
     checkoutSummaryEl.appendChild(row);
+    total += item.price * item.quantity;
   });
 
   checkoutTotalText.textContent = total.toFixed(2) + " €";
 
-  if (auth.currentUser) ckEmail.value = auth.currentUser.email;
+  const user = auth.currentUser;
+  if (user) {
+    ckEmail.value = user.email || "";
+  }
+
+  checkoutMessage.textContent = "";
+  checkoutMessage.className = "text-sm mt-2 text-center";
 
   checkoutModal.classList.remove("hidden");
   cart.style.right = "-400px";
 };
 
-checkoutClose.onclick = () => checkoutModal.classList.add("hidden");
-
-checkoutModal.onclick = (e) => {
-  if (e.target === checkoutModal) checkoutModal.classList.add("hidden");
+checkoutClose.onclick = () => {
+  checkoutModal.classList.add("hidden");
 };
+
+checkoutModal.addEventListener("click", (e) => {
+  if (e.target === checkoutModal) {
+    checkoutModal.classList.add("hidden");
+  }
+});
 
 checkoutForm.onsubmit = async (e) => {
   e.preventDefault();
 
   if (!cartItems.length) {
-    checkoutMessage.textContent = "Coș gol.";
+    checkoutMessage.textContent = "Coșul este gol.";
     checkoutMessage.classList.add("text-red-400");
     return;
   }
@@ -444,14 +463,16 @@ checkoutForm.onsubmit = async (e) => {
   const payment = ckPayment.value;
   const notes = ckNotes.value.trim();
 
-  if (!name || !city || !address) {
-    checkoutMessage.textContent = "Completează câmpurile necesare.";
+  if (!name || !city || !address || !delivery || !payment) {
+    checkoutMessage.textContent = "Completează toate câmpurile obligatorii.";
+    checkoutMessage.classList.remove("text-green-400");
     checkoutMessage.classList.add("text-red-400");
     return;
   }
 
   if (!emailRegex.test(email)) {
     checkoutMessage.textContent = "Email invalid.";
+    checkoutMessage.classList.remove("text-green-400");
     checkoutMessage.classList.add("text-red-400");
     return;
   }
@@ -459,26 +480,56 @@ checkoutForm.onsubmit = async (e) => {
   const phoneDigits = phone.replace(/\D/g, "");
   if (phoneDigits.length < 6) {
     checkoutMessage.textContent = "Telefon invalid.";
+    checkoutMessage.classList.remove("text-green-400");
     checkoutMessage.classList.add("text-red-400");
     return;
   }
 
-  const items = getCartSummary();
-  let total = 0; items.forEach(i => total += i.price * i.quantity);
+  const items = getCartSummaryItems();
+  const invalidItem = items.find(
+    (i) =>
+      !Number.isFinite(i.price) ||
+      i.price <= 0 ||
+      !Number.isInteger(i.quantity) ||
+      i.quantity <= 0
+  );
+  if (invalidItem) {
+    checkoutMessage.textContent = "Există produse cu preț sau cantitate invalidă.";
+    checkoutMessage.classList.remove("text-green-400");
+    checkoutMessage.classList.add("text-red-400");
+    return;
+  }
+
+  let total = 0;
+  items.forEach((i) => (total += i.price * i.quantity));
 
   checkoutSubmitBtn.disabled = true;
-  checkoutSubmitBtn.textContent = "Se procesează...";
+  checkoutSubmitBtn.textContent = "Se procesează comanda...";
+  checkoutMessage.textContent = "";
+  checkoutMessage.className = "text-sm mt-2 text-center";
 
   try {
-    const ref = await addDoc(collection(db, "orders"), {
-      items, total,
-      customer: { name, email, phone, city, address, delivery, payment, notes },
+    const orderRef = await addDoc(collection(db, "orders"), {
+      items,
+      total,
+      customer: {
+        name,
+        email,
+        phone,
+        city,
+        address,
+        delivery,
+        payment,
+        notes
+      },
+      status: "nouă",
       createdAt: serverTimestamp(),
-      userId: auth.currentUser?.uid || null,
-      status: "nouă"
+      userId: auth.currentUser ? auth.currentUser.uid : null
     });
 
-    checkoutMessage.textContent = "Comandă plasată! ID: " + ref.id;
+    checkoutMessage.textContent =
+      "Comanda a fost plasată cu succes! ID comandă: " + orderRef.id;
+    checkoutMessage.classList.remove("text-red-400");
     checkoutMessage.classList.add("text-green-400");
 
     cartItems = [];
@@ -487,79 +538,92 @@ checkoutForm.onsubmit = async (e) => {
 
     setTimeout(() => {
       checkoutModal.classList.add("hidden");
+      checkoutForm.reset();
       checkoutSubmitBtn.disabled = false;
       checkoutSubmitBtn.textContent = "Plasează comanda";
       checkoutMessage.textContent = "";
-      checkoutForm.reset();
     }, 2500);
-
   } catch (err) {
-    checkoutMessage.textContent = "Eroare la salvare.";
+    console.error(err);
+    checkoutMessage.textContent = "A apărut o eroare la salvarea comenzii.";
+    checkoutMessage.classList.remove("text-green-400");
     checkoutMessage.classList.add("text-red-400");
     checkoutSubmitBtn.disabled = false;
     checkoutSubmitBtn.textContent = "Plasează comanda";
   }
 };
 
-/* ==========================================================
-   BOTTOM NAV (MOBILE)
-========================================================== */
-const scrollToSection = (sel) => {
-  const el = document.querySelector(sel);
-  if (!el) return;
-  const top = el.getBoundingClientRect().top + window.scrollY - 80;
-  window.scrollTo({ top, behavior: "smooth" });
-};
-
-bottomPromoBtn?.addEventListener("click", () => scrollToSection("#promotions"));
-bottomCatalogBtn?.addEventListener("click", () => scrollToSection("#productsSection"));
-
-bottomCartBtn?.addEventListener("click", () => cart.style.right = "0");
-
-bottomAccountBtn?.addEventListener("click", () => {
-  if (auth.currentUser) {
-    window.location.href = "profile.html";
-  } else {
-    openAuthModal("login");
-  }
-});
-
-bottomMoreBtn?.addEventListener("click", () => {
-  moreSheet.classList.toggle("hidden");
-});
-
-moreCloseBtn?.addEventListener("click", () => {
-  moreSheet.classList.add("hidden");
-});
-
-moreSheet?.addEventListener("click", (e) => {
-  if (e.target === moreSheet) {
-    moreSheet.classList.add("hidden");
-  }
-});
-
-/* ==========================================================
-   FILTRE INPUTS
-========================================================== */
+// ===========================
+// EVENT LISTENERS
+// ===========================
 searchInput.oninput = renderProductList;
 categoryFilter.onchange = renderProductList;
 sortFilter.onchange = renderProductList;
 minPriceInput.oninput = renderProductList;
 maxPriceInput.oninput = renderProductList;
 
-cartBtn.onclick = () => cart.style.right = "0";
-closeCart.onclick = () => cart.style.right = "-400px";
+if (cartBtn) {
+  cartBtn.onclick = () => {
+    cart.style.right = "0";
+  };
+}
+closeCart.onclick = () => {
+  cart.style.right = "-400px";
+};
 
-[minPriceInput, maxPriceInput].forEach(input => {
+[minPriceInput, maxPriceInput].forEach((input) => {
   if (!input) return;
   input.addEventListener("input", () => {
-    input.value = input.value.replace(/[^0-9.]/g, "");
+    input.value = input.value.replace(/[^0-9.,]/g, "");
   });
 });
 
-/* ==========================================================
-   INITIAL LOAD
-========================================================== */
+// ===========================
+// BOTTOM NAV FUNCTIONALITY
+// ===========================
+if (tabPromo) {
+  tabPromo.addEventListener("click", () => smoothScrollTo("#promotions"));
+}
+if (tabCatalog) {
+  tabCatalog.addEventListener("click", () => smoothScrollTo("#productsSection"));
+}
+if (tabCart) {
+  tabCart.addEventListener("click", () => {
+    cart.style.right = "0";
+  });
+}
+if (tabAccount) {
+  tabAccount.addEventListener("click", () => {
+    if (auth.currentUser) {
+      window.location.href = "profile.html";
+    } else {
+      openAuthModal("login");
+    }
+  });
+}
+if (tabMore && moreSheet) {
+  tabMore.addEventListener("click", () => {
+    moreSheet.classList.toggle("translate-y-full");
+  });
+}
+if (moreClose && moreSheet) {
+  moreClose.addEventListener("click", () => {
+    moreSheet.classList.add("translate-y-full");
+  });
+}
+
+// linkurile din sheet
+document.querySelectorAll(".more-link").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const target = btn.getAttribute("data-target");
+    if (target) smoothScrollTo(target);
+    if (moreSheet) moreSheet.classList.add("translate-y-full");
+  });
+});
+
+// ===========================
+// INITIAL LOAD
+// ===========================
 window.addEventListener("load", async () => {
   await loadProducts();
   updateCart();
