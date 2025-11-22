@@ -1,3 +1,8 @@
+// admin.js (COMPLET)
+
+// ===========================
+// IMPORTURI FIREBASE
+// ===========================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
 import {
   getFirestore,
@@ -5,16 +10,21 @@ import {
   addDoc,
   getDocs,
   doc,
-  deleteDoc,
+  getDoc,
   updateDoc,
-  serverTimestamp,
-  getDoc
+  deleteDoc,
+  query,
+  orderBy
 } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-firestore.js";
+
 import {
   getAuth,
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-auth.js";
 
+// ===========================
+// CONFIG FIREBASE – LA FEL CA ÎN app.js
+// ===========================
 const firebaseConfig = {
   apiKey: "AIzaSyAKe4zLHem2_1LSOkTc4StNVqJJFCB9_Uc",
   authDomain: "it-store-2da3a.firebaseapp.com",
@@ -29,467 +39,534 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-// ELEMENTE DOM
+// ===========================
+// DOM – PRODUSE
+// ===========================
 const adminTitle = document.getElementById("adminTitle");
-const adminDesc = document.getElementById("adminDesc");
 const adminPrice = document.getElementById("adminPrice");
 const adminStock = document.getElementById("adminStock");
 const adminImage = document.getElementById("adminImage");
+const adminDesc = document.getElementById("adminDesc");
 const adminCategory = document.getElementById("adminCategory");
 const addProductBtn = document.getElementById("addProductBtn");
+
 const adminSearch = document.getElementById("adminSearch");
-const adminProductsEl = document.getElementById("adminProducts");
-const adminOrdersEl = document.getElementById("adminOrders");
+const adminProducts = document.getElementById("adminProducts");
 
-const statTotalOrdersEl = document.getElementById("statTotalOrders");
-const statTotalRevenueEl = document.getElementById("statTotalRevenue");
-const statNewOrdersEl = document.getElementById("statNewOrders");
+// ===========================
+// DOM – COMENZI + STATISTICI
+// ===========================
+const adminOrders = document.getElementById("adminOrders");
+const statTotalOrders = document.getElementById("statTotalOrders");
+const statTotalRevenue = document.getElementById("statTotalRevenue");
+const statNewOrders = document.getElementById("statNewOrders");
 
-const salesChartCanvas = document.getElementById("salesChart");
-const statusChartCanvas = document.getElementById("statusChart");
+const statusTabs = document.querySelectorAll(".order-status-tab");
 
-const ORDER_STATUS_LABELS = {
-  all: "Toate",
-  "nouă": "Noi",
-  "în procesare": "În procesare",
-  "expediată": "Expediate",
-  "livrată": "Livrate",
-  "anulată": "Anulate"
-};
+let salesChartInstance = null;
+let statusChartInstance = null;
 
-let isAdmin = false;
-let allProducts = [];
+// ===========================
+// STATE
+// ===========================
+let products = [];
+let orders = [];
 let editingProductId = null;
-let orderStatusFilter = "all";
-let salesChart = null;
-let statusChart = null;
+let currentStatusFilter = "all";
 
 // ===========================
-// PRODUCTE ADMIN
+// HELPERS
 // ===========================
-const renderAdminProduct = (product) => {
-  const card = document.createElement("div");
-  card.className = "bg-gray-800 p-3 rounded shadow-lg flex flex-col";
-  card.innerHTML = `
-    <h4 class="font-bold mb-1">${product.title}</h4>
-    <p class="text-gray-400 mb-1 text-sm">${product.price} €</p>
-    <p class="text-xs text-gray-500 mb-2">${product.category || ""}</p>
-    <div class="mt-auto flex gap-2">
-      <button class="bg-yellow-400 text-black px-2 py-1 rounded text-sm edit">Editează</button>
-      <button class="bg-red-500 text-white px-2 py-1 rounded text-sm delete">Șterge</button>
-    </div>
-  `;
+const numberToPrice = (n) => `${Number(n).toFixed(2)} €`;
 
-  card.querySelector(".delete").onclick = async () => {
-    if (!confirm("Sigur vrei să ștergi produsul?")) return;
-    await deleteDoc(doc(db, "products", product.id));
-    await loadAdminProducts();
-  };
-
-  card.querySelector(".edit").onclick = () => {
-    editingProductId = product.id;
-    adminTitle.value = product.title;
-    adminDesc.value = product.description || "";
-    adminPrice.value = product.price;
-    adminStock.value = product.stock ?? 0;
-    adminImage.value = product.imageURL || "";
-    adminCategory.value = product.category || "Component";
-  };
-
-  return card;
+const formatDate = (ts) => {
+  if (!ts || !ts.toDate) return "-";
+  const d = ts.toDate();
+  return d.toLocaleString("ro-RO", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit"
+  });
 };
 
-const loadAdminProducts = async () => {
-  adminProductsEl.innerHTML = '<p class="text-gray-400 text-sm">Se încarcă produsele...</p>';
-  const snapshot = await getDocs(collection(db, "products"));
-  allProducts = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+// ===========================
+// VERIFICARE ADMIN
+// ===========================
+const requireAdmin = () =>
+  new Promise((resolve, reject) => {
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        alert("Trebuie să fii logat ca admin pentru a accesa acest panou.");
+        window.location.href = "index.html";
+        return reject("not-logged-in");
+      }
 
-  let products = [...allProducts];
-  if (adminSearch.value.trim()) {
-    const q = adminSearch.value.toLowerCase();
-    products = products.filter((p) => p.title.toLowerCase().includes(q));
+      try {
+        const adminDoc = await getDoc(doc(db, "admins", user.uid));
+        if (!adminDoc.exists()) {
+          alert("Nu ai drepturi de admin.");
+          window.location.href = "index.html";
+          return reject("not-admin");
+        }
+        resolve(user);
+      } catch (err) {
+        console.error("Eroare la verificarea admin:", err);
+        alert("A apărut o eroare la verificarea drepturilor de admin.");
+        window.location.href = "index.html";
+        reject(err);
+      }
+    });
+  });
+
+// ===========================
+// PRODUSE – LOAD + RENDER
+// ===========================
+const loadProducts = async () => {
+  const snap = await getDocs(collection(db, "products"));
+  products = snap.docs.map((d) => ({
+    id: d.id,
+    ...d.data()
+  }));
+  renderProducts();
+};
+
+const renderProducts = () => {
+  if (!adminProducts) return;
+
+  const queryText = adminSearch.value.trim().toLowerCase();
+
+  let filtered = [...products];
+  if (queryText) {
+    filtered = filtered.filter(
+      (p) =>
+        (p.title || "").toLowerCase().includes(queryText) ||
+        (p.category || "").toLowerCase().includes(queryText)
+    );
   }
 
-  if (!products.length) {
-    adminProductsEl.innerHTML =
-      '<p class="text-gray-400 text-sm">Nu există produse.</p>';
+  adminProducts.innerHTML = "";
+
+  if (!filtered.length) {
+    adminProducts.innerHTML =
+      '<p class="text-gray-400 col-span-full">Nu s-au găsit produse.</p>';
     return;
   }
 
-  adminProductsEl.innerHTML = "";
-  products.forEach((p) => adminProductsEl.appendChild(renderAdminProduct(p)));
+  filtered.forEach((p) => {
+    const div = document.createElement("div");
+    div.className =
+      "bg-gray-800 p-3 rounded-lg flex flex-col justify-between shadow";
+
+    div.innerHTML = `
+      <div class="flex gap-3 mb-3">
+        <div class="w-20 h-20 bg-gray-900 rounded overflow-hidden flex-shrink-0">
+          <img src="${p.imageURL || "https://via.placeholder.com/150"}" 
+               class="w-full h-full object-cover" alt="${p.title || ""}">
+        </div>
+        <div class="flex-1">
+          <h4 class="font-semibold text-yellow-300">${p.title || "Fără titlu"}</h4>
+          <p class="text-sm text-gray-300">${p.category || "Categorie necunoscută"}</p>
+          <p class="text-sm text-gray-400 mt-1">
+            Preț: <span class="font-semibold text-yellow-400">${numberToPrice(
+              p.price || 0
+            )}</span>
+          </p>
+          <p class="text-sm text-gray-400">
+            Stoc: <span class="font-semibold">${p.stock ?? 0}</span>
+          </p>
+        </div>
+      </div>
+      <p class="text-xs text-gray-400 line-clamp-2 mb-3">${
+        p.description || ""
+      }</p>
+      <div class="flex justify-between gap-2 text-sm">
+        <button 
+          data-id="${p.id}"
+          class="edit-product flex-1 bg-blue-500 hover:bg-blue-400 text-white py-1 rounded">
+          Editează
+        </button>
+        <button 
+          data-id="${p.id}"
+          class="delete-product flex-1 bg-red-500 hover:bg-red-400 text-white py-1 rounded">
+          Șterge
+        </button>
+      </div>
+    `;
+    adminProducts.appendChild(div);
+  });
 };
 
-const saveProduct = async () => {
+// ===========================
+// PRODUSE – ADD / EDIT / DELETE
+// ===========================
+const resetProductForm = () => {
+  adminTitle.value = "";
+  adminPrice.value = "";
+  adminStock.value = "";
+  adminImage.value = "";
+  adminDesc.value = "";
+  adminCategory.value = "Laptop";
+  editingProductId = null;
+  addProductBtn.textContent = "Salvează produs";
+};
+
+addProductBtn?.addEventListener("click", async () => {
   const title = adminTitle.value.trim();
-  const desc = adminDesc.value.trim();
-  const priceRaw = adminPrice.value.replace(",", ".").trim();
-  const stockRaw = adminStock.value.trim();
+  const price = Number(adminPrice.value);
+  const stock = Number(adminStock.value || 0);
+  const imageURL = adminImage.value.trim();
+  const description = adminDesc.value.trim();
+  const category = adminCategory.value;
 
-  if (!title || !priceRaw || !stockRaw) {
-    alert("Titlu, preț și stoc sunt obligatorii.");
+  if (!title || !Number.isFinite(price) || price <= 0) {
+    alert("Titlu și preț valid sunt obligatorii.");
     return;
   }
-
-  const price = Number(priceRaw);
-  const stock = Number(stockRaw);
-
-  if (!Number.isFinite(price) || price <= 0) {
-    alert("Preț invalid. Introdu un număr pozitiv.");
-    return;
-  }
-
-  if (!Number.isInteger(stock) || stock < 0) {
-    alert("Stoc invalid. Introdu un număr întreg ≥ 0.");
+  if (!Number.isFinite(stock) || stock < 0) {
+    alert("Stoc invalid.");
     return;
   }
 
   const payload = {
     title,
-    description: desc,
     price,
     stock,
-    imageURL: adminImage.value.trim() || "https://via.placeholder.com/400x250",
-    category: adminCategory.value || "Component"
+    imageURL: imageURL || "",
+    description,
+    category
   };
 
-  if (editingProductId) {
-    await updateDoc(doc(db, "products", editingProductId), payload);
-  } else {
-    await addDoc(collection(db, "products"), payload);
-  }
-
-  editingProductId = null;
-  adminTitle.value = "";
-  adminDesc.value = "";
-  adminPrice.value = "";
-  adminStock.value = "";
-  adminImage.value = "";
-  adminCategory.value = "Laptop";
-
-  await loadAdminProducts();
-};
-
-// ===========================
-// COMENZI ADMIN
-// ===========================
-const renderAdminOrder = (order) => {
-  const card = document.createElement("div");
-  card.className = "bg-gray-800 p-4 rounded-lg shadow-lg";
-
-  let createdText = "necunoscută";
-  if (order.createdAt?.seconds) {
-    const d = new Date(order.createdAt.seconds * 1000);
-    createdText = d.toLocaleString();
-  }
-
-  let total = order.total || 0;
-  if (!total && Array.isArray(order.items)) {
-    total = order.items.reduce(
-      (s, i) => s + Number(i.price || 0) * Number(i.quantity || 1),
-      0
-    );
-  }
-
-  let itemsHtml = "";
-  if (Array.isArray(order.items)) {
-    itemsHtml = order.items
-      .map(
-        (i) =>
-          `<li class="flex justify-between text-sm">
-            <span>${i.title} <span class="text-gray-400">x${i.quantity}</span></span>
-            <span>${(Number(i.price) * Number(i.quantity)).toFixed(2)} €</span>
-          </li>`
-      )
-      .join("");
-  }
-
-  card.innerHTML = `
-    <div class="flex justify-between items-start gap-4">
-      <div class="flex-1">
-        <p class="text-xs text-gray-500 mb-1">ID: <span class="font-mono">${order.id}</span></p>
-        <p class="font-semibold text-lg mb-1">${order.customer?.name || "Client necunoscut"}</p>
-        <p class="text-sm text-gray-300 mb-1">
-          <span class="text-gray-400">Email:</span> ${order.customer?.email || "-"}
-        </p>
-        <p class="text-sm text-gray-300 mb-1">
-          <span class="text-gray-400">Telefon:</span> ${order.customer?.phone || "-"}
-        </p>
-        <p class="text-sm text-gray-300 mb-1">
-          <span class="text-gray-400">Adresă:</span> ${order.customer?.city || ""}, ${order.customer?.address || ""}
-        </p>
-        <p class="text-xs text-gray-500 mt-1">Plasată la: ${createdText}</p>
-      </div>
-
-      <div class="text-right">
-        <p class="text-sm text-gray-400">Total</p>
-        <p class="text-xl font-bold text-yellow-400 mb-2">${total.toFixed(2)} €</p>
-        <label class="block text-xs text-gray-400 mb-1">Status</label>
-        <select class="status-select w-full p-1 rounded bg-gray-900 border border-gray-700 text-sm">
-          <option value="nouă" ${order.status === "nouă" ? "selected" : ""}>Nouă</option>
-          <option value="în procesare" ${order.status === "în procesare" ? "selected" : ""}>În procesare</option>
-          <option value="expediată" ${order.status === "expediată" ? "selected" : ""}>Expediată</option>
-          <option value="livrată" ${order.status === "livrată" ? "selected" : ""}>Livrată</option>
-          <option value="anulată" ${order.status === "anulată" ? "selected" : ""}>Anulată</option>
-        </select>
-      </div>
-    </div>
-
-    ${
-      itemsHtml
-        ? `<div class="mt-4">
-             <p class="text-sm font-semibold mb-1">Produse:</p>
-             <ul class="space-y-1">${itemsHtml}</ul>
-           </div>`
-        : ""
+  try {
+    if (editingProductId) {
+      // UPDATE
+      await updateDoc(doc(db, "products", editingProductId), payload);
+      alert("Produs actualizat!");
+    } else {
+      // ADD
+      await addDoc(collection(db, "products"), payload);
+      alert("Produs adăugat!");
     }
+    await loadProducts();
+    resetProductForm();
+  } catch (err) {
+    console.error(err);
+    alert("Eroare la salvarea produsului.");
+  }
+});
 
-    ${
-      order.customer?.notes
-        ? `<p class="mt-3 text-xs text-gray-400">
-             <span class="font-semibold text-gray-300">Observații client:</span> ${order.customer.notes}
-           </p>`
-        : ""
-    }
-  `;
+// click pe Editează / Șterge
+adminProducts?.addEventListener("click", async (e) => {
+  const editBtn = e.target.closest(".edit-product");
+  const deleteBtn = e.target.closest(".delete-product");
 
-  const statusSelect = card.querySelector(".status-select");
-  statusSelect.onchange = async (e) => {
+  if (editBtn) {
+    const id = editBtn.dataset.id;
+    const prod = products.find((p) => p.id === id);
+    if (!prod) return;
+
+    adminTitle.value = prod.title || "";
+    adminPrice.value = prod.price ?? "";
+    adminStock.value = prod.stock ?? "";
+    adminImage.value = prod.imageURL || "";
+    adminDesc.value = prod.description || "";
+    adminCategory.value = prod.category || "Laptop";
+
+    editingProductId = id;
+    addProductBtn.textContent = "Actualizează produsul";
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  if (deleteBtn) {
+    const id = deleteBtn.dataset.id;
+    const prod = products.find((p) => p.id === id);
+    if (!prod) return;
+
+    if (!confirm(`Sigur ștergi produsul "${prod.title}"?`)) return;
+
     try {
-      await updateDoc(doc(db, "orders", order.id), {
-        status: e.target.value
-      });
-      order.status = e.target.value;
+      await deleteDoc(doc(db, "products", id));
+      alert("Produs șters.");
+      await loadProducts();
     } catch (err) {
       console.error(err);
-      alert("Nu s-a putut actualiza statusul comenzii.");
-      e.target.value = order.status || "nouă";
+      alert("Eroare la ștergerea produsului.");
     }
-  };
+  }
+});
 
-  return card;
+adminSearch?.addEventListener("input", renderProducts);
+
+// ===========================
+// COMENZI – LOAD
+// ===========================
+const loadOrders = async () => {
+  const q = query(collection(db, "orders"), orderBy("createdAt", "desc"));
+  const snap = await getDocs(q);
+  orders = snap.docs.map((d) => ({
+    id: d.id,
+    ...d.data()
+  }));
+
+  updateOrderStatsAndCharts();
+  renderOrders();
 };
 
-const updateAdminCharts = (orders, counts) => {
-  if (!salesChartCanvas || !statusChartCanvas) return;
+// ===========================
+// COMENZI – STATISTICI + GRAFICE
+// ===========================
+const updateOrderStatsAndCharts = () => {
+  const totalOrders = orders.length;
+  const totalRevenue = orders.reduce((sum, o) => sum + Number(o.total || 0), 0);
+  const newOrders = orders.filter((o) => (o.status || "nouă") === "nouă").length;
 
+  statTotalOrders.textContent = totalOrders;
+  statTotalRevenue.textContent = numberToPrice(totalRevenue);
+  statNewOrders.textContent = newOrders;
+
+  buildSalesChart();
+  buildStatusChart();
+};
+
+const buildSalesChart = () => {
+  const ctx = document.getElementById("salesChart");
+  if (!ctx) return;
+
+  // distrugem graficul vechi
+  if (salesChartInstance) salesChartInstance.destroy();
+
+  // ultimele 7 zile
   const today = new Date();
-  const days = [];
+  const labels = [];
+  const sums = [];
 
   for (let i = 6; i >= 0; i--) {
     const d = new Date(today);
     d.setDate(d.getDate() - i);
-    const key = d.toISOString().slice(0, 10);
-    days.push({
-      key,
-      label: d.toLocaleDateString("ro-RO", { day: "2-digit", month: "2-digit" }),
-      total: 0
-    });
+    const key = d.toISOString().slice(0, 10); // YYYY-MM-DD
+
+    labels.push(d.toLocaleDateString("ro-RO", { day: "2-digit", month: "2-digit" }));
+
+    const daySum = orders
+      .filter((o) => {
+        if (!o.createdAt || !o.createdAt.toDate) return false;
+        const od = o.createdAt.toDate().toISOString().slice(0, 10);
+        return od === key;
+      })
+      .reduce((sum, o) => sum + Number(o.total || 0), 0);
+
+    sums.push(daySum);
   }
 
-  const dayMap = {};
-  days.forEach((d) => (dayMap[d.key] = d));
-
-  orders.forEach((o) => {
-    if (!o.createdAt?.seconds) return;
-    const d = new Date(o.createdAt.seconds * 1000);
-    const key = d.toISOString().slice(0, 10);
-    if (!dayMap[key]) return;
-
-    let total = typeof o.total === "number" ? o.total : 0;
-    if (!total && Array.isArray(o.items)) {
-      total = o.items.reduce(
-        (s, i) => s + Number(i.price || 0) * Number(i.quantity || 1),
-        0
-      );
-    }
-    dayMap[key].total += total;
-  });
-
-  const salesLabels = days.map((d) => d.label);
-  const salesData = days.map((d) => Number(d.total.toFixed(2)));
-
-  const statusLabels = ["Nouă", "În procesare", "Expediată", "Livrată", "Anulată"];
-  const statusKeys = ["nouă", "în procesare", "expediată", "livrată", "anulată"];
-  const statusData = statusKeys.map((k) => counts[k] || 0);
-
-  if (salesChart) salesChart.destroy();
-  if (statusChart) statusChart.destroy();
-
-  salesChart = new Chart(salesChartCanvas.getContext("2d"), {
-    type: "line",
+  salesChartInstance = new Chart(ctx, {
+    type: "bar",
     data: {
-      labels: salesLabels,
-      datasets: [{
-        label: "Venit (€)",
-        data: salesData,
-        tension: 0.3
-      }]
+      labels,
+      datasets: [
+        {
+          label: "€ pe zi",
+          data: sums
+        }
+      ]
     },
     options: {
       responsive: true,
-      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false }
+      },
       scales: {
         y: {
           beginAtZero: true
         }
-      },
-      plugins: {
-        legend: { labels: { color: "#e5e7eb" } }
       }
     }
   });
+};
 
-  statusChart = new Chart(statusChartCanvas.getContext("2d"), {
+const buildStatusChart = () => {
+  const ctx = document.getElementById("statusChart");
+  if (!ctx) return;
+
+  if (statusChartInstance) statusChartInstance.destroy();
+
+  const statuses = ["nouă", "în procesare", "expediată", "livrată", "anulată"];
+  const counts = statuses.map(
+    (st) => orders.filter((o) => (o.status || "nouă") === st).length
+  );
+
+  statusChartInstance = new Chart(ctx, {
     type: "doughnut",
     data: {
-      labels: statusLabels,
-      datasets: [{
-        data: statusData
-      }]
+      labels: statuses,
+      datasets: [
+        {
+          data: counts
+        }
+      ]
     },
     options: {
       responsive: true,
-      maintainAspectRatio: false,
       plugins: {
         legend: {
-          position: "bottom",
-          labels: {
-            color: "#e5e7eb",
-            boxWidth: 12
-          }
+          position: "bottom"
         }
       }
     }
   });
 };
 
-const loadAdminOrders = async () => {
-  if (!adminOrdersEl) return;
+// ===========================
+// COMENZI – LISTARE + UPDATE STATUS
+// ===========================
+const renderOrders = () => {
+  if (!adminOrders) return;
 
-  adminOrdersEl.innerHTML = '<p class="text-gray-400 text-sm">Se încarcă comenzile...</p>';
+  adminOrders.innerHTML = "";
 
-  try {
-    const snapshot = await getDocs(collection(db, "orders"));
-    let orders = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
-    const allOrdersForCharts = [...orders];
-
-    orders.sort((a, b) => {
-      const ta = a.createdAt?.seconds || 0;
-      const tb = b.createdAt?.seconds || 0;
-      return tb - ta;
-    });
-
-    const counts = {
-      all: orders.length,
-      "nouă": 0,
-      "în procesare": 0,
-      "expediată": 0,
-      "livrată": 0,
-      "anulată": 0
-    };
-
-    let totalRevenue = 0;
-
-    orders.forEach((o) => {
-      const st = o.status || "nouă";
-      if (counts[st] !== undefined) counts[st]++;
-
-      if (typeof o.total === "number") {
-        totalRevenue += o.total;
-      } else if (Array.isArray(o.items)) {
-        o.items.forEach((i) => {
-          totalRevenue += Number(i.price || 0) * Number(i.quantity || 1);
-        });
-      }
-    });
-
-    if (statTotalOrdersEl) statTotalOrdersEl.textContent = counts.all;
-    if (statTotalRevenueEl) statTotalRevenueEl.textContent = totalRevenue.toFixed(2) + " €";
-    if (statNewOrdersEl) statNewOrdersEl.textContent = counts["nouă"];
-
-    const orderStatusTabs = document.querySelectorAll(".order-status-tab");
-    orderStatusTabs.forEach((btn) => {
-      const status = btn.getAttribute("data-status");
-      const baseLabel = ORDER_STATUS_LABELS[status] || status;
-      const count = counts[status] ?? 0;
-      btn.textContent = count > 0 ? `${baseLabel} (${count})` : baseLabel;
-    });
-
-    updateAdminCharts(allOrdersForCharts, counts);
-
-    if (orderStatusFilter !== "all") {
-      orders = orders.filter((o) => (o.status || "nouă") === orderStatusFilter);
-    }
-
-    if (!orders.length) {
-      adminOrdersEl.innerHTML =
-        '<p class="text-gray-400 text-sm">Nu există comenzi pentru acest filtru.</p>';
-      return;
-    }
-
-    adminOrdersEl.innerHTML = "";
-    orders.forEach((o) => adminOrdersEl.appendChild(renderAdminOrder(o)));
-  } catch (err) {
-    console.error(err);
-    adminOrdersEl.innerHTML =
-      '<p class="text-red-400 text-sm">Eroare la încărcarea comenzilor.</p>';
+  let filtered = [...orders];
+  if (currentStatusFilter !== "all") {
+    filtered = filtered.filter(
+      (o) => (o.status || "nouă") === currentStatusFilter
+    );
   }
-};
 
-// ===========================
-// AUTH & INIT
-// ===========================
-onAuthStateChanged(auth, async (user) => {
-  if (!user) {
-    alert("Trebuie să fii logat ca admin.");
-    window.location.href = "index.html";
+  if (!filtered.length) {
+    adminOrders.innerHTML =
+      '<p class="text-gray-400">Nu există comenzi pentru filtrul selectat.</p>';
     return;
   }
 
+  filtered.forEach((o) => {
+    const card = document.createElement("div");
+    card.className = "bg-gray-800 rounded-lg p-4 shadow";
+
+    const cust = o.customer || {};
+    const items = o.items || [];
+
+    card.innerHTML = `
+      <div class="flex justify-between items-start mb-2 gap-2">
+        <div>
+          <p class="font-semibold text-yellow-300 text-sm">${
+            cust.name || "Client necunoscut"
+          }</p>
+          <p class="text-xs text-gray-300">${cust.email || ""}</p>
+          <p class="text-xs text-gray-400">${cust.city || ""}, ${
+      cust.address || ""
+    }</p>
+          <p class="text-xs text-gray-400">Telefon: ${cust.phone || ""}</p>
+        </div>
+        <div class="text-right">
+          <p class="text-sm text-gray-300">Total:</p>
+          <p class="font-bold text-yellow-400">${numberToPrice(
+            o.total || 0
+          )}</p>
+          <p class="text-xs text-gray-400 mt-1">${formatDate(
+            o.createdAt
+          )}</p>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <p class="text-xs text-gray-400 mb-1">Produse:</p>
+        <ul class="text-xs text-gray-200 list-disc ml-4 space-y-1">
+          ${items
+            .map(
+              (it) =>
+                `<li>${it.title} <span class="text-gray-400">x${
+                  it.quantity
+                }</span> – ${numberToPrice(it.price || 0)}</li>`
+            )
+            .join("")}
+        </ul>
+      </div>
+
+      ${
+        cust.notes
+          ? `<p class="text-xs text-gray-300 mb-3"><span class="font-semibold text-gray-400">Observații:</span> ${cust.notes}</p>`
+          : ""
+      }
+
+      <div class="flex items-center justify-between gap-2">
+        <div class="flex flex-col text-xs text-gray-300">
+          <span>Status comandă:</span>
+          <select data-id="${
+            o.id
+          }" class="order-status-select mt-1 bg-gray-900 border border-gray-700 rounded px-2 py-1 text-xs">
+            <option value="nouă" ${
+              (o.status || "nouă") === "nouă" ? "selected" : ""
+            }>Nouă</option>
+            <option value="în procesare" ${
+              o.status === "în procesare" ? "selected" : ""
+            }>În procesare</option>
+            <option value="expediată" ${
+              o.status === "expediată" ? "selected" : ""
+            }>Expediată</option>
+            <option value="livrată" ${
+              o.status === "livrată" ? "selected" : ""
+            }>Livrată</option>
+            <option value="anulată" ${
+              o.status === "anulată" ? "selected" : ""
+            }>Anulată</option>
+          </select>
+        </div>
+        <p class="text-[11px] text-gray-500">ID comandă: ${o.id}</p>
+      </div>
+    `;
+
+    adminOrders.appendChild(card);
+  });
+};
+
+// schimbare status din select
+adminOrders?.addEventListener("change", async (e) => {
+  const sel = e.target.closest(".order-status-select");
+  if (!sel) return;
+
+  const id = sel.dataset.id;
+  const newStatus = sel.value;
+
   try {
-    const adminDoc = await getDoc(doc(db, "admins", user.uid));
-    if (!adminDoc.exists()) {
-      alert("Nu ai drepturi de administrator.");
-      window.location.href = "index.html";
-      return;
-    }
-    isAdmin = true;
-    await loadAdminProducts();
-    await loadAdminOrders();
+    await updateDoc(doc(db, "orders", id), { status: newStatus });
+
+    const idx = orders.findIndex((o) => o.id === id);
+    if (idx !== -1) orders[idx].status = newStatus;
+
+    updateOrderStatsAndCharts();
+    renderOrders();
   } catch (err) {
     console.error(err);
-    alert("Eroare la verificarea drepturilor de admin.");
-    window.location.href = "index.html";
+    alert("Eroare la actualizarea statusului.");
   }
 });
 
-// ===========================
-// EVENT LISTENERS
-// ===========================
-if (addProductBtn) addProductBtn.onclick = saveProduct;
-if (adminSearch) adminSearch.oninput = loadAdminProducts;
-
-const numericAdminInputs = [adminPrice, adminStock];
-numericAdminInputs.forEach((input) => {
-  if (!input) return;
-  input.addEventListener("input", () => {
-    input.value = input.value.replace(/[^0-9.,]/g, "");
-  });
-});
-
-const orderStatusTabs = document.querySelectorAll(".order-status-tab");
-orderStatusTabs.forEach((btn) => {
+// TAB-uri de status
+statusTabs.forEach((btn) => {
   btn.addEventListener("click", () => {
-    orderStatusFilter = btn.getAttribute("data-status");
+    statusTabs.forEach((b) =>
+      b.classList.remove("bg-yellow-400", "text-black", "font-semibold")
+    );
+    statusTabs.forEach((b) =>
+      b.classList.add("bg-gray-800", "text-gray-200")
+    );
 
-    orderStatusTabs.forEach((b) => {
-      b.classList.remove("bg-yellow-400", "text-black", "font-semibold");
-      b.classList.add("bg-gray-800", "text-gray-200");
-    });
     btn.classList.remove("bg-gray-800", "text-gray-200");
     btn.classList.add("bg-yellow-400", "text-black", "font-semibold");
 
-    loadAdminOrders();
+    currentStatusFilter = btn.dataset.status || "all";
+    renderOrders();
   });
 });
+
+// ===========================
+// INIT
+// ===========================
+(async () => {
+  try {
+    await requireAdmin();   // verifică user + admin
+    await loadProducts();
+    await loadOrders();
+  } catch (err) {
+    // redirect deja făcut în requireAdmin, nu mai facem nimic aici
+  }
+})();

@@ -2,33 +2,32 @@
 <html lang="ro">
 <head>
   <meta charset="UTF-8">
-  <title>Profilul Meu - TechStore</title>
+  <title>TechStore - Profil</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-gray-900 text-gray-100 font-sans">
+<body class="bg-gray-900 text-gray-100">
+  <header class="p-4 bg-black flex justify-between items-center">
+    <h1 class="text-2xl font-bold text-yellow-400">Profil utilizator</h1>
+    <a href="index.html" class="text-sm text-gray-300 hover:text-yellow-400">← Înapoi la magazin</a>
+  </header>
 
-<header class="p-6 bg-black shadow-lg">
-  <div class="max-w-4xl mx-auto flex justify-between items-center">
-    <h1 class="text-2xl md:text-3xl font-bold text-yellow-400">Profilul meu</h1>
-    <a href="index.html" class="text-gray-300 hover:text-yellow-400 text-sm">← Înapoi la magazin</a>
-  </div>
-</header>
+  <main class="max-w-4xl mx-auto p-4 space-y-6">
+    <section class="bg-gray-800 rounded-xl p-4">
+      <h2 class="text-xl font-semibold text-yellow-400 mb-2">Date cont</h2>
+      <p id="userEmail" class="text-gray-200 text-sm">Email: -</p>
+      <p id="userId" class="text-gray-500 text-xs mt-1 break-all">UID: -</p>
+    </section>
 
-<section class="max-w-4xl mx-auto py-10 px-6">
-  <h2 class="text-2xl font-bold mb-4 text-yellow-400">Informații cont</h2>
-  <div id="userInfo" class="bg-gray-800 p-4 rounded-lg mb-10">
-    <p class="text-gray-300 mb-1"><strong>Email:</strong> <span id="userEmail"></span></p>
-    <p class="text-gray-300 mb-1"><strong>User ID:</strong> <span id="userId"></span></p>
-    <p class="text-gray-300"><strong>Email verificat:</strong> <span id="verified"></span></p>
-  </div>
+    <section class="bg-gray-800 rounded-xl p-4">
+      <h2 class="text-xl font-semibold text-yellow-400 mb-2">Comenzile mele</h2>
+      <div id="ordersList" class="space-y-3 text-sm text-gray-200">
+        <p>Se încarcă comenzile...</p>
+      </div>
+    </section>
+  </main>
 
-  <h2 class="text-2xl font-bold mb-4 text-yellow-400">Comenzile mele</h2>
-  <div id="myOrders" class="space-y-4">
-    <p class="text-gray-400 text-sm">Se încarcă comenzile...</p>
-  </div>
-</section>
-
-<script type="module" src="profile.js"></script>
+  <script type="module" src="profile.js"></script>
 </body>
 </html>

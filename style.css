@@ -1,6 +1,25 @@
-/* FONT */
+/* ===========================
+   FONT & GLOBAL
+=========================== */
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: #030712; /* gray-900 */
+  color: #f9fafb;
+  margin: 0;
+}
+
+/* spațiu pentru navbar-ul de jos pe mobile */
+@media (max-width: 768px) {
+  body {
+    padding-bottom: 4.5rem; /* să nu calce conținutul peste nav */
+  }
+}
+
+/* ===========================
+   HERO SECTION
+=========================== */
+.hero {
+  background: radial-gradient(circle at top, #111827 0, #020617 60%);
 }
 
 /* ===========================
@@ -11,24 +30,29 @@ body {
   transform: translateY(20px);
   transition: opacity 0.8s ease, transform 0.8s ease;
 }
+
 .fade-in.show {
   opacity: 1;
   transform: translateY(0);
 }
+
 .slide-left {
   opacity: 0;
   transform: translateX(-30px);
   transition: opacity 0.8s ease, transform 0.8s ease;
 }
+
 .slide-left.show {
   opacity: 1;
   transform: translateX(0);
 }
+
 .slide-right {
   opacity: 0;
   transform: translateX(30px);
   transition: opacity 0.8s ease, transform 0.8s ease;
 }
+
 .slide-right.show {
   opacity: 1;
   transform: translateX(0);
@@ -40,11 +64,13 @@ body {
 .perspective {
   perspective: 1000px;
 }
+
 .product-card {
   width: 100%;
   height: 24rem;
   perspective: 1000px;
 }
+
 .product-card-inner {
   position: relative;
   width: 100%;
@@ -52,9 +78,11 @@ body {
   transition: transform 0.6s;
   transform-style: preserve-3d;
 }
+
 .product-card:hover .product-card-inner {
   transform: rotateY(180deg);
 }
+
 .product-card-front,
 .product-card-back {
   backface-visibility: hidden;
@@ -65,15 +93,18 @@ body {
   left: 0;
   border-radius: 0.75rem;
 }
+
 .product-card-front {
   background-color: #1F2937;
   display: flex;
   flex-direction: column;
 }
+
 .product-card-front img {
   object-fit: cover;
   border-radius: 0.75rem 0.75rem 0 0;
 }
+
 .product-card-back {
   transform: rotateY(180deg);
   background-color: #111827;
@@ -86,7 +117,7 @@ body {
 }
 
 /* ===========================
-   SLIDER
+   HORIZONTAL SLIDER
 =========================== */
 .slider {
   display: flex;
@@ -95,9 +126,11 @@ body {
   gap: 1rem;
   padding-bottom: 1rem;
 }
+
 .slider::-webkit-scrollbar {
   display: none;
 }
+
 .slider-item {
   flex: 0 0 300px;
   scroll-snap-align: start;
@@ -109,7 +142,6 @@ body {
 /* ===========================
    CATEGORY CARD – GLOW / HOVER
 =========================== */
-
 .category-card {
   position: relative;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
@@ -137,15 +169,53 @@ body {
   font-weight: 700;
 }
 
+/* ===========================
+   PROMO CARD
+=========================== */
+.promo-card {
+  box-shadow: 0 20px 25px rgba(0, 0, 0, 0.4);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.promo-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 30px 40px rgba(0, 0, 0, 0.6);
+}
 
 /* ===========================
-   AUTH MODAL
+   TESTIMONIAL CARD
+=========================== */
+.testimonial-card {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.testimonial-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 30px rgba(0, 0, 0, 0.6);
+}
+
+/* ===========================
+   AUTH MODAL & CHECKOUT
 =========================== */
 #authModal input {
   outline: none;
 }
+
 #authModal button {
   cursor: pointer;
+}
+
+/* modalele ocupă tot ecranul, dar le controlezi cu tailwind .hidden */
+#authModal,
+#checkoutModal {
+  backdrop-filter: blur(4px);
+}
+
+/* ===========================
+   CART SIDEBAR
+=========================== */
+#cart {
+  max-width: 100%;
 }
 
 /* ===========================
@@ -155,9 +225,11 @@ body {
   .hero h2 {
     font-size: 2.5rem;
   }
+
   .hero p {
     font-size: 16px;
   }
+
   .hero a {
     padding: 0.8rem 2rem;
     font-size: 16px;
@@ -167,37 +239,37 @@ body {
     height: auto;
     margin-bottom: 1rem;
   }
+
   .product-card-front img {
     height: 200px;
   }
+
   .product-card-back {
     padding: 0.5rem;
   }
+
   .product-card-back button {
     padding: 0.5rem 1rem;
     font-size: 14px;
   }
 }
-/* =====================================
-   PROMO CARD
-===================================== */
-.promo-card {
-  box-shadow: 0 20px 25px rgba(0,0,0,0.4);
-  transition: transform .25s ease, box-shadow .25s ease;
-}
-.promo-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 30px 40px rgba(0,0,0,0.6);
+
+/* ===========================
+   BOTTOM NAV (MOBILE)
+=========================== */
+/* dacă ai dat o clasă custom nav-ului de jos, o poți stiliza aici; 
+   tailwind deja face 90% din treabă, noi doar ne asigurăm că stă deasupra conținutului */
+.mobile-bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 50;
+  background: rgba(0, 0, 0, 0.95);
+  border-top: 1px solid #374151; /* gray-700 */
 }
 
-/* =====================================
-   TESTIMONIAL CARD
-===================================== */
-.testimonial-card {
-  transition: transform .25s ease, box-shadow .25s ease;
+/* icon + text aliniate frumos */
+.mobile-bottom-nav-item span {
+  line-height: 1.1;
 }
-.testimonial-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 20px 30px rgba(0,0,0,0.6);
-}
-
