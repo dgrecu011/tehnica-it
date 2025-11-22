@@ -22,16 +22,19 @@
   <header class="flex items-center justify-between p-4 md:p-6 bg-black/90 backdrop-blur shadow-lg sticky top-0 z-50">
     <div class="flex items-center gap-4">
       <h1 class="text-3xl md:text-4xl font-extrabold text-yellow-400 tracking-tight">TechStore</h1>
-      <!-- HAMBURGER (mobile) -->
-      <button id="hamburgerBtn" class="md:hidden inline-flex items-center justify-center p-2 rounded bg-gray-800 text-gray-100">
-        ☰
+
+      <!-- HAMBURGER (mobile animat) -->
+      <button id="hamburgerBtn" class="hamburger-btn md:hidden">
+        <span></span>
+        <span></span>
+        <span></span>
       </button>
     </div>
 
     <!-- NAV -->
     <nav
       id="navMenu"
-      class="hidden md:flex flex-col md:flex-row md:items-center md:space-x-6 gap-2 md:gap-0 mt-4 md:mt-0 text-sm md:text-base"
+      class="mobile-menu md:flex flex-col md:flex-row md:items-center md:space-x-6 gap-2 md:gap-0 mt-4 md:mt-0 text-sm md:text-base"
     >
       <a href="#about" class="hover:text-yellow-400 transition font-medium">Despre Noi</a>
       <a href="#productsSection" class="hover:text-yellow-400 transition font-medium">Produse</a>
@@ -108,217 +111,214 @@
 
   <!-- CATEGORII RECOMANDATE -->
   <section id="categories" class="max-w-6xl mx-auto py-20 px-6 fade-in">
-  <h3 class="text-4xl font-bold text-yellow-400 mb-10 text-center slide-left">
-    Categorii Recomandate
-  </h3>
+    <h3 class="text-4xl font-bold text-yellow-400 mb-10 text-center slide-left">
+      Categorii Recomandate
+    </h3>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-    <!-- Laptopuri -->
-    <div class="category-card relative overflow-hidden bg-gray-800 rounded-xl p-4 cursor-pointer group">
-      <img
-        src="https://images.pexels.com/photos/18105/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=800"
-        alt="Laptopuri"
-        class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition"
-      >
-      <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80"></div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <!-- Laptopuri -->
+      <div class="category-card relative overflow-hidden bg-gray-800 rounded-xl p-4 cursor-pointer group">
+        <img
+          src="https://images.pexels.com/photos/18105/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=800"
+          alt="Laptopuri"
+          class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition"
+        >
+        <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80"></div>
 
-      <div class="relative flex flex-col h-full justify-between">
-        <div class="flex items-center gap-3 mb-4">
-          <div class="w-10 h-10 rounded-full bg-yellow-400/90 flex items-center justify-center text-black font-bold text-lg">
-            💻
+        <div class="relative flex flex-col h-full justify-between">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-full bg-yellow-400/90 flex items-center justify-center text-black font-bold text-lg">
+              💻
+            </div>
+            <div>
+              <h4 class="font-bold text-yellow-400 text-lg">Laptopuri</h4>
+              <p class="text-xs text-gray-300">Office, gaming, ultrabook</p>
+            </div>
           </div>
-          <div>
-            <h4 class="font-bold text-yellow-400 text-lg">Laptopuri</h4>
-            <p class="text-xs text-gray-300">Office, gaming, ultrabook</p>
-          </div>
+          <p class="text-xs text-gray-300">
+            De la <span class="font-semibold text-yellow-300">399 €</span> · modele pentru muncă, școală și gaming.
+          </p>
         </div>
-        <p class="text-xs text-gray-300">
-          De la <span class="font-semibold text-yellow-300">399 €</span> · modele pentru muncă, școală și gaming.
-        </p>
+
+        <span class="category-chip">Nou</span>
       </div>
 
-      <span class="category-chip">Nou</span>
-    </div>
+      <!-- Componente -->
+      <div class="category-card relative overflow-hidden bg-gray-800 rounded-xl p-4 cursor-pointer group">
+        <img
+          src="https://images.pexels.com/photos/1714208/pexels-photo-1714208.jpeg?auto=compress&cs=tinysrgb&w=800"
+          alt="Componente PC"
+          class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition"
+        >
+        <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80"></div>
 
-    <!-- Componente -->
-    <div class="category-card relative overflow-hidden bg-gray-800 rounded-xl p-4 cursor-pointer group">
-      <img
-        src="https://images.pexels.com/photos/1714208/pexels-photo-1714208.jpeg?auto=compress&cs=tinysrgb&w=800"
-        alt="Componente PC"
-        class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition"
-      >
-      <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80"></div>
-
-      <div class="relative flex flex-col h-full justify-between">
-        <div class="flex items-center gap-3 mb-4">
-          <div class="w-10 h-10 rounded-full bg-yellow-400/90 flex items-center justify-center text-black font-bold text-lg">
-            🖥️
+        <div class="relative flex flex-col h-full justify-between">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-full bg-yellow-400/90 flex items-center justify-center text-black font-bold text-lg">
+              🖥️
+            </div>
+            <div>
+              <h4 class="font-bold text-yellow-400 text-lg">Componente</h4>
+              <p class="text-xs text-gray-300">Procesoare, plăci video, SSD</p>
+            </div>
           </div>
-          <div>
-            <h4 class="font-bold text-yellow-400 text-lg">Componente</h4>
-            <p class="text-xs text-gray-300">Procesoare, plăci video, SSD</p>
-          </div>
+          <p class="text-xs text-gray-300">
+            Construiește-ți PC-ul ideal: piese compatibile și performante.
+          </p>
         </div>
-        <p class="text-xs text-gray-300">
-          Construiește-ți PC-ul ideal: piese compatibile și performante.
-        </p>
+
+        <span class="category-chip">Popular</span>
       </div>
 
-      <span class="category-chip">Popular</span>
-    </div>
+      <!-- Gadgeturi -->
+      <div class="category-card relative overflow-hidden bg-gray-800 rounded-xl p-4 cursor-pointer group">
+        <img
+          src="https://images.pexels.com/photos/1092644/pexels-photo-1092644.jpeg?auto=compress&cs=tinysrgb&w=800"
+          alt="Gadgeturi"
+          class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition"
+        >
+        <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80"></div>
 
-    <!-- Gadgeturi -->
-    <div class="category-card relative overflow-hidden bg-gray-800 rounded-xl p-4 cursor-pointer group">
-      <img
-        src="https://images.pexels.com/photos/1092644/pexels-photo-1092644.jpeg?auto=compress&cs=tinysrgb&w=800"
-        alt="Gadgeturi"
-        class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition"
-      >
-      <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80"></div>
-
-      <div class="relative flex flex-col h-full justify-between">
-        <div class="flex items-center gap-3 mb-4">
-          <div class="w-10 h-10 rounded-full bg-yellow-400/90 flex items-center justify-center text-black font-bold text-lg">
-            📱
+        <div class="relative flex flex-col h-full justify-between">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-full bg-yellow-400/90 flex items-center justify-center text-black font-bold text-lg">
+              📱
+            </div>
+            <div>
+              <h4 class="font-bold text-yellow-400 text-lg">Gadgeturi</h4>
+              <p class="text-xs text-gray-300">Căști, smartwatch, smart home</p>
+            </div>
           </div>
-          <div>
-            <h4 class="font-bold text-yellow-400 text-lg">Gadgeturi</h4>
-            <p class="text-xs text-gray-300">Căști, smartwatch, smart home</p>
-          </div>
+          <p class="text-xs text-gray-300">
+            Gadgeturi care îți fac viața mai simplă și mai smart.
+          </p>
         </div>
-        <p class="text-xs text-gray-300">
-          Gadgeturi care îți fac viața mai simplă și mai smart.
-        </p>
+
+        <span class="category-chip">Recomandat</span>
       </div>
 
-      <span class="category-chip">Recomandat</span>
-    </div>
+      <!-- Accesorii -->
+      <div class="category-card relative overflow-hidden bg-gray-800 rounded-xl p-4 cursor-pointer group">
+        <img
+          src="https://images.pexels.com/photos/1420701/pexels-photo-1420701.jpeg?auto=compress&cs=tinysrgb&w=800"
+          alt="Accesorii"
+          class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition"
+        >
+        <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80"></div>
 
-    <!-- Accesorii -->
-    <div class="category-card relative overflow-hidden bg-gray-800 rounded-xl p-4 cursor-pointer group">
-      <img
-        src="https://images.pexels.com/photos/1420701/pexels-photo-1420701.jpeg?auto=compress&cs=tinysrgb&w=800"
-        alt="Accesorii"
-        class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition"
-      >
-      <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80"></div>
-
-      <div class="relative flex flex-col h-full justify-between">
-        <div class="flex items-center gap-3 mb-4">
-          <div class="w-10 h-10 rounded-full bg-yellow-400/90 flex items-center justify-center text-black font-bold text-lg">
-            🎧
+        <div class="relative flex flex-col h-full justify-between">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-full bg-yellow-400/90 flex items-center justify-center text-black font-bold text-lg">
+              🎧
+            </div>
+            <div>
+              <h4 class="font-bold text-yellow-400 text-lg">Accesorii</h4>
+              <p class="text-xs text-gray-300">Mouse, tastaturi, periferice</p>
+            </div>
           </div>
-          <div>
-            <h4 class="font-bold text-yellow-400 text-lg">Accesorii</h4>
-            <p class="text-xs text-gray-300">Mouse, tastaturi, periferice</p>
-          </div>
+          <p class="text-xs text-gray-300">
+            Completează-ți setup-ul cu accesorii confortabile și fiabile.
+          </p>
         </div>
-        <p class="text-xs text-gray-300">
-          Completează-ți setup-ul cu accesorii confortabile și fiabile.
-        </p>
-      </div>
 
-      <span class="category-chip">-10%</span>
-    </div>
-  </div>
-</section>
-
-
- <section id="promotions" class="max-w-6xl mx-auto py-20 px-6 fade-in">
-  <h3 class="text-4xl font-bold text-yellow-400 mb-10 text-center slide-left">
-    Promoții Speciale
-  </h3>
-
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-    <!-- Promo 1 -->
-    <div class="promo-card relative overflow-hidden rounded-xl p-6 cursor-pointer group">
-      <img src="https://images.pexels.com/photos/374074/pexels-photo-374074.jpeg?auto=compress&cs=tinysrgb&w=1200"
-           class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-70 transition">
-
-      <div class="absolute inset-0 bg-gradient-to-br from-black/70 via-black/40 to-black/80"></div>
-
-      <div class="relative z-10">
-        <h4 class="text-yellow-400 font-bold text-xl mb-2">🔥 -15% la Laptopuri Gaming</h4>
-        <p class="text-gray-200">Doar până la finalul lunii. Modele ASUS ROG, Acer Nitro, MSI.</p>
+        <span class="category-chip">-10%</span>
       </div>
     </div>
+  </section>
 
-    <!-- Promo 2 -->
-    <div class="promo-card relative overflow-hidden rounded-xl p-6 cursor-pointer group">
-      <img src="https://images.pexels.com/photos/4792718/pexels-photo-4792718.jpeg?auto=compress&cs=tinysrgb&w=1200"
-           class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-70 transition">
+  <section id="promotions" class="max-w-6xl mx-auto py-20 px-6 fade-in">
+    <h3 class="text-4xl font-bold text-yellow-400 mb-10 text-center slide-left">
+      Promoții Speciale
+    </h3>
 
-      <div class="absolute inset-0 bg-gradient-to-br from-black/70 via-black/40 to-black/80"></div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-      <div class="relative z-10">
-        <h4 class="text-yellow-400 font-bold text-xl mb-2">⚡ SSD + Montaj Gratuit</h4>
-        <p class="text-gray-200">La orice SSD peste 500GB – montajul este inclus.</p>
+      <!-- Promo 1 -->
+      <div class="promo-card relative overflow-hidden rounded-xl p-6 cursor-pointer group">
+        <img src="https://images.pexels.com/photos/374074/pexels-photo-374074.jpeg?auto=compress&cs=tinysrgb&w=1200"
+             class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-70 transition">
+
+        <div class="absolute inset-0 bg-gradient-to-br from-black/70 via-black/40 to-black/80"></div>
+
+        <div class="relative z-10">
+          <h4 class="text-yellow-400 font-bold text-xl mb-2">🔥 -15% la Laptopuri Gaming</h4>
+          <p class="text-gray-200">Doar până la finalul lunii. Modele ASUS ROG, Acer Nitro, MSI.</p>
+        </div>
       </div>
+
+      <!-- Promo 2 -->
+      <div class="promo-card relative overflow-hidden rounded-xl p-6 cursor-pointer group">
+        <img src="https://images.pexels.com/photos/4792718/pexels-photo-4792718.jpeg?auto=compress&cs=tinysrgb&w=1200"
+             class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-70 transition">
+
+        <div class="absolute inset-0 bg-gradient-to-br from-black/70 via-black/40 to-black/80"></div>
+
+        <div class="relative z-10">
+          <h4 class="text-yellow-400 font-bold text-xl mb-2">⚡ SSD + Montaj Gratuit</h4>
+          <p class="text-gray-200">La orice SSD peste 500GB – montajul este inclus.</p>
+        </div>
+      </div>
+
     </div>
-
-  </div>
-</section>
-
+  </section>
 
   <section id="testimonials" class="max-w-6xl mx-auto py-20 px-6 fade-in">
-  <h3 class="text-4xl font-bold text-yellow-400 mb-10 text-center slide-left">
-    Ce spun clienții noștri
-  </h3>
+    <h3 class="text-4xl font-bold text-yellow-400 mb-10 text-center slide-left">
+      Ce spun clienții noștri
+    </h3>
 
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-    <!-- Testimonial 1 -->
-    <div class="testimonial-card relative overflow-hidden p-6 rounded-xl bg-gray-800/80 backdrop-blur group">
-      <div class="flex items-center gap-3 mb-4">
-        <img src="https://randomuser.me/api/portraits/men/32.jpg"
-             class="w-12 h-12 rounded-full border-2 border-yellow-400">
-        <div>
-          <p class="font-semibold text-yellow-300 text-sm">Ion C.</p>
-          <p class="text-gray-400 text-xs">Achiziție Laptop</p>
+      <!-- Testimonial 1 -->
+      <div class="testimonial-card relative overflow-hidden p-6 rounded-xl bg-gray-800/80 backdrop-blur group">
+        <div class="flex items-center gap-3 mb-4">
+          <img src="https://randomuser.me/api/portraits/men/32.jpg"
+               class="w-12 h-12 rounded-full border-2 border-yellow-400">
+          <div>
+            <p class="font-semibold text-yellow-300 text-sm">Ion C.</p>
+            <p class="text-gray-400 text-xs">Achiziție Laptop</p>
+          </div>
         </div>
+
+        <p class="text-gray-300 italic">
+          “Produsele sunt de calitate, livrare rapidă și suport excelent. Recomand!”
+        </p>
       </div>
 
-      <p class="text-gray-300 italic">
-        “Produsele sunt de calitate, livrare rapidă și suport excelent. Recomand!”
-      </p>
-    </div>
-
-    <!-- Testimonial 2 -->
-    <div class="testimonial-card relative overflow-hidden p-6 rounded-xl bg-gray-800/80 backdrop-blur group">
-      <div class="flex items-center gap-3 mb-4">
-        <img src="https://randomuser.me/api/portraits/women/42.jpg"
-             class="w-12 h-12 rounded-full border-2 border-yellow-400">
-        <div>
-          <p class="font-semibold text-yellow-300 text-sm">Maria P.</p>
-          <p class="text-gray-400 text-xs">Componente PC</p>
+      <!-- Testimonial 2 -->
+      <div class="testimonial-card relative overflow-hidden p-6 rounded-xl bg-gray-800/80 backdrop-blur group">
+        <div class="flex items-center gap-3 mb-4">
+          <img src="https://randomuser.me/api/portraits/women/42.jpg"
+               class="w-12 h-12 rounded-full border-2 border-yellow-400">
+          <div>
+            <p class="font-semibold text-yellow-300 text-sm">Maria P.</p>
+            <p class="text-gray-400 text-xs">Componente PC</p>
+          </div>
         </div>
+
+        <p class="text-gray-300 italic">
+          “Am găsit toate componentele pentru PC-ul meu. Prețuri corecte și livrare rapidă.”
+        </p>
       </div>
 
-      <p class="text-gray-300 italic">
-        “Am găsit toate componentele pentru PC-ul meu. Prețuri corecte și livrare rapidă.”
-      </p>
-    </div>
-
-    <!-- Testimonial 3 -->
-    <div class="testimonial-card relative overflow-hidden p-6 rounded-xl bg-gray-800/80 backdrop-blur group">
-      <div class="flex items-center gap-3 mb-4">
-        <img src="https://randomuser.me/api/portraits/men/85.jpg"
-             class="w-12 h-12 rounded-full border-2 border-yellow-400">
-        <div>
-          <p class="font-semibold text-yellow-300 text-sm">Alex D.</p>
-          <p class="text-gray-400 text-xs">Smartphone</p>
+      <!-- Testimonial 3 -->
+      <div class="testimonial-card relative overflow-hidden p-6 rounded-xl bg-gray-800/80 backdrop-blur group">
+        <div class="flex items-center gap-3 mb-4">
+          <img src="https://randomuser.me/api/portraits/men/85.jpg"
+               class="w-12 h-12 rounded-full border-2 border-yellow-400">
+          <div>
+            <p class="font-semibold text-yellow-300 text-sm">Alex D.</p>
+            <p class="text-gray-400 text-xs">Smartphone</p>
+          </div>
         </div>
+
+        <p class="text-gray-300 italic">
+          “Site-ul arată modern și comanda a ajuns în 24h. Super experiență!”
+        </p>
       </div>
 
-      <p class="text-gray-300 italic">
-        “Site-ul arată modern și comanda a ajuns în 24h. Super experiență!”
-      </p>
     </div>
-
-  </div>
-</section>
-
+  </section>
 
   <!-- BLOG -->
   <section id="blog" class="max-w-6xl mx-auto py-20 px-6 fade-in">
