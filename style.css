@@ -1,49 +1,25 @@
+
 /* ===========================
    FONT & GLOBAL
 =========================== */
 body {
   font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  background: radial-gradient(circle at top, #020617 0, #020617 30%, #000 100%);
+  background-color: #020617; /* slate-950 */
   color: #f9fafb;
   margin: 0;
 }
 
-/* container general – ca un ecran de app */
+/* App shell – centrat ca o aplicație de mobil */
 .app-shell {
-  max-width: 480px;              /* ca un telefon mai mare */
-  margin: 0 auto;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+  max-width: 960px;
+  margin: 0 auto;
+  background: radial-gradient(circle at top, #0f172a 0, #020617 45%, #000 100%);
+  box-shadow: 0 0 80px rgba(0, 0, 0, 0.85);
 }
 
-/* lăsăm loc pentru bottom-nav pe mobil */
-@media (max-width: 768px) {
-  body {
-    padding-bottom: 4.5rem;
-  }
-}
-
-/* ===========================
-   HERO / TOP AREA
-=========================== */
-.hero {
-  background: linear-gradient(135deg, #0f172a 0%, #020617 60%);
-}
-
-.hero-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 10px;
-  border-radius: 999px;
-  font-size: 11px;
-  background: rgba(248, 250, 252, 0.06);
-  border: 1px solid rgba(148, 163, 184, 0.6);
-}
-
-.hero-badge span {
-  font-size: 13px;
+.app-main {
+  padding-bottom: 4.5rem; /* spațiu pentru navbar-ul de jos pe mobil */
 }
 
 /* ===========================
@@ -51,28 +27,26 @@ body {
 =========================== */
 .fade-in {
   opacity: 0;
-  transform: translateY(16px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
 }
 .fade-in.show {
   opacity: 1;
   transform: translateY(0);
 }
-
 .slide-left {
   opacity: 0;
-  transform: translateX(-24px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transform: translateX(-30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
 }
 .slide-left.show {
   opacity: 1;
   transform: translateX(0);
 }
-
 .slide-right {
   opacity: 0;
-  transform: translateX(24px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transform: translateX(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
 }
 .slide-right.show {
   opacity: 1;
@@ -80,114 +54,70 @@ body {
 }
 
 /* ===========================
-   PRODUCT CARD – MOBILE APP STYLE
+   PRODUCT CARD – FLIP
 =========================== */
 .perspective {
   perspective: 1000px;
 }
-
-/* renunțăm vizual la flip agresiv, păstrăm structură pentru JS */
 .product-card {
   width: 100%;
-  border-radius: 1rem;
-  overflow: hidden;
-  background: radial-gradient(circle at top left, #1f2937 0, #020617 70%);
-  border: 1px solid rgba(15, 23, 42, 0.9);
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6);
-  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  height: 24rem;
+  perspective: 1000px;
 }
 .product-card-inner {
   position: relative;
   width: 100%;
-  height: auto;
-  transform-style: flat;
+  height: 100%;
+  border-radius: 0.9rem;
+  overflow: hidden;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  box-shadow: 0 18px 35px rgba(0, 0, 0, 0.55);
+}
+.product-card:hover .product-card-inner {
+  transform: rotateY(180deg);
 }
 .product-card-front,
 .product-card-back {
-  position: relative;
-  width: 100%;
-  height: auto;
   backface-visibility: hidden;
+  position: absolute;
+  inset: 0;
+  border-radius: 0.9rem;
 }
-.product-card-back {
-  display: none; /* nu mai facem flip pe hover pentru UX mai clar */
-}
-
-.product-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 22px 50px rgba(0, 0, 0, 0.75);
-}
-
 .product-card-front {
+  background: radial-gradient(circle at top, #1f2937 0, #020617 65%);
   display: flex;
   flex-direction: column;
 }
-
 .product-card-front img {
-  width: 100%;
-  height: 210px;
   object-fit: cover;
+  border-radius: 0.9rem 0.9rem 0 0;
 }
-
-.product-card-front-content {
-  padding: 0.75rem 0.9rem 0.85rem 0.9rem;
-}
-
-.product-price-row {
+.product-card-back {
+  transform: rotateY(180deg);
+  background: radial-gradient(circle at bottom, #020617 0, #020617 40%, #000 100%);
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 0.5rem;
-}
-
-/* ===========================
-   HORIZONTAL SLIDER (promo, recomandări)
-=========================== */
-.slider {
-  display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  gap: 1rem;
-  padding-bottom: 0.5rem;
-}
-.slider::-webkit-scrollbar {
-  height: 4px;
-}
-.slider::-webkit-scrollbar-track {
-  background: transparent;
-}
-.slider::-webkit-scrollbar-thumb {
-  background: #4b5563;
-  border-radius: 999px;
-}
-
-.slider-item {
-  flex: 0 0 80%;
-  max-width: 320px;
-  scroll-snap-align: start;
-  border-radius: 1rem;
-  background: radial-gradient(circle at top left, #1f2937 0, #020617 70%);
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
   padding: 1rem;
-  border: 1px solid rgba(31, 41, 55, 0.9);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
 }
 
 /* ===========================
-   CATEGORY CARD – APP STYLE
+   CATEGORY CARD – GLOW / HOVER
 =========================== */
 .category-card {
   position: relative;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.65);
   transform: translateY(0);
-  transition: transform 0.18s ease, box-shadow 0.18s ease, border 0.18s ease;
-  border-radius: 0.9rem;
-  border: 1px solid rgba(30, 64, 175, 0.5);
-  background: radial-gradient(circle at top, #020617 0, #020617 60%, #000 100%);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+  border: 1px solid rgba(148, 163, 184, 0.25); /* slate-400/25 */
 }
 .category-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.9);
-  border-color: rgba(250, 204, 21, 0.8);
+  transform: translateY(-6px);
+  box-shadow: 0 25px 55px rgba(0, 0, 0, 0.85);
+  border-color: rgba(250, 204, 21, 0.6); /* yellow-400/60 */
 }
 
 /* mic chip în colțul dreapta-sus */
@@ -197,122 +127,59 @@ body {
   right: 10px;
   font-size: 10px;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  background: rgba(250, 204, 21, 0.96);
-  color: #000;
-  padding: 3px 8px;
+  letter-spacing: 0.08em;
+  background: rgba(250, 204, 21, 0.96); /* galben */
+  color: #020617;
+  padding: 3px 9px;
   border-radius: 999px;
   font-weight: 700;
 }
 
 /* ===========================
-   PROMO CARD
+   PROMO & TESTIMONIAL CARDS
 =========================== */
 .promo-card {
-  position: relative;
-  overflow: hidden;
-  border-radius: 1rem;
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.7);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 20px 30px rgba(0, 0, 0, 0.6);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border 0.25s ease;
+  border: 1px solid rgba(30, 64, 175, 0.4); /* blue-700/40 */
 }
 .promo-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 24px 55px rgba(0, 0, 0, 0.9);
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 30px 50px rgba(0, 0, 0, 0.85);
+  border-color: rgba(250, 204, 21, 0.8); /* accent galben */
 }
 
-/* ===========================
-   TESTIMONIAL CARD
-=========================== */
 .testimonial-card {
-  border-radius: 1rem;
-  background: radial-gradient(circle at top, #020617 0, #020617 60%, #000 100%);
-  border: 1px solid rgba(31, 41, 55, 0.9);
-  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.7);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border 0.25s ease;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  background: radial-gradient(circle at top left, rgba(250, 204, 21, 0.06), rgba(15, 23, 42, 0.95));
 }
 .testimonial-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
+  transform: translateY(-5px);
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.8);
+  border-color: rgba(250, 204, 21, 0.7);
 }
 
 /* ===========================
-   AUTH MODAL & CHECKOUT
-=========================== */
-#authModal input,
-#checkoutModal input,
-#checkoutModal textarea,
-#checkoutModal select {
-  outline: none;
-}
-
-#authModal button,
-#checkoutModal button {
-  cursor: pointer;
-}
-
-#authModal,
-#checkoutModal {
-  backdrop-filter: blur(5px);
-}
-
-/* card interior modal */
-.modal-card {
-  border-radius: 1rem;
-  background: radial-gradient(circle at top, #020617 0, #020617 60%, #000 100%);
-  border: 1px solid rgba(30, 64, 175, 0.6);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
-}
-
-/* ===========================
-   CART SIDEBAR
-=========================== */
-#cart {
-  max-width: 100%;
-  border-left: 1px solid rgba(31, 41, 55, 0.9);
-  background: radial-gradient(circle at top left, #020617 0, #020617 60%, #000 100%);
-}
-
-/* ===========================
-   MOBILE OPTIMIZED
-=========================== */
-@media (max-width: 768px) {
-  .hero h1,
-  .hero h2 {
-    font-size: 1.8rem;
-  }
-  .hero p {
-    font-size: 0.9rem;
-  }
-
-  .product-card-front img {
-    height: 190px;
-  }
-
-  .product-card-front-content {
-    padding: 0.7rem 0.8rem 0.8rem 0.8rem;
-  }
-}
-
-/* ===========================
-   BOTTOM NAV (MOBILE APP STYLE)
+   MOBILE BOTTOM NAV
 =========================== */
 .mobile-bottom-nav {
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
-  z-index: 40;
-  background: rgba(15, 23, 42, 0.98);
-  border-top: 1px solid rgba(55, 65, 81, 0.9);
-  backdrop-filter: blur(10px);
+  z-index: 50;
+  background: rgba(2, 6, 23, 0.98); /* slate-950 */
+  border-top: 1px solid #1f2937;
+  backdrop-filter: blur(14px);
 }
 
 .mobile-bottom-nav-inner {
-  max-width: 480px;
+  max-width: 960px;
   margin: 0 auto;
   display: flex;
   justify-content: space-around;
-  padding: 0.35rem 0.25rem 0.3rem 0.25rem;
+  padding: 0.35rem 0.75rem 0.6rem;
 }
 
 .mobile-bottom-nav-item {
@@ -321,58 +188,62 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 2px;
+  background: transparent;
+  border: none;
+  color: #e5e7eb;
   font-size: 11px;
-  color: #9ca3af;
-  text-decoration: none;
+  padding: 0.2rem 0;
 }
-.mobile-bottom-nav-item span.icon {
-  font-size: 1.35rem;
+
+.mobile-bottom-nav-item span:first-child {
+  font-size: 1.25rem;
   line-height: 1;
 }
-.mobile-bottom-nav-item span.label {
-  line-height: 1.1;
+
+/* ---------------------------
+   MOBILE ACCOUNT SHEET
+--------------------------- */
+#mobileAccountMenu {
+  backdrop-filter: blur(10px);
 }
 
-/* stare activă – poți adăuga/elim clasa asta din JS dacă vrei */
-.mobile-bottom-nav-item.active {
-  color: #facc15;
+.mobile-account-card {
+  border-radius: 1.25rem 1.25rem 0 0;
+  background: radial-gradient(circle at top, #020617, #020617 50%, #000 100%);
+  border-top: 1px solid rgba(148, 163, 184, 0.4);
+  box-shadow: 0 -18px 35px rgba(0, 0, 0, 0.85);
 }
 
-/* ascundem bara de jos pe desktop */
-@media (min-width: 768px) {
+/* ===========================
+   AUTH MODAL
+=========================== */
+#authModal input {
+  outline: none;
+}
+#authModal button {
+  cursor: pointer;
+}
+
+/* ===========================
+   RESPONSIVE
+=========================== */
+@media (min-width: 1024px) {
+  .app-main {
+    padding-bottom: 2rem;
+  }
   .mobile-bottom-nav {
     display: none;
   }
 }
 
-/* ===========================
-   ACCOUNT SHEET (mobile drawer)
-=========================== */
-#mobileAccountMenu {
-  backdrop-filter: blur(5px);
-}
-.mobile-account-card {
-  border-radius: 1rem 1rem 0 0;
-  background: radial-gradient(circle at top, #020617 0, #020617 60%, #000 100%);
-  border-top: 1px solid rgba(55, 65, 81, 0.8);
-}
-
-/* ===========================
-   MISC
-=========================== */
-.chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 3px 8px;
-  font-size: 11px;
-  border-radius: 999px;
-  background: rgba(15, 23, 42, 0.85);
-  border: 1px solid rgba(75, 85, 99, 0.9);
-}
-
-.badge-yellow {
-  background: rgba(250, 204, 21, 0.1);
-  color: #facc15;
-  border-color: rgba(250, 204, 21, 0.8);
+@media (max-width: 768px) {
+  .product-card {
+    height: auto;
+  }
+  .product-card-front img {
+    height: 190px;
+  }
+  .product-card-back {
+    padding: 0.8rem;
+  }
 }
