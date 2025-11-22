@@ -1,1 +1,443 @@
-<!-- TODO: Full index.html content will be inserted here -->
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TechStore - Magazin IT</title>
+
+  <!-- SEO -->
+  <meta name="description" content="TechStore - magazin IT cu laptopuri, componente, gadgeturi și accesorii.">
+  <meta property="og:title" content="TechStore - Magazin IT" />
+  <meta property="og:description" content="Laptopuri, componente și gadgeturi la prețuri corecte." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://via.placeholder.com/600x315" />
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body class="bg-gray-900 text-gray-100 font-sans">
+
+  <!-- HEADER -->
+  <header class="flex items-center justify-between p-4 md:p-6 bg-black/90 backdrop-blur shadow-lg sticky top-0 z-50">
+
+    <div class="flex items-center gap-3">
+      <h1 class="text-3xl md:text-4xl font-extrabold text-yellow-400 tracking-tight">
+        TechStore
+      </h1>
+
+      <!-- BURGER -->
+      <button id="hamburgerBtn" class="md:hidden flex flex-col gap-1 p-2 bg-gray-800 rounded">
+        <span class="w-6 h-0.5 bg-white block"></span>
+        <span class="w-6 h-0.5 bg-white block"></span>
+        <span class="w-6 h-0.5 bg-white block"></span>
+      </button>
+    </div>
+
+    <!-- NAV -->
+    <nav
+      id="navMenu"
+      class="hidden md:flex flex-col md:flex-row md:items-center md:space-x-6 gap-4 md:gap-0 text-sm md:text-base"
+    >
+      <a href="#about" class="hover:text-yellow-400 transition">Despre Noi</a>
+      <a href="#productsSection" class="hover:text-yellow-400 transition">Produse</a>
+      <a href="#categories" class="hover:text-yellow-400 transition">Categorii</a>
+      <a href="#promotions" class="hover:text-yellow-400 transition">Promoții</a>
+      <a href="#testimonials" class="hover:text-yellow-400 transition">Testimoniale</a>
+      <a href="#blog" class="hover:text-yellow-400 transition">Blog</a>
+      <a href="#contact" class="hover:text-yellow-400 transition">Contact</a>
+
+      <a id="profileLink" href="profile.html"
+         class="hidden hover:text-yellow-400 transition">Profil</a>
+      <a id="adminLink" href="admin.html"
+         class="hidden hover:text-yellow-400 transition">Admin</a>
+    </nav>
+
+    <!-- BUTTONS -->
+    <div class="flex items-center space-x-3 ml-4">
+      <button id="loginBtn"
+        class="bg-yellow-400 text-black px-4 py-2 rounded-full font-semibold hover:bg-yellow-300 transition">
+        Logare / Cont nou
+      </button>
+
+      <button id="logoutBtn"
+        class="hidden bg-yellow-400 text-black px-4 py-2 rounded-full font-semibold hover:bg-yellow-300 transition">
+        Logout
+      </button>
+
+      <button id="cartBtn"
+        class="bg-yellow-400 text-black px-4 py-2 rounded-full font-semibold hover:bg-yellow-300 transition">
+        Coș (<span id="cartCount">0</span>)
+      </button>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero relative bg-gradient-to-b from-black via-gray-900 to-gray-800 text-center text-white py-24 md:py-32 px-6">
+    <h2 class="text-4xl md:text-6xl font-extrabold mb-6 fade-in">
+      Tehnologie la un click distanță
+    </h2>
+
+    <p class="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-8 fade-in"
+       style="transition-delay:.15s">
+      Cele mai noi gadgeturi, componente și accesorii IT.
+    </p>
+
+    <a href="#productsSection"
+       class="inline-block bg-yellow-400 text-black px-8 py-3 rounded-full font-bold hover:bg-yellow-300 transition text-lg fade-in shadow-xl"
+       style="transition-delay:.3s">
+       Vezi Produse
+    </a>
+  </section>
+
+  <!-- DESPRE NOI -->
+  <section id="about" class="max-w-6xl mx-auto py-20 px-6 fade-in">
+    <h3 class="text-4xl font-bold text-yellow-400 mb-6 text-center slide-left">
+      Despre Noi
+    </h3>
+
+    <p class="text-gray-300 text-lg md:text-xl text-center slide-right">
+      TechStore este un magazin IT dedicat pasionaților de tehnologie.
+    </p>
+  </section>
+
+  <!-- PRODUSE POPULARE -->
+  <section id="productsSection" class="max-w-6xl mx-auto py-20 px-6 fade-in">
+    <h3 class="text-4xl font-bold text-yellow-400 mb-6 text-center slide-left">
+      Produse Populare
+    </h3>
+
+    <div class="flex flex-col md:flex-row justify-between mb-4 gap-4">
+      <input id="search" class="p-3 rounded bg-gray-800 border border-gray-700 flex-1"
+             placeholder="Caută produs..." />
+
+      <select id="categoryFilter" class="p-3 rounded bg-gray-800 border border-gray-700"></select>
+
+      <select id="sortFilter" class="p-3 rounded bg-gray-800 border border-gray-700">
+        <option value="new">Cele mai noi</option>
+        <option value="priceAsc">Preț ↑</option>
+        <option value="priceDesc">Preț ↓</option>
+      </select>
+    </div>
+
+    <div class="flex flex-col md:flex-row gap-4 mb-8">
+      <input id="minPrice" type="number" placeholder="Preț minim (€)"
+             class="p-2 rounded bg-gray-800 border border-gray-700" />
+      <input id="maxPrice" type="number" placeholder="Preț maxim (€)"
+             class="p-2 rounded bg-gray-800 border border-gray-700" />
+    </div>
+
+    <div id="products"
+         class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 fade-in">
+    </div>
+  </section>
+
+  <!-- CATEGORII -->
+  <section id="categories" class="max-w-6xl mx-auto py-20 px-6 fade-in">
+
+    <h3 class="text-4xl font-bold text-yellow-400 mb-10 text-center slide-left">
+      Categorii Recomandate
+    </h3>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+      <!-- Laptopuri -->
+      <div class="category-card relative overflow-hidden bg-gray-800 rounded-xl p-4 cursor-pointer group">
+        <img src="https://images.pexels.com/photos/18105/pexels-photo.jpg"
+             class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition">
+        <div class="absolute inset-0 bg-gradient-to-b from-black/60"></div>
+
+        <div class="relative flex flex-col h-full justify-between">
+          <h4 class="font-bold text-yellow-400 text-xl">Laptopuri</h4>
+          <p class="text-gray-300 text-sm">Gaming, office, ultrabook</p>
+        </div>
+
+        <span class="category-chip">Nou</span>
+      </div>
+
+      <!-- Componente -->
+      <div class="category-card relative overflow-hidden p-4 rounded-xl bg-gray-800 cursor-pointer group">
+        <img src="https://images.pexels.com/photos/1714208/pexels-photo-1714208.jpeg"
+             class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition" />
+        <div class="absolute inset-0 bg-gradient-to-b from-black/60"></div>
+
+        <div class="relative flex flex-col justify-between">
+          <h4 class="text-xl text-yellow-400 font-bold">Componente</h4>
+          <p class="text-gray-300 text-sm">Procesoare, SSD, GPU</p>
+        </div>
+
+        <span class="category-chip">Popular</span>
+      </div>
+
+      <!-- Gadgeturi -->
+      <div class="category-card relative overflow-hidden p-4 rounded-xl bg-gray-800 cursor-pointer group">
+        <img src="https://images.pexels.com/photos/1092644/pexels-photo-1092644.jpeg"
+             class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition" />
+        <div class="absolute inset-0 bg-gradient-to-b from-black/60"></div>
+
+        <div class="relative flex flex-col justify-between">
+          <h4 class="text-xl text-yellow-400 font-bold">Gadgeturi</h4>
+          <p class="text-gray-300 text-sm">Smartwatch, căști</p>
+        </div>
+
+        <span class="category-chip">Top</span>
+      </div>
+
+      <!-- Accesorii -->
+      <div class="category-card relative overflow-hidden p-4 rounded-xl bg-gray-800 cursor-pointer group">
+        <img src="https://images.pexels.com/photos/1420701/pexels-photo-1420701.jpeg"
+             class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition" />
+        <div class="absolute inset-0 bg-gradient-to-b from-black/60"></div>
+
+        <div class="relative flex flex-col justify-between">
+          <h4 class="text-xl text-yellow-400 font-bold">Accesorii</h4>
+          <p class="text-gray-300 text-sm">Mouse, tastaturi</p>
+        </div>
+
+        <span class="category-chip">-10%</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- PROMOTIONS -->
+  <section id="promotions" class="max-w-6xl mx-auto py-20 px-6 fade-in">
+    <h3 class="text-4xl font-bold text-yellow-400 mb-10 text-center slide-left">
+      Promoții Speciale
+    </h3>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+      <div class="promo-card relative p-6 rounded-xl overflow-hidden">
+        <img src="https://images.pexels.com/photos/374074/pexels-photo-374074.jpeg"
+             class="absolute inset-0 w-full h-full object-cover opacity-50" />
+        <div class="absolute inset-0 bg-gradient-to-b from-black/60"></div>
+        <div class="relative">
+          <h4 class="text-xl text-yellow-400 font-bold">🔥 -15% la laptopuri gaming</h4>
+        </div>
+      </div>
+
+      <div class="promo-card relative p-6 rounded-xl overflow-hidden">
+        <img src="https://images.pexels.com/photos/4792718/pexels-photo-4792718.jpeg"
+             class="absolute inset-0 w-full h-full object-cover opacity-50" />
+        <div class="absolute inset-0 bg-gradient-to-b from-black/60"></div>
+        <div class="relative">
+          <h4 class="text-xl text-yellow-400 font-bold">⚡ SSD + montaj gratuit</h4>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- TESTIMONIALE -->
+  <section id="testimonials" class="max-w-6xl mx-auto py-20 px-6 fade-in">
+
+    <h3 class="text-4xl font-bold text-yellow-400 mb-10 text-center">
+      Ce spun clienții noștri
+    </h3>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+      <div class="testimonial-card bg-gray-800 p-6 rounded-xl">
+        <p class="text-gray-300 italic">„Produse excelente, livrare rapidă.”</p>
+      </div>
+
+      <div class="testimonial-card bg-gray-800 p-6 rounded-xl">
+        <p class="text-gray-300 italic">„Prețuri avantajoase și suport bun.”</p>
+      </div>
+
+      <div class="testimonial-card bg-gray-800 p-6 rounded-xl">
+        <p class="text-gray-300 italic">„Comand mereu de aici!”</p>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- BLOG -->
+  <section id="blog" class="max-w-6xl mx-auto py-20 px-6 fade-in">
+
+    <h3 class="text-4xl font-bold text-yellow-400 mb-6 text-center">Blog & Știri IT</h3>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+      <div class="bg-gray-800 p-6 rounded-xl">
+        <h4 class="text-yellow-400 font-bold">Top 5 laptopuri</h4>
+      </div>
+
+      <div class="bg-gray-800 p-6 rounded-xl">
+        <h4 class="text-yellow-400 font-bold">Upgrade SSD</h4>
+      </div>
+
+      <div class="bg-gray-800 p-6 rounded-xl">
+        <h4 class="text-yellow-400 font-bold">Gadgeturi noi</h4>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="max-w-6xl mx-auto py-20 px-6 fade-in text-center">
+
+    <h3 class="text-4xl font-bold text-yellow-400 mb-6">Contact & Newsletter</h3>
+
+    <form class="flex flex-col md:flex-row gap-4 justify-center mb-8">
+      <input type="email" class="p-3 rounded bg-gray-800 border border-gray-700" placeholder="Email..." />
+      <button class="bg-yellow-400 text-black px-6 py-3 rounded font-bold hover:bg-yellow-300">
+        Abonează-te
+      </button>
+    </form>
+
+    <p class="text-gray-400">
+      Email: contact@techstore.ro
+    </p>
+
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-black text-gray-400 text-center py-6">
+    &copy; 2025 TechStore. Toate drepturile rezervate.
+  </footer>
+
+  <!-- CART -->
+  <div id="cart"
+       class="fixed top-0 right-[-400px] w-96 h-full bg-gray-800 text-white p-6 shadow-lg transition-all z-50">
+
+    <h3 class="text-2xl font-bold mb-4">Coș Produse</h3>
+
+    <div id="cartItems" class="space-y-4"></div>
+    <hr class="border-gray-600 my-4">
+
+    <div class="flex justify-between mb-4">
+      <strong>Total:</strong>
+      <span id="cartTotal">0 €</span>
+    </div>
+
+    <button id="checkoutBtn"
+      class="w-full bg-yellow-400 text-black py-2 rounded font-semibold hover:bg-yellow-300 mb-2">
+      Checkout
+    </button>
+
+    <button id="closeCart"
+      class="w-full bg-gray-700 text-white py-2 rounded font-semibold hover:bg-gray-600">
+      Închide
+    </button>
+  </div>
+
+  <!-- CHECKOUT -->
+  <div id="checkoutModal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+    <div class="bg-gray-900 p-6 rounded-xl max-w-xl w-full">
+
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-2xl font-bold text-yellow-400">Finalizare comandă</h3>
+        <button id="checkoutClose" class="text-gray-400 text-2xl">&times;</button>
+      </div>
+
+      <div id="checkoutSummary" class="space-y-2 mb-4"></div>
+
+      <div class="text-right font-bold mb-4 text-yellow-400">
+        Total: <span id="checkoutTotalText">0 €</span>
+      </div>
+
+      <form id="checkoutForm" class="space-y-3">
+
+        <input id="ckName" class="w-full p-2 rounded bg-gray-800 border border-gray-700" placeholder="Nume complet" />
+        <input id="ckEmail" class="w-full p-2 rounded bg-gray-800 border border-gray-700" placeholder="Email" />
+        <input id="ckPhone" class="w-full p-2 rounded bg-gray-800 border border-gray-700" placeholder="Telefon" />
+        <input id="ckCity" class="w-full p-2 rounded bg-gray-800 border border-gray-700" placeholder="Oraș" />
+        <input id="ckAddress" class="w-full p-2 rounded bg-gray-800 border border-gray-700" placeholder="Adresă" />
+
+        <select id="ckDelivery" class="w-full p-2 rounded bg-gray-800 border border-gray-700">
+          <option value="curier">Curier rapid</option>
+          <option value="pickup">Ridicare din magazin</option>
+        </select>
+
+        <select id="ckPayment" class="w-full p-2 rounded bg-gray-800 border border-gray-700">
+          <option value="ramburs">Ramburs</option>
+          <option value="card_curier">Card la curier</option>
+          <option value="transfer_bancar">Transfer bancar</option>
+        </select>
+
+        <textarea id="ckNotes" rows="3"
+          class="w-full p-2 rounded bg-gray-800 border border-gray-700"
+          placeholder="Observații (opțional)"></textarea>
+
+        <button id="checkoutSubmitBtn"
+          class="w-full bg-yellow-400 text-black py-2 rounded font-semibold hover:bg-yellow-300">
+          Trimite Comanda
+        </button>
+
+        <p id="checkoutMessage" class="text-center text-sm mt-2"></p>
+
+      </form>
+
+    </div>
+  </div>
+
+  <!-- AUTH -->
+  <div id="authModal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+
+    <div class="bg-gray-900 p-6 rounded-xl max-w-md w-full">
+
+      <div class="flex justify-between items-center mb-4">
+        <h3 id="authTitle" class="text-2xl text-yellow-400 font-bold">Logare</h3>
+        <button id="authClose" class="text-gray-400">&times;</button>
+      </div>
+
+      <div class="flex border-b border-gray-700 mb-4">
+        <button id="tabLogin"
+                class="flex-1 py-2 text-center border-b-2 border-yellow-400 font-semibold">
+          Logare
+        </button>
+        <button id="tabRegister"
+                class="flex-1 py-2 text-center text-gray-400 hover:text-yellow-400">
+          Înregistrare
+        </button>
+      </div>
+
+      <!-- LOGIN -->
+      <form id="loginForm" class="space-y-3">
+        <input id="loginEmail" class="w-full p-2 rounded bg-gray-800 border border-gray-700"
+               placeholder="Email" />
+        <input id="loginPassword" type="password"
+               class="w-full p-2 rounded bg-gray-800 border border-gray-700"
+               placeholder="Parola" />
+
+        <button class="w-full bg-yellow-400 text-black py-2 rounded font-semibold hover:bg-yellow-300">
+          Logare
+        </button>
+
+        <button id="forgotPasswordBtn"
+                type="button"
+                class="text-yellow-400 text-sm text-center w-full hover:underline">
+          Ai uitat parola?
+        </button>
+      </form>
+
+      <!-- REGISTER -->
+      <form id="registerForm" class="space-y-3 hidden">
+        <input id="registerEmail" class="w-full p-2 rounded bg-gray-800 border border-gray-700"
+               placeholder="Email" />
+        <input id="registerPassword" type="password"
+               class="w-full p-2 rounded bg-gray-800 border border-gray-700"
+               placeholder="Parolă" />
+        <input id="registerPassword2" type="password"
+               class="w-full p-2 rounded bg-gray-800 border border-gray-700"
+               placeholder="Confirmă parola" />
+
+        <button class="w-full bg-yellow-400 text-black py-2 rounded font-semibold hover:bg-yellow-300">
+          Creează cont
+        </button>
+      </form>
+
+    </div>
+
+  </div>
+
+  <script type="module" src="app.js"></script>
+  <script src="animations.js"></script>
+
+</body>
+</html>
