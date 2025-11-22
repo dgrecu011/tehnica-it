@@ -1,25 +1,25 @@
+
 /* ===========================
    FONT & GLOBAL
 =========================== */
 body {
   font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  background-color: #030712; /* gray-900 */
+  background-color: #020617; /* slate-950 */
   color: #f9fafb;
   margin: 0;
 }
 
-/* spațiu pentru navbar-ul de jos pe mobile */
-@media (max-width: 768px) {
-  body {
-    padding-bottom: 4.5rem; /* să nu calce conținutul peste nav */
-  }
+/* App shell – centrat ca o aplicație de mobil */
+.app-shell {
+  min-height: 100vh;
+  max-width: 960px;
+  margin: 0 auto;
+  background: radial-gradient(circle at top, #0f172a 0, #020617 45%, #000 100%);
+  box-shadow: 0 0 80px rgba(0, 0, 0, 0.85);
 }
 
-/* ===========================
-   HERO SECTION
-=========================== */
-.hero {
-  background: radial-gradient(circle at top, #111827 0, #020617 60%);
+.app-main {
+  padding-bottom: 4.5rem; /* spațiu pentru navbar-ul de jos pe mobil */
 }
 
 /* ===========================
@@ -30,84 +30,72 @@ body {
   transform: translateY(20px);
   transition: opacity 0.8s ease, transform 0.8s ease;
 }
-
 .fade-in.show {
   opacity: 1;
   transform: translateY(0);
 }
-
 .slide-left {
   opacity: 0;
   transform: translateX(-30px);
   transition: opacity 0.8s ease, transform 0.8s ease;
 }
-
 .slide-left.show {
   opacity: 1;
   transform: translateX(0);
 }
-
 .slide-right {
   opacity: 0;
   transform: translateX(30px);
   transition: opacity 0.8s ease, transform 0.8s ease;
 }
-
 .slide-right.show {
   opacity: 1;
   transform: translateX(0);
 }
 
 /* ===========================
-   PRODUCT CARD FLIP
+   PRODUCT CARD – FLIP
 =========================== */
 .perspective {
   perspective: 1000px;
 }
-
 .product-card {
   width: 100%;
   height: 24rem;
   perspective: 1000px;
 }
-
 .product-card-inner {
   position: relative;
   width: 100%;
   height: 100%;
+  border-radius: 0.9rem;
+  overflow: hidden;
   transition: transform 0.6s;
   transform-style: preserve-3d;
+  box-shadow: 0 18px 35px rgba(0, 0, 0, 0.55);
 }
-
 .product-card:hover .product-card-inner {
   transform: rotateY(180deg);
 }
-
 .product-card-front,
 .product-card-back {
   backface-visibility: hidden;
   position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  border-radius: 0.75rem;
+  inset: 0;
+  border-radius: 0.9rem;
 }
-
 .product-card-front {
-  background-color: #1F2937;
+  background: radial-gradient(circle at top, #1f2937 0, #020617 65%);
   display: flex;
   flex-direction: column;
 }
-
 .product-card-front img {
   object-fit: cover;
-  border-radius: 0.75rem 0.75rem 0 0;
+  border-radius: 0.9rem 0.9rem 0 0;
 }
-
 .product-card-back {
   transform: rotateY(180deg);
-  background-color: #111827;
+  background: radial-gradient(circle at bottom, #020617 0, #020617 40%, #000 100%);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -117,41 +105,19 @@ body {
 }
 
 /* ===========================
-   HORIZONTAL SLIDER
-=========================== */
-.slider {
-  display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  gap: 1rem;
-  padding-bottom: 1rem;
-}
-
-.slider::-webkit-scrollbar {
-  display: none;
-}
-
-.slider-item {
-  flex: 0 0 300px;
-  scroll-snap-align: start;
-  border-radius: 0.75rem;
-  background-color: #1F2937;
-  padding: 1rem;
-}
-
-/* ===========================
    CATEGORY CARD – GLOW / HOVER
 =========================== */
 .category-card {
   position: relative;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.65);
   transform: translateY(0);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+  border: 1px solid rgba(148, 163, 184, 0.25); /* slate-400/25 */
 }
-
 .category-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 25px 45px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 25px 55px rgba(0, 0, 0, 0.85);
+  border-color: rgba(250, 204, 21, 0.6); /* yellow-400/60 */
 }
 
 /* mic chip în colțul dreapta-sus */
@@ -161,115 +127,123 @@ body {
   right: 10px;
   font-size: 10px;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  background: rgba(250, 204, 21, 0.95); /* galben */
-  color: #000;
-  padding: 3px 8px;
+  letter-spacing: 0.08em;
+  background: rgba(250, 204, 21, 0.96); /* galben */
+  color: #020617;
+  padding: 3px 9px;
   border-radius: 999px;
   font-weight: 700;
 }
 
 /* ===========================
-   PROMO CARD
+   PROMO & TESTIMONIAL CARDS
 =========================== */
 .promo-card {
-  box-shadow: 0 20px 25px rgba(0, 0, 0, 0.4);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: 0 20px 30px rgba(0, 0, 0, 0.6);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border 0.25s ease;
+  border: 1px solid rgba(30, 64, 175, 0.4); /* blue-700/40 */
 }
-
 .promo-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 30px 40px rgba(0, 0, 0, 0.6);
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 30px 50px rgba(0, 0, 0, 0.85);
+  border-color: rgba(250, 204, 21, 0.8); /* accent galben */
 }
 
-/* ===========================
-   TESTIMONIAL CARD
-=========================== */
 .testimonial-card {
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border 0.25s ease;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  background: radial-gradient(circle at top left, rgba(250, 204, 21, 0.06), rgba(15, 23, 42, 0.95));
 }
-
 .testimonial-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 20px 30px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.8);
+  border-color: rgba(250, 204, 21, 0.7);
 }
 
 /* ===========================
-   AUTH MODAL & CHECKOUT
+   MOBILE BOTTOM NAV
 =========================== */
-#authModal input {
-  outline: none;
-}
-
-#authModal button {
-  cursor: pointer;
-}
-
-/* modalele ocupă tot ecranul, dar le controlezi cu tailwind .hidden */
-#authModal,
-#checkoutModal {
-  backdrop-filter: blur(4px);
-}
-
-/* ===========================
-   CART SIDEBAR
-=========================== */
-#cart {
-  max-width: 100%;
-}
-
-/* ===========================
-   MOBILE OPTIMIZED
-=========================== */
-@media (max-width: 768px) {
-  .hero h2 {
-    font-size: 2.5rem;
-  }
-
-  .hero p {
-    font-size: 16px;
-  }
-
-  .hero a {
-    padding: 0.8rem 2rem;
-    font-size: 16px;
-  }
-
-  .product-card {
-    height: auto;
-    margin-bottom: 1rem;
-  }
-
-  .product-card-front img {
-    height: 200px;
-  }
-
-  .product-card-back {
-    padding: 0.5rem;
-  }
-
-  .product-card-back button {
-    padding: 0.5rem 1rem;
-    font-size: 14px;
-  }
-}
-
-/* ===========================
-   BOTTOM NAV (MOBILE)
-=========================== */
-/* dacă ai dat o clasă custom nav-ului de jos, o poți stiliza aici; 
-   tailwind deja face 90% din treabă, noi doar ne asigurăm că stă deasupra conținutului */
 .mobile-bottom-nav {
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
   z-index: 50;
-  background: rgba(0, 0, 0, 0.95);
-  border-top: 1px solid #374151; /* gray-700 */
+  background: rgba(2, 6, 23, 0.98); /* slate-950 */
+  border-top: 1px solid #1f2937;
+  backdrop-filter: blur(14px);
 }
 
-/* icon + text aliniate frumos */
-.mobile-bottom-nav-item span {
-  line-height: 1.1;
+.mobile-bottom-nav-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-around;
+  padding: 0.35rem 0.75rem 0.6rem;
+}
+
+.mobile-bottom-nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  background: transparent;
+  border: none;
+  color: #e5e7eb;
+  font-size: 11px;
+  padding: 0.2rem 0;
+}
+
+.mobile-bottom-nav-item span:first-child {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+/* ---------------------------
+   MOBILE ACCOUNT SHEET
+--------------------------- */
+#mobileAccountMenu {
+  backdrop-filter: blur(10px);
+}
+
+.mobile-account-card {
+  border-radius: 1.25rem 1.25rem 0 0;
+  background: radial-gradient(circle at top, #020617, #020617 50%, #000 100%);
+  border-top: 1px solid rgba(148, 163, 184, 0.4);
+  box-shadow: 0 -18px 35px rgba(0, 0, 0, 0.85);
+}
+
+/* ===========================
+   AUTH MODAL
+=========================== */
+#authModal input {
+  outline: none;
+}
+#authModal button {
+  cursor: pointer;
+}
+
+/* ===========================
+   RESPONSIVE
+=========================== */
+@media (min-width: 1024px) {
+  .app-main {
+    padding-bottom: 2rem;
+  }
+  .mobile-bottom-nav {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .product-card {
+    height: auto;
+  }
+  .product-card-front img {
+    height: 190px;
+  }
+  .product-card-back {
+    padding: 0.8rem;
+  }
 }
