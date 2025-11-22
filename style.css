@@ -15,6 +15,7 @@ body {
   opacity: 1;
   transform: translateY(0);
 }
+
 .slide-left {
   opacity: 0;
   transform: translateX(-30px);
@@ -24,6 +25,7 @@ body {
   opacity: 1;
   transform: translateX(0);
 }
+
 .slide-right {
   opacity: 0;
   transform: translateX(30px);
@@ -34,17 +36,20 @@ body {
   transform: translateX(0);
 }
 
+
 /* ===========================
    PRODUCT CARD FLIP
 =========================== */
 .perspective {
   perspective: 1000px;
 }
+
 .product-card {
   width: 100%;
   height: 24rem;
   perspective: 1000px;
 }
+
 .product-card-inner {
   position: relative;
   width: 100%;
@@ -52,9 +57,11 @@ body {
   transition: transform 0.6s;
   transform-style: preserve-3d;
 }
+
 .product-card:hover .product-card-inner {
   transform: rotateY(180deg);
 }
+
 .product-card-front,
 .product-card-back {
   backface-visibility: hidden;
@@ -65,15 +72,18 @@ body {
   left: 0;
   border-radius: 0.75rem;
 }
+
 .product-card-front {
   background-color: #1F2937;
   display: flex;
   flex-direction: column;
 }
+
 .product-card-front img {
   object-fit: cover;
   border-radius: 0.75rem 0.75rem 0 0;
 }
+
 .product-card-back {
   transform: rotateY(180deg);
   background-color: #111827;
@@ -84,6 +94,7 @@ body {
   text-align: center;
   padding: 1rem;
 }
+
 
 /* ===========================
    SLIDER
@@ -106,12 +117,14 @@ body {
   padding: 1rem;
 }
 
+
 /* ===========================
    CATEGORY CARD – GLOW / HOVER
 =========================== */
-
 .category-card {
   position: relative;
+  overflow: hidden;
+  border-radius: 0.75rem;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
   transform: translateY(0);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
@@ -122,7 +135,6 @@ body {
   box-shadow: 0 25px 45px rgba(0, 0, 0, 0.7);
 }
 
-/* mic chip în colțul dreapta-sus */
 .category-chip {
   position: absolute;
   top: 10px;
@@ -130,7 +142,7 @@ body {
   font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  background: rgba(250, 204, 21, 0.95); /* galben */
+  background: rgba(250, 204, 21, 0.95);
   color: #000;
   padding: 3px 8px;
   border-radius: 999px;
@@ -144,9 +156,11 @@ body {
 #authModal input {
   outline: none;
 }
+
 #authModal button {
   cursor: pointer;
 }
+
 
 /* ===========================
    MOBILE OPTIMIZED
@@ -167,98 +181,44 @@ body {
     height: auto;
     margin-bottom: 1rem;
   }
+
   .product-card-front img {
     height: 200px;
   }
+
   .product-card-back {
     padding: 0.5rem;
   }
+
   .product-card-back button {
     padding: 0.5rem 1rem;
     font-size: 14px;
   }
 }
 
-/* =====================================
-   PROMO CARD
-===================================== */
+
+/* ===========================
+   PROMO CARD HOVER
+=========================== */
 .promo-card {
   box-shadow: 0 20px 25px rgba(0,0,0,0.4);
   transition: transform .25s ease, box-shadow .25s ease;
 }
+
 .promo-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 30px 40px rgba(0,0,0,0.6);
 }
 
-/* =====================================
-   TESTIMONIAL CARD
-===================================== */
+
+/* ===========================
+   TESTIMONIAL CARD HOVER
+=========================== */
 .testimonial-card {
   transition: transform .25s ease, box-shadow .25s ease;
 }
+
 .testimonial-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 20px 30px rgba(0,0,0,0.6);
-}
-
-/* =====================================
-   HAMBURGER ANIMAT + MENIU MOBIL
-===================================== */
-#hamburgerBtn {
-  width: 40px;
-  height: 34px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 8px;
-  border-radius: 6px;
-  background: #1f2937;
-  border: 1px solid #374151;
-}
-
-#hamburgerBtn span {
-  display: block;
-  height: 3px;
-  background: #facc15; /* galben */
-  border-radius: 99px;
-  transition: 0.25s ease;
-}
-
-/* stare deschis (X) */
-#hamburgerBtn.open span:nth-child(1) {
-  transform: translateY(8px) rotate(45deg);
-}
-#hamburgerBtn.open span:nth-child(2) {
-  opacity: 0;
-}
-#hamburgerBtn.open span:nth-child(3) {
-  transform: translateY(-8px) rotate(-45deg);
-}
-
-/* meniu mobil slide-down */
-#navMenu {
-  max-height: 0;
-  overflow: hidden;
-  opacity: 0;
-  transform: translateY(-12px);
-  transition: max-height .32s ease, opacity .32s ease, transform .32s ease;
-}
-
-#navMenu.open {
-  max-height: 500px;
-  opacity: 1;
-  transform: translateY(0);
-}
-
-@media (min-width: 768px) {
-  #navMenu {
-    max-height: none !important;
-    opacity: 1 !important;
-    transform: none !important;
-    overflow: visible !important;
-  }
-  #hamburgerBtn {
-    display: none;
-  }
 }
