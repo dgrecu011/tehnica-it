@@ -15,7 +15,6 @@ body {
   opacity: 1;
   transform: translateY(0);
 }
-
 .slide-left {
   opacity: 0;
   transform: translateX(-30px);
@@ -25,7 +24,6 @@ body {
   opacity: 1;
   transform: translateX(0);
 }
-
 .slide-right {
   opacity: 0;
   transform: translateX(30px);
@@ -36,20 +34,17 @@ body {
   transform: translateX(0);
 }
 
-
 /* ===========================
    PRODUCT CARD FLIP
 =========================== */
 .perspective {
   perspective: 1000px;
 }
-
 .product-card {
   width: 100%;
   height: 24rem;
   perspective: 1000px;
 }
-
 .product-card-inner {
   position: relative;
   width: 100%;
@@ -57,11 +52,9 @@ body {
   transition: transform 0.6s;
   transform-style: preserve-3d;
 }
-
 .product-card:hover .product-card-inner {
   transform: rotateY(180deg);
 }
-
 .product-card-front,
 .product-card-back {
   backface-visibility: hidden;
@@ -72,18 +65,15 @@ body {
   left: 0;
   border-radius: 0.75rem;
 }
-
 .product-card-front {
   background-color: #1F2937;
   display: flex;
   flex-direction: column;
 }
-
 .product-card-front img {
   object-fit: cover;
   border-radius: 0.75rem 0.75rem 0 0;
 }
-
 .product-card-back {
   transform: rotateY(180deg);
   background-color: #111827;
@@ -94,7 +84,6 @@ body {
   text-align: center;
   padding: 1rem;
 }
-
 
 /* ===========================
    SLIDER
@@ -117,14 +106,12 @@ body {
   padding: 1rem;
 }
 
-
 /* ===========================
    CATEGORY CARD – GLOW / HOVER
 =========================== */
+
 .category-card {
   position: relative;
-  overflow: hidden;
-  border-radius: 0.75rem;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
   transform: translateY(0);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
@@ -149,94 +136,46 @@ body {
   font-weight: 700;
 }
 
+/* AUTH MODAL */
+#authModal input { outline: none; }
+#authModal button { cursor: pointer; }
 
-/* ===========================
-   AUTH MODAL
-=========================== */
-#authModal input {
-  outline: none;
-}
-
-#authModal button {
-  cursor: pointer;
-}
-
-
-/* ===========================
-   /* ================
-   MOBILE NAV MENU FIX
-================ */
-
-#navMenu {
-  transition: all .3s ease;
-}
-
-/* MOBILE STYLE ONLY */
+/* MOBILE OPTIMIZED */
 @media (max-width: 768px) {
-
-  /* Meniul devine un dropdown sub header */
-  #navMenu {
-    position: absolute;
-    top: 64px; /* sub navbar */
-    left: 0;
-    width: 100%;
-    background: rgba(0,0,0,0.95);
-    backdrop-filter: blur(8px);
-    padding: 20px 0;
-    display: none; /* ascuns implicit */
-    flex-direction: column;
-    gap: 16px;
-    z-index: 9999;
+  .hero h2 { font-size: 2.5rem; }
+  .hero p { font-size:16px; }
+  .hero a {
+    padding:0.8rem 2rem;
+    font-size:16px;
   }
 
-  /* când e activ */
-  #navMenu.active {
-    display: flex;
-    animation: slideDown .25s ease;
+  .product-card {
+    height:auto;
+    margin-bottom:1rem;
   }
-
-  @keyframes slideDown {
-    from {
-      opacity: 0;
-      transform: translateY(-10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  /* Links — frumos pe mobil */
-  #navMenu a {
-    text-align: center;
-    padding: 10px 0;
-    font-size: 18px;
-    font-weight: 600;
+  .product-card-front img { height:200px; }
+  .product-card-back { padding:0.5rem; }
+  .product-card-back button {
+    padding:0.5rem 1rem;
+    font-size:14px;
   }
 }
 
-/* ===========================
-   PROMO CARD HOVER
-=========================== */
+/* PROMO CARD */
 .promo-card {
-  box-shadow: 0 20px 25px rgba(0,0,0,0.4);
-  transition: transform .25s ease, box-shadow .25s ease;
+  box-shadow:0 20px 25px rgba(0,0,0,0.4);
+  transition:transform .25s ease, box-shadow .25s ease;
 }
-
 .promo-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 30px 40px rgba(0,0,0,0.6);
+  transform:translateY(-6px);
+  box-shadow:0 30px 40px rgba(0,0,0,0.6);
 }
 
-
-/* ===========================
-   TESTIMONIAL CARD HOVER
-=========================== */
+/* TESTIMONIAL CARD */
 .testimonial-card {
-  transition: transform .25s ease, box-shadow .25s ease;
+  transition:transform .25s ease, box-shadow .25s ease;
 }
-
 .testimonial-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 20px 30px rgba(0,0,0,0.6);
+  transform:translateY(-5px);
+  box-shadow:0 20px 30px rgba(0,0,0,0.6);
 }
