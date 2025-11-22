@@ -4,19 +4,26 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TechStore - Magazin IT</title>
+
+  <!-- SEO BASIC -->
+  <meta name="description" content="TechStore - magazin IT cu laptopuri, componente, gadgeturi și accesorii. Livrare rapidă și suport premium.">
+  <meta property="og:title" content="TechStore - Magazin IT">
+  <meta property="og:description" content="Laptopuri, componente și gadgeturi la prețuri corecte.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://exemplu-techstore.ro">
+  <meta property="og:image" content="https://via.placeholder.com/600x315">
+
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="bg-gray-900 text-gray-100 font-sans">
 
   <!-- HEADER -->
-  <header class="flex items-center justify-between p-4 md:p-6 bg-black shadow-lg sticky top-0 z-50">
+  <header class="flex items-center justify-between p-4 md:p-6 bg-black/90 backdrop-blur shadow-lg sticky top-0 z-50">
     <div class="flex items-center gap-4">
-      <h1 class="text-3xl md:text-4xl font-extrabold text-white">TechStore</h1>
-
+      <h1 class="text-3xl md:text-4xl font-extrabold text-yellow-400 tracking-tight">TechStore</h1>
       <!-- HAMBURGER (mobile) -->
-      <button id="hamburgerBtn" class="md:hidden inline-flex items-center justify-center p-2 rounded bg-gray-800">
-        <span class="sr-only">Deschide meniul</span>
+      <button id="hamburgerBtn" class="md:hidden inline-flex items-center justify-center p-2 rounded bg-gray-800 text-gray-100">
         ☰
       </button>
     </div>
@@ -24,7 +31,7 @@
     <!-- NAV -->
     <nav
       id="navMenu"
-      class="hidden md:flex flex-col md:flex-row md:items-center md:space-x-6 gap-2 md:gap-0 mt-4 md:mt-0"
+      class="hidden md:flex flex-col md:flex-row md:items-center md:space-x-6 gap-2 md:gap-0 mt-4 md:mt-0 text-sm md:text-base"
     >
       <a href="#about" class="hover:text-yellow-400 transition font-medium">Despre Noi</a>
       <a href="#productsSection" class="hover:text-yellow-400 transition font-medium">Produse</a>
@@ -33,29 +40,32 @@
       <a href="#testimonials" class="hover:text-yellow-400 transition font-medium">Testimoniale</a>
       <a href="#blog" class="hover:text-yellow-400 transition font-medium">Blog</a>
       <a href="#contact" class="hover:text-yellow-400 transition font-medium">Contact</a>
+      <a href="profile.html" class="hover:text-yellow-400 transition font-medium hidden" id="profileLink">Profil</a>
     </nav>
 
     <!-- RIGHT BUTTONS -->
     <div class="flex items-center space-x-3 ml-4">
-      <button id="loginBtn" class="bg-yellow-400 text-black px-4 py-2 rounded font-semibold hover:bg-yellow-300 transition">
-        Logare / Înregistrare
+      <button id="loginBtn" class="bg-yellow-400 text-black px-4 py-2 rounded-full font-semibold hover:bg-yellow-300 transition text-sm md:text-base">
+        Logare / Cont nou
       </button>
-      <button id="logoutBtn" class="bg-yellow-400 text-black px-4 py-2 rounded font-semibold hover:bg-yellow-300 transition hidden">
+      <button id="logoutBtn" class="bg-yellow-400 text-black px-4 py-2 rounded-full font-semibold hover:bg-yellow-300 transition hidden text-sm md:text-base">
         Logout
       </button>
-      <button id="cartBtn" class="bg-yellow-400 text-black px-4 py-2 rounded font-semibold hover:bg-yellow-300 transition">
+      <button id="cartBtn" class="bg-yellow-400 text-black px-4 py-2 rounded-full font-semibold hover:bg-yellow-300 transition text-sm md:text-base">
         Coș (<span id="cartCount">0</span>)
       </button>
     </div>
   </header>
 
   <!-- HERO -->
-  <section class="hero relative bg-gradient-to-b from-black via-gray-900 to-gray-800 text-center text-white py-28 px-6">
-    <h2 class="text-5xl md:text-6xl font-extrabold mb-6 fade-in">Tehnologie la un click distanță</h2>
+  <section class="hero relative bg-gradient-to-b from-black via-gray-900 to-gray-800 text-center text-white py-24 md:py-32 px-6">
+    <h2 class="text-4xl md:text-6xl font-extrabold mb-6 fade-in tracking-tight">
+      Tehnologie la un click distanță
+    </h2>
     <p class="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-8 fade-in" style="transition-delay:0.2s">
-      Cele mai noi gadgeturi, componente și accesorii IT. Livrare rapidă și suport premium.
+      Cele mai noi gadgeturi, componente și accesorii IT. Livrare rapidă, prețuri corecte și suport premium.
     </p>
-    <a href="#productsSection" class="bg-yellow-400 text-black px-8 py-3 rounded-full font-bold hover:bg-yellow-300 transition text-lg fade-in" style="transition-delay:0.4s">
+    <a href="#productsSection" class="inline-block bg-yellow-400 text-black px-8 py-3 rounded-full font-bold hover:bg-yellow-300 transition text-lg fade-in shadow-lg" style="transition-delay:0.4s">
       Vezi Produse
     </a>
   </section>
@@ -73,17 +83,25 @@
   <!-- PRODUSE POPULARE -->
   <section id="productsSection" class="max-w-6xl mx-auto py-20 px-6 fade-in">
     <h3 class="text-4xl font-bold text-yellow-400 mb-6 text-center slide-left">Produse Populare</h3>
-    <div class="flex flex-col md:flex-row justify-between mb-8 gap-4">
-      <input id="search" class="p-3 rounded bg-gray-700 border border-gray-600 flex-1" placeholder="Caută produs...">
-      <select id="categoryFilter" class="p-3 rounded bg-gray-700 border border-gray-600">
+
+    <div class="flex flex-col md:flex-row justify-between mb-4 gap-4">
+      <input id="search" class="p-3 rounded bg-gray-800 border border-gray-700 flex-1" placeholder="Caută produs...">
+      <select id="categoryFilter" class="p-3 rounded bg-gray-800 border border-gray-700">
         <option value="">Toate categoriile</option>
       </select>
-      <select id="sortFilter" class="p-3 rounded bg-gray-700 border border-gray-600">
+      <select id="sortFilter" class="p-3 rounded bg-gray-800 border border-gray-700">
         <option value="new">Cele mai noi</option>
         <option value="priceAsc">Preț ↑</option>
         <option value="priceDesc">Preț ↓</option>
       </select>
     </div>
+
+    <!-- FILTRU PREȚ -->
+    <div class="flex flex-col md:flex-row gap-4 mb-8">
+      <input id="minPrice" type="number" class="p-2 rounded bg-gray-800 border border-gray-700 w-full md:w-1/2" placeholder="Preț minim (€)">
+      <input id="maxPrice" type="number" class="p-2 rounded bg-gray-800 border border-gray-700 w-full md:w-1/2" placeholder="Preț maxim (€)">
+    </div>
+
     <div id="products" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 fade-in"></div>
   </section>
 
@@ -177,7 +195,7 @@
     <h3 class="text-4xl font-bold text-yellow-400 mb-6 slide-left">Contact & Newsletter</h3>
     <p class="text-gray-400 mb-4 slide-right">Abonează-te pentru oferte și noutăți IT:</p>
     <form class="flex flex-col md:flex-row justify-center items-center gap-4 mb-8">
-      <input type="email" placeholder="Emailul tău" class="p-3 rounded bg-gray-700 border border-gray-600 w-full md:w-1/2">
+      <input type="email" placeholder="Emailul tău" class="p-3 rounded bg-gray-800 border border-gray-700 w-full md:w-1/2">
       <button class="bg-yellow-400 text-black px-6 py-3 rounded font-bold hover:bg-yellow-300 transition">
         Abonează-te
       </button>
@@ -325,10 +343,55 @@
     <hr class="my-8 border-gray-700">
 
     <div class="mt-6">
-      <h4 class="font-bold text-xl mb-4">Comenzi</h4>
-      <p class="text-gray-400 text-sm mb-2">
+      <h4 class="font-bold text-xl mb-2">Comenzi</h4>
+      <p class="text-gray-400 text-sm mb-4">
         Aici vezi toate comenzile plasate prin checkout, poți urmări statusul lor.
       </p>
+
+      <!-- TAB-URI STATUS -->
+      <div id="orderStatusTabs" class="flex flex-wrap gap-2 mb-4 text-sm">
+        <button data-status="all"
+                class="order-status-tab bg-yellow-400 text-black px-3 py-1 rounded-full font-semibold">
+          Toate
+        </button>
+        <button data-status="nouă"
+                class="order-status-tab bg-gray-800 text-gray-200 px-3 py-1 rounded-full">
+          Noi
+        </button>
+        <button data-status="în procesare"
+                class="order-status-tab bg-gray-800 text-gray-200 px-3 py-1 rounded-full">
+          În procesare
+        </button>
+        <button data-status="expediată"
+                class="order-status-tab bg-gray-800 text-gray-200 px-3 py-1 rounded-full">
+          Expediate
+        </button>
+        <button data-status="livrată"
+                class="order-status-tab bg-gray-800 text-gray-200 px-3 py-1 rounded-full">
+          Livrate
+        </button>
+        <button data-status="anulată"
+                class="order-status-tab bg-gray-800 text-gray-200 px-3 py-1 rounded-full">
+          Anulate
+        </button>
+      </div>
+
+      <!-- MINI DASHBOARD COMENZI -->
+      <div id="orderStats" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="bg-gray-800 p-4 rounded-lg shadow">
+          <p class="text-gray-400 text-sm">Total comenzi</p>
+          <p id="statTotalOrders" class="text-2xl font-bold text-yellow-400">0</p>
+        </div>
+        <div class="bg-gray-800 p-4 rounded-lg shadow">
+          <p class="text-gray-400 text-sm">Venit total</p>
+          <p id="statTotalRevenue" class="text-2xl font-bold text-yellow-400">0 €</p>
+        </div>
+        <div class="bg-gray-800 p-4 rounded-lg shadow">
+          <p class="text-gray-400 text-sm">Comenzi noi</p>
+          <p id="statNewOrders" class="text-2xl font-bold text-yellow-400">0</p>
+        </div>
+      </div>
+
       <div id="adminOrders" class="space-y-4"></div>
     </div>
   </section>
@@ -341,7 +404,7 @@
         <button id="authClose" class="text-gray-400 hover:text-white">&times;</button>
       </div>
 
-      <div class="flex mb-4 border-b border-gray-700">
+      <div class="flex mb-4 border-b border-gray-700 text-sm">
         <button id="tabLogin" class="flex-1 py-2 text-center border-b-2 border-yellow-400 font-semibold">
           Logare
         </button>
@@ -358,6 +421,9 @@
                placeholder="Parolă">
         <button type="submit" class="w-full bg-yellow-400 text-black py-2 rounded font-semibold hover:bg-yellow-300">
           Logare
+        </button>
+        <button type="button" id="forgotPasswordBtn" class="w-full text-yellow-400 text-sm mt-1 hover:underline">
+          Ai uitat parola?
         </button>
       </form>
 

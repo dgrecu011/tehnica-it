@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <title>Profilul Meu - TechStore</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-gray-100 font-sans">
+
+<header class="p-6 bg-black shadow-lg">
+  <div class="max-w-4xl mx-auto flex justify-between items-center">
+    <h1 class="text-2xl md:text-3xl font-bold text-yellow-400">Profilul Meu</h1>
+    <a href="index.html" class="text-gray-300 hover:text-yellow-400 text-sm">← Înapoi la magazin</a>
+  </div>
+</header>
+
+<section class="max-w-4xl mx-auto py-10 px-6">
+  <h2 class="text-2xl font-bold mb-4 text-yellow-400">Informații cont</h2>
+  <div id="userInfo" class="bg-gray-800 p-4 rounded-lg mb-10">
+    <p class="text-gray-300 mb-1"><strong>Email:</strong> <span id="userEmail"></span></p>
+    <p class="text-gray-300 mb-1"><strong>User ID:</strong> <span id="userId"></span></p>
+    <p class="text-gray-300"><strong>Email verificat:</strong> <span id="verified"></span></p>
+  </div>
+
+  <h2 class="text-2xl font-bold mb-4 text-yellow-400">Comenzile Mele</h2>
+  <div id="myOrders" class="space-y-4"></div>
+</section>
+
+<script type="module" src="profile.js"></script>
+</body>
+</html>

@@ -7,14 +7,17 @@ import {
   doc,
   deleteDoc,
   updateDoc,
-  serverTimestamp
+  serverTimestamp,
+  getDoc
 } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-firestore.js";
 import {
   getAuth,
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
-  createUserWithEmailAndPassword
+  createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
+  sendEmailVerification
 } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-auth.js";
 
 // ===========================
@@ -41,6 +44,8 @@ const productsEl = document.getElementById("products");
 const searchInput = document.getElementById("search");
 const categoryFilter = document.getElementById("categoryFilter");
 const sortFilter = document.getElementById("sortFilter");
+const minPriceInput = document.getElementById("minPrice");
+const maxPriceInput = document.getElementById("maxPrice");
 
 const adminPanel = document.getElementById("adminPanel");
 const adminTitle = document.getElementById("adminTitle");
@@ -56,6 +61,7 @@ const adminOrdersEl = document.getElementById("adminOrders");
 
 const loginBtn = document.getElementById("loginBtn");
 const logoutBtn = document.getElementById("logoutBtn");
+const profileLink = document.getElementById("profileLink");
 
 const cartBtn = document.getElementById("cartBtn");
 const cart = document.getElementById("cart");
@@ -77,6 +83,7 @@ const loginPassword = document.getElementById("loginPassword");
 const registerEmail = document.getElementById("registerEmail");
 const registerPassword = document.getElementById("registerPassword");
 const registerPassword2 = document.getElementById("registerPassword2");
+const forgotPasswordBtn = document.getElementById("forgotPasswordBtn");
 
 // CHECKOUT
 const checkoutModal = document.getElementById("checkoutModal");
@@ -96,12 +103,29 @@ const ckDelivery = document.getElementById("ckDelivery");
 const ckPayment = document.getElementById("ckPayment");
 const ckNotes = document.getElementById("ckNotes");
 
+// Admin order stats
+const statTotalOrdersEl = document.getElementById("statTotalOrders");
+const statTotalRevenueEl = document.getElementById("statTotalRevenue");
+const statNewOrdersEl = document.getElementById("statNewOrders");
+
 // ===========================
 // STATE
 // ===========================
 let allProducts = [];
 let cartItems = [];
-let editingProductId = null; // produs editat în admin
+let editingProductId = null;
+let orderStatusFilter = "all";
+let isAdmin = false;
+
+// labels pentru tab-uri status comenzi
+const ORDER_STATUS_LABELS = {
+  all: "Toate",
+  "nouă": "Noi",
+  "în procesare": "În procesare",
+  "expediată": "Expediate",
+  "livrată": "Livrate",
+  "anulată": "Anulate"
+};
 
 // restaurăm coșul din localStorage, dacă există
 const savedCart = localStorage.getItem("cartItems");
@@ -114,7 +138,7 @@ if (savedCart) {
 }
 
 // ===========================
-// FUNCȚII UI / UTILE
+// UI UTILS
 // ===========================
 const openAuthModal = (mode = "login") => {
   authModal.classList.remove("hidden");
@@ -206,6 +230,15 @@ const renderProductList = () => {
     filtered = filtered.filter((p) => p.category === categoryFilter.value);
   }
 
+  if (minPriceInput.value) {
+    const min = Number(minPriceInput.value);
+    filtered = filtered.filter((p) => Number(p.price) >= min);
+  }
+  if (maxPriceInput.value) {
+    const max = Number(maxPriceInput.value);
+    filtered = filtered.filter((p) => Number(p.price) <= max);
+  }
+
   if (sortFilter.value === "priceAsc") {
     filtered.sort((a, b) => Number(a.price) - Number(b.price));
   } else if (sortFilter.value === "priceDesc") {
@@ -247,7 +280,6 @@ const updateCart = () => {
   cartTotalEl.textContent = total.toFixed(2) + " €";
   cartCountEl.textContent = cartItems.length;
 
-  // salvăm coșul în localStorage
   localStorage.setItem("cartItems", JSON.stringify(cartItems));
 };
 
@@ -286,6 +318,10 @@ const renderAdminProduct = (product) => {
   `;
 
   card.querySelector(".delete").onclick = async () => {
+    if (!isAdmin) {
+      alert("Nu ai drepturi de admin.");
+      return;
+    }
     if (confirm("Sigur vrei să ștergi produsul?")) {
       await deleteDoc(doc(db, "products", product.id));
       await loadProducts();
@@ -294,6 +330,10 @@ const renderAdminProduct = (product) => {
   };
 
   card.querySelector(".edit").onclick = () => {
+    if (!isAdmin) {
+      alert("Nu ai drepturi de admin.");
+      return;
+    }
     editingProductId = product.id;
     adminTitle.value = product.title;
     adminDesc.value = product.description || "";
@@ -307,6 +347,7 @@ const renderAdminProduct = (product) => {
 };
 
 const loadAdminProducts = async () => {
+  if (!isAdmin) return;
   adminProductsEl.innerHTML = "";
   const snapshot = await getDocs(collection(db, "products"));
   let products = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
@@ -321,6 +362,11 @@ const loadAdminProducts = async () => {
 };
 
 const saveProduct = async () => {
+  if (!isAdmin) {
+    alert("Nu ai drepturi de admin pentru a modifica produsele.");
+    return;
+  }
+
   if (!adminTitle.value || !adminPrice.value) {
     alert("Titlu și preț sunt obligatorii");
     return;
@@ -440,10 +486,16 @@ const renderAdminOrder = (order) => {
 
   const statusSelect = card.querySelector(".status-select");
   statusSelect.onchange = async (e) => {
+    if (!isAdmin) {
+      alert("Nu ai drepturi de admin.");
+      e.target.value = order.status || "nouă";
+      return;
+    }
     try {
       await updateDoc(doc(db, "orders", order.id), {
         status: e.target.value
       });
+      order.status = e.target.value;
     } catch (err) {
       console.error(err);
       alert("Nu s-a putut actualiza statusul comenzii.");
@@ -455,7 +507,7 @@ const renderAdminOrder = (order) => {
 };
 
 const loadAdminOrders = async () => {
-  if (!adminOrdersEl) return;
+  if (!adminOrdersEl || !isAdmin) return;
 
   adminOrdersEl.innerHTML = '<p class="text-gray-400 text-sm">Se încarcă comenzile...</p>';
 
@@ -463,15 +515,60 @@ const loadAdminOrders = async () => {
     const snapshot = await getDocs(collection(db, "orders"));
     let orders = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
 
+    // sortăm descrescător după dată
     orders.sort((a, b) => {
       const ta = a.createdAt?.seconds || 0;
       const tb = b.createdAt?.seconds || 0;
       return tb - ta;
     });
 
+    // statistici globale
+    const counts = {
+      all: orders.length,
+      "nouă": 0,
+      "în procesare": 0,
+      "expediată": 0,
+      "livrată": 0,
+      "anulată": 0
+    };
+
+    let totalRevenue = 0;
+
+    orders.forEach((o) => {
+      const st = o.status || "nouă";
+      if (counts[st] !== undefined) counts[st]++;
+
+      if (typeof o.total === "number") {
+        totalRevenue += o.total;
+      } else if (Array.isArray(o.items)) {
+        o.items.forEach((i) => {
+          totalRevenue += Number(i.price || 0) * Number(i.quantity || 1);
+        });
+      }
+    });
+
+    // actualizăm cardurile de statistici
+    if (statTotalOrdersEl) statTotalOrdersEl.textContent = counts.all;
+    if (statTotalRevenueEl) statTotalRevenueEl.textContent = totalRevenue.toFixed(2) + " €";
+    if (statNewOrdersEl) statNewOrdersEl.textContent = counts["nouă"];
+
+    // actualizăm textul tab-urilor
+    const orderStatusTabs = document.querySelectorAll(".order-status-tab");
+    orderStatusTabs.forEach((btn) => {
+      const status = btn.getAttribute("data-status");
+      const baseLabel = ORDER_STATUS_LABELS[status] || status;
+      const count = counts[status] ?? 0;
+      btn.textContent = count > 0 ? `${baseLabel} (${count})` : baseLabel;
+    });
+
+    // aplicăm filtrul de status pentru lista afișată
+    if (orderStatusFilter !== "all") {
+      orders = orders.filter((o) => (o.status || "nouă") === orderStatusFilter);
+    }
+
     if (!orders.length) {
       adminOrdersEl.innerHTML =
-        '<p class="text-gray-400 text-sm">Nu există comenzi încă.</p>';
+        '<p class="text-gray-400 text-sm">Nu există comenzi pentru acest filtru.</p>';
       return;
     }
 
@@ -503,7 +600,12 @@ loginForm.onsubmit = async (e) => {
     return;
   }
   try {
-    await signInWithEmailAndPassword(auth, email, pass);
+    const userCred = await signInWithEmailAndPassword(auth, email, pass);
+    if (!userCred.user.emailVerified) {
+      alert("Emailul nu este verificat! Verifică inbox/spam și apoi reloghează-te.");
+      await signOut(auth);
+      return;
+    }
     closeAuthModal();
   } catch (err) {
     alert("Eroare la logare: " + err.message);
@@ -526,24 +628,58 @@ registerForm.onsubmit = async (e) => {
   }
 
   try {
-    await createUserWithEmailAndPassword(auth, email, pass1);
-    alert("Cont creat cu succes. Ești autentificat.");
+    const userCred = await createUserWithEmailAndPassword(auth, email, pass1);
+    await sendEmailVerification(userCred.user);
+    alert("Cont creat! Ți-am trimis un email de verificare. Verifică inbox/spam și apoi loghează-te.");
+    await signOut(auth);
     closeAuthModal();
   } catch (err) {
     alert("Eroare la înregistrare: " + err.message);
   }
 };
 
-onAuthStateChanged(auth, (user) => {
+if (forgotPasswordBtn) {
+  forgotPasswordBtn.onclick = async () => {
+    const email = prompt("Introdu emailul cu care te-ai înregistrat:");
+    if (!email) return;
+    try {
+      await sendPasswordResetEmail(auth, email);
+      alert("Ți-am trimis un email cu link pentru resetarea parolei.");
+    } catch (err) {
+      alert("Eroare: " + err.message);
+    }
+  };
+}
+
+onAuthStateChanged(auth, async (user) => {
   if (user) {
-    adminPanel.classList.remove("hidden");
     loginBtn.classList.add("hidden");
     logoutBtn.classList.remove("hidden");
-    loadAdminOrders(); // reîncarcă comenzile când intră un admin
+    profileLink.classList.remove("hidden");
+
+    try {
+      // verificăm dacă userul este admin
+      const adminDoc = await getDoc(doc(db, "admins", user.uid));
+      isAdmin = adminDoc.exists();
+
+      if (isAdmin) {
+        adminPanel.classList.remove("hidden");
+        await loadAdminProducts();
+        await loadAdminOrders();
+      } else {
+        adminPanel.classList.add("hidden");
+      }
+    } catch (err) {
+      console.error("Eroare la verificarea rolului de admin:", err);
+      isAdmin = false;
+      adminPanel.classList.add("hidden");
+    }
   } else {
+    isAdmin = false;
     adminPanel.classList.add("hidden");
     loginBtn.classList.remove("hidden");
     logoutBtn.classList.add("hidden");
+    profileLink.classList.add("hidden");
   }
 });
 
@@ -657,8 +793,7 @@ checkoutForm.onsubmit = async (e) => {
     updateCart();
     localStorage.removeItem("cartItems");
 
-    // dacă admin panel e deschis, reîncarcă comenzile
-    if (!adminPanel.classList.contains("hidden")) {
+    if (isAdmin) {
       loadAdminOrders();
     }
 
@@ -685,6 +820,8 @@ checkoutForm.onsubmit = async (e) => {
 searchInput.oninput = renderProductList;
 categoryFilter.onchange = renderProductList;
 sortFilter.onchange = renderProductList;
+minPriceInput.oninput = renderProductList;
+maxPriceInput.oninput = renderProductList;
 
 cartBtn.onclick = () => {
   cart.style.right = "0";
@@ -696,11 +833,26 @@ closeCart.onclick = () => {
 addProductBtn.onclick = saveProduct;
 adminSearch.oninput = loadAdminProducts;
 
+const orderStatusTabs = document.querySelectorAll(".order-status-tab");
+orderStatusTabs.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    orderStatusFilter = btn.getAttribute("data-status");
+
+    orderStatusTabs.forEach((b) => {
+      b.classList.remove("bg-yellow-400", "text-black", "font-semibold");
+      b.classList.add("bg-gray-800", "text-gray-200");
+    });
+    btn.classList.remove("bg-gray-800", "text-gray-200");
+    btn.classList.add("bg-yellow-400", "text-black", "font-semibold");
+
+    loadAdminOrders();
+  });
+});
+
 // ===========================
 // INITIAL LOAD
 // ===========================
 window.addEventListener("load", async () => {
   await loadProducts();
-  await loadAdminProducts();
   updateCart();
 });
