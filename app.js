@@ -91,24 +91,18 @@ const ckNotes = document.getElementById("ckNotes");
 
 const checkoutBtn = document.getElementById("checkoutBtn");
 
-// Bottom nav
-const bottomPromoBtn    = document.getElementById("bottomPromoBtn");
-const bottomCatalogBtn  = document.getElementById("bottomCatalogBtn");
-const bottomCartBtn     = document.getElementById("bottomCartBtn");
-const bottomAccountBtn  = document.getElementById("bottomAccountBtn");
-const bottomMoreBtn     = document.getElementById("bottomMoreBtn");
-
-// Quick menu
-const quickOverlay      = document.getElementById("quickOverlay");
-const quickMenu         = document.getElementById("quickMenu");
-const quickClose        = document.getElementById("quickClose");
-const quickAbout        = document.getElementById("quickAbout");
-const quickPromo        = document.getElementById("quickPromo");
-const quickBlog         = document.getElementById("quickBlog");
-const quickContact      = document.getElementById("quickContact");
-const quickCategories   = document.getElementById("quickCategories");
-const quickTestimonials = document.getElementById("quickTestimonials");
-const quickAdmin        = document.getElementById("quickAdmin");
+// NAVBAR mobil / cont
+const bottomProfileBtn = document.getElementById("bottomProfileBtn");
+const mobileAccountMenu = document.getElementById("mobileAccountMenu");
+const notLogged = document.getElementById("notLogged");
+const loggedUser = document.getElementById("loggedUser");
+const adminPanelBtn = document.getElementById("adminPanelBtn");
+const logoutBtnMobile = document.getElementById("logoutBtnMobile");
+const openLogin = document.getElementById("openLogin");
+const bottomCartBtn = document.getElementById("bottomCartBtn");
+const navCatalog = document.getElementById("navCatalog");
+const navPromo = document.getElementById("navPromo");
+const bottomMoreBtn = document.getElementById("bottomMoreBtn");
 
 // ===========================
 // STATE
@@ -155,13 +149,6 @@ const openAuthModal = (mode = "login") => {
 
 const closeAuthModal = () => {
   authModal.classList.add("hidden");
-};
-
-// helper scroll
-const scrollToSection = (id) => {
-  const el = document.getElementById(id);
-  if (!el) return;
-  el.scrollIntoView({ behavior: "smooth", block: "start" });
 };
 
 // ===========================
@@ -282,7 +269,6 @@ const updateCart = () => {
   localStorage.setItem("cartItems", JSON.stringify(cartItems));
 };
 
-// grupăm produsele din coș pentru checkout
 const getCartSummaryItems = () => {
   const map = {};
   cartItems.forEach((p) => {
@@ -303,60 +289,62 @@ const getCartSummaryItems = () => {
 // ===========================
 // AUTH
 // ===========================
-loginBtn.onclick = () => openAuthModal("login");
-logoutBtn.onclick = () => signOut(auth);
-authClose.onclick = closeAuthModal;
+if (loginBtn) loginBtn.onclick = () => openAuthModal("login");
+if (logoutBtn) logoutBtn.onclick = () => signOut(auth);
+if (authClose) authClose.onclick = closeAuthModal;
 
-tabLogin.onclick = () => openAuthModal("login");
-tabRegister.onclick = () => openAuthModal("register");
+if (tabLogin) tabLogin.onclick = () => openAuthModal("login");
+if (tabRegister) tabRegister.onclick = () => openAuthModal("register");
 
-loginForm.onsubmit = async (e) => {
-  e.preventDefault();
-  const email = loginEmail.value.trim();
-  const pass = loginPassword.value.trim();
-  if (!emailRegex.test(email)) {
-    alert("Email invalid.");
-    return;
-  }
-  if (pass.length < 6) {
-    alert("Parola trebuie să aibă minim 6 caractere.");
-    return;
-  }
-  try {
-    await signInWithEmailAndPassword(auth, email, pass);
-    closeAuthModal();
-  } catch (err) {
-    alert("Eroare la logare: " + err.message);
-  }
-};
+if (loginForm)
+  loginForm.onsubmit = async (e) => {
+    e.preventDefault();
+    const email = loginEmail.value.trim();
+    const pass = loginPassword.value.trim();
+    if (!emailRegex.test(email)) {
+      alert("Email invalid.");
+      return;
+    }
+    if (pass.length < 6) {
+      alert("Parola trebuie să aibă minim 6 caractere.");
+      return;
+    }
+    try {
+      await signInWithEmailAndPassword(auth, email, pass);
+      closeAuthModal();
+    } catch (err) {
+      alert("Eroare la logare: " + err.message);
+    }
+  };
 
-registerForm.onsubmit = async (e) => {
-  e.preventDefault();
-  const email = registerEmail.value.trim();
-  const pass1 = registerPassword.value.trim();
-  const pass2 = registerPassword2.value.trim();
+if (registerForm)
+  registerForm.onsubmit = async (e) => {
+    e.preventDefault();
+    const email = registerEmail.value.trim();
+    const pass1 = registerPassword.value.trim();
+    const pass2 = registerPassword2.value.trim();
 
-  if (!emailRegex.test(email)) {
-    alert("Email invalid.");
-    return;
-  }
-  if (pass1.length < 6) {
-    alert("Parola trebuie să aibă minim 6 caractere.");
-    return;
-  }
-  if (pass1 !== pass2) {
-    alert("Parolele nu coincid.");
-    return;
-  }
+    if (!emailRegex.test(email)) {
+      alert("Email invalid.");
+      return;
+    }
+    if (pass1.length < 6) {
+      alert("Parola trebuie să aibă minim 6 caractere.");
+      return;
+    }
+    if (pass1 !== pass2) {
+      alert("Parolele nu coincid.");
+      return;
+    }
 
-  try {
-    await createUserWithEmailAndPassword(auth, email, pass1);
-    alert("Cont creat cu succes! Te poți loga acum.");
-    closeAuthModal();
-  } catch (err) {
-    alert("Eroare la înregistrare: " + err.message);
-  }
-};
+    try {
+      await createUserWithEmailAndPassword(auth, email, pass1);
+      alert("Cont creat cu succes! Te poți loga acum.");
+      closeAuthModal();
+    } catch (err) {
+      alert("Eroare la înregistrare: " + err.message);
+    }
+  };
 
 if (forgotPasswordBtn) {
   forgotPasswordBtn.onclick = async () => {
@@ -375,275 +363,270 @@ if (forgotPasswordBtn) {
   };
 }
 
+// auth state
 onAuthStateChanged(auth, async (user) => {
   if (user) {
-    loginBtn.classList.add("hidden");
-    logoutBtn.classList.remove("hidden");
-    profileLink.classList.remove("hidden");
+    if (loginBtn) loginBtn.classList.add("hidden");
+    if (logoutBtn) logoutBtn.classList.remove("hidden");
+    if (profileLink) profileLink.classList.remove("hidden");
 
     try {
-      // verificăm dacă userul este admin (document cu id = uid în colecția "admins")
       const adminDoc = await getDoc(doc(db, "admins", user.uid));
       isAdmin = adminDoc.exists();
-
       if (isAdmin) {
-        adminLink.classList.remove("hidden");
-        if (quickAdmin) quickAdmin.classList.remove("hidden");
+        if (adminLink) adminLink.classList.remove("hidden");
+        if (adminPanelBtn) adminPanelBtn.classList.remove("hidden");
       } else {
-        adminLink.classList.add("hidden");
-        if (quickAdmin) quickAdmin.classList.add("hidden");
+        if (adminLink) adminLink.classList.add("hidden");
+        if (adminPanelBtn) adminPanelBtn.classList.add("hidden");
       }
     } catch (err) {
       console.error("Eroare la verificarea rolului de admin:", err);
       isAdmin = false;
-      adminLink.classList.add("hidden");
-      if (quickAdmin) quickAdmin.classList.add("hidden");
+      if (adminLink) adminLink.classList.add("hidden");
+      if (adminPanelBtn) adminPanelBtn.classList.add("hidden");
     }
   } else {
     isAdmin = false;
-    loginBtn.classList.remove("hidden");
-    logoutBtn.classList.add("hidden");
-    profileLink.classList.add("hidden");
-    adminLink.classList.add("hidden");
-    if (quickAdmin) quickAdmin.classList.add("hidden");
+    if (loginBtn) loginBtn.classList.remove("hidden");
+    if (logoutBtn) logoutBtn.classList.add("hidden");
+    if (profileLink) profileLink.classList.add("hidden");
+    if (adminLink) adminLink.classList.add("hidden");
+    if (adminPanelBtn) adminPanelBtn.classList.add("hidden");
   }
 });
 
 // ===========================
 // CHECKOUT
 // ===========================
-checkoutBtn.onclick = () => {
-  if (!cartItems.length) {
-    alert("Coșul este gol.");
-    return;
-  }
+if (checkoutBtn)
+  checkoutBtn.onclick = () => {
+    if (!cartItems.length) {
+      alert("Coșul este gol.");
+      return;
+    }
 
-  const items = getCartSummaryItems();
-  checkoutSummaryEl.innerHTML = "";
-  let total = 0;
+    const items = getCartSummaryItems();
+    checkoutSummaryEl.innerHTML = "";
+    let total = 0;
 
-  items.forEach((item) => {
-    const row = document.createElement("div");
-    row.className = "flex justify-between text-sm";
-    row.innerHTML = `
-      <span>${item.title} <span class="text-gray-400">x${item.quantity}</span></span>
-      <span>${(item.price * item.quantity).toFixed(2)} €</span>
-    `;
-    checkoutSummaryEl.appendChild(row);
-    total += item.price * item.quantity;
-  });
-
-  checkoutTotalText.textContent = total.toFixed(2) + " €";
-
-  const user = auth.currentUser;
-  if (user) {
-    ckEmail.value = user.email || "";
-  }
-
-  checkoutMessage.textContent = "";
-  checkoutMessage.className = "text-sm mt-2 text-center";
-
-  checkoutModal.classList.remove("hidden");
-  cart.style.right = "-400px";
-};
-
-checkoutClose.onclick = () => {
-  checkoutModal.classList.add("hidden");
-};
-
-checkoutModal.addEventListener("click", (e) => {
-  if (e.target === checkoutModal) {
-    checkoutModal.classList.add("hidden");
-  }
-});
-
-checkoutForm.onsubmit = async (e) => {
-  e.preventDefault();
-
-  if (!cartItems.length) {
-    checkoutMessage.textContent = "Coșul este gol.";
-    checkoutMessage.classList.add("text-red-400");
-    return;
-  }
-
-  const name = ckName.value.trim();
-  const email = ckEmail.value.trim();
-  const phone = ckPhone.value.trim();
-  const city = ckCity.value.trim();
-  const address = ckAddress.value.trim();
-  const delivery = ckDelivery.value;
-  const payment = ckPayment.value;
-  const notes = ckNotes.value.trim();
-
-  if (!name || !city || !address || !delivery || !payment) {
-    checkoutMessage.textContent = "Completează toate câmpurile obligatorii.";
-    checkoutMessage.classList.remove("text-green-400");
-    checkoutMessage.classList.add("text-red-400");
-    return;
-  }
-
-  if (!emailRegex.test(email)) {
-    checkoutMessage.textContent = "Email invalid.";
-    checkoutMessage.classList.remove("text-green-400");
-    checkoutMessage.classList.add("text-red-400");
-    return;
-  }
-
-  const phoneDigits = phone.replace(/\D/g, "");
-  if (phoneDigits.length < 6) {
-    checkoutMessage.textContent = "Telefon invalid.";
-    checkoutMessage.classList.remove("text-green-400");
-    checkoutMessage.classList.add("text-red-400");
-    return;
-  }
-
-  const items = getCartSummaryItems();
-
-  const invalidItem = items.find(
-    (i) =>
-      !Number.isFinite(i.price) ||
-      i.price <= 0 ||
-      !Number.isInteger(i.quantity) ||
-      i.quantity <= 0
-  );
-  if (invalidItem) {
-    checkoutMessage.textContent = "Există produse cu preț sau cantitate invalidă.";
-    checkoutMessage.classList.remove("text-green-400");
-    checkoutMessage.classList.add("text-red-400");
-    return;
-  }
-
-  let total = 0;
-  items.forEach((i) => (total += i.price * i.quantity));
-
-  checkoutSubmitBtn.disabled = true;
-  checkoutSubmitBtn.textContent = "Se procesează comanda...";
-  checkoutMessage.textContent = "";
-  checkoutMessage.className = "text-sm mt-2 text-center";
-
-  try {
-    const orderRef = await addDoc(collection(db, "orders"), {
-      items,
-      total,
-      customer: {
-        name,
-        email,
-        phone,
-        city,
-        address,
-        delivery,
-        payment,
-        notes
-      },
-      status: "nouă",
-      createdAt: serverTimestamp(),
-      userId: auth.currentUser ? auth.currentUser.uid : null
+    items.forEach((item) => {
+      const row = document.createElement("div");
+      row.className = "flex justify-between text-sm";
+      row.innerHTML = `
+        <span>${item.title} <span class="text-gray-400">x${item.quantity}</span></span>
+        <span>${(item.price * item.quantity).toFixed(2)} €</span>
+      `;
+      checkoutSummaryEl.appendChild(row);
+      total += item.price * item.quantity;
     });
 
-    checkoutMessage.textContent =
-      "Comanda a fost plasată cu succes! ID comandă: " + orderRef.id;
-    checkoutMessage.classList.remove("text-red-400");
-    checkoutMessage.classList.add("text-green-400");
+    checkoutTotalText.textContent = total.toFixed(2) + " €";
 
-    cartItems = [];
-    updateCart();
-    localStorage.removeItem("cartItems");
+    const user = auth.currentUser;
+    if (user) {
+      ckEmail.value = user.email || "";
+    }
 
-    setTimeout(() => {
+    checkoutMessage.textContent = "";
+    checkoutMessage.className = "text-sm mt-2 text-center";
+
+    checkoutModal.classList.remove("hidden");
+    cart.style.right = "-400px";
+  };
+
+if (checkoutClose)
+  checkoutClose.onclick = () => {
+    checkoutModal.classList.add("hidden");
+  };
+
+if (checkoutModal)
+  checkoutModal.addEventListener("click", (e) => {
+    if (e.target === checkoutModal) {
       checkoutModal.classList.add("hidden");
-      checkoutForm.reset();
+    }
+  });
+
+if (checkoutForm)
+  checkoutForm.onsubmit = async (e) => {
+    e.preventDefault();
+
+    if (!cartItems.length) {
+      checkoutMessage.textContent = "Coșul este gol.";
+      checkoutMessage.classList.add("text-red-400");
+      return;
+    }
+
+    const name = ckName.value.trim();
+    const email = ckEmail.value.trim();
+    const phone = ckPhone.value.trim();
+    const city = ckCity.value.trim();
+    const address = ckAddress.value.trim();
+    const delivery = ckDelivery.value;
+    const payment = ckPayment.value;
+    const notes = ckNotes.value.trim();
+
+    if (!name || !city || !address || !delivery || !payment) {
+      checkoutMessage.textContent = "Completează toate câmpurile obligatorii.";
+      checkoutMessage.classList.remove("text-green-400");
+      checkoutMessage.classList.add("text-red-400");
+      return;
+    }
+
+    if (!emailRegex.test(email)) {
+      checkoutMessage.textContent = "Email invalid.";
+      checkoutMessage.classList.remove("text-green-400");
+      checkoutMessage.classList.add("text-red-400");
+      return;
+    }
+
+    const phoneDigits = phone.replace(/\D/g, "");
+    if (phoneDigits.length < 6) {
+      checkoutMessage.textContent = "Telefon invalid.";
+      checkoutMessage.classList.remove("text-green-400");
+      checkoutMessage.classList.add("text-red-400");
+      return;
+    }
+
+    const items = getCartSummaryItems();
+
+    const invalidItem = items.find(
+      (i) =>
+        !Number.isFinite(i.price) ||
+        i.price <= 0 ||
+        !Number.isInteger(i.quantity) ||
+        i.quantity <= 0
+    );
+    if (invalidItem) {
+      checkoutMessage.textContent = "Există produse cu preț sau cantitate invalidă.";
+      checkoutMessage.classList.remove("text-green-400");
+      checkoutMessage.classList.add("text-red-400");
+      return;
+    }
+
+    let total = 0;
+    items.forEach((i) => (total += i.price * i.quantity));
+
+    checkoutSubmitBtn.disabled = true;
+    checkoutSubmitBtn.textContent = "Se procesează comanda...";
+    checkoutMessage.textContent = "";
+    checkoutMessage.className = "text-sm mt-2 text-center";
+
+    try {
+      const orderRef = await addDoc(collection(db, "orders"), {
+        items,
+        total,
+        customer: {
+          name,
+          email,
+          phone,
+          city,
+          address,
+          delivery,
+          payment,
+          notes
+        },
+        status: "nouă",
+        createdAt: serverTimestamp(),
+        userId: auth.currentUser ? auth.currentUser.uid : null
+      });
+
+      checkoutMessage.textContent =
+        "Comanda a fost plasată cu succes! ID comandă: " + orderRef.id;
+      checkoutMessage.classList.remove("text-red-400");
+      checkoutMessage.classList.add("text-green-400");
+
+      cartItems = [];
+      updateCart();
+      localStorage.removeItem("cartItems");
+
+      setTimeout(() => {
+        checkoutModal.classList.add("hidden");
+        checkoutForm.reset();
+        checkoutSubmitBtn.disabled = false;
+        checkoutSubmitBtn.textContent = "Plasează comanda";
+        checkoutMessage.textContent = "";
+      }, 2500);
+    } catch (err) {
+      console.error(err);
+      checkoutMessage.textContent = "A apărut o eroare la salvarea comenzii.";
+      checkoutMessage.classList.remove("text-green-400");
+      checkoutMessage.classList.add("text-red-400");
       checkoutSubmitBtn.disabled = false;
       checkoutSubmitBtn.textContent = "Plasează comanda";
-      checkoutMessage.textContent = "";
-    }, 2500);
-  } catch (err) {
-    console.error(err);
-    checkoutMessage.textContent = "A apărut o eroare la salvarea comenzii.";
-    checkoutMessage.classList.remove("text-green-400");
-    checkoutMessage.classList.add("text-red-400");
-    checkoutSubmitBtn.disabled = false;
-    checkoutSubmitBtn.textContent = "Plasează comanda";
-  }
-};
+    }
+  };
 
 // ===========================
-// BOTTOM NAV & QUICK MENU
+// EVENT LISTENERS BASIC
 // ===========================
-if (bottomPromoBtn) {
-  bottomPromoBtn.addEventListener("click", () => scrollToSection("promotions"));
-}
-if (bottomCatalogBtn) {
-  bottomCatalogBtn.addEventListener("click", () => scrollToSection("productsSection"));
-}
-if (bottomCartBtn) {
-  bottomCartBtn.addEventListener("click", () => {
+if (searchInput) searchInput.oninput = renderProductList;
+if (categoryFilter) categoryFilter.onchange = renderProductList;
+if (sortFilter) sortFilter.onchange = renderProductList;
+if (minPriceInput) minPriceInput.oninput = renderProductList;
+if (maxPriceInput) maxPriceInput.oninput = renderProductList;
+
+if (cartBtn)
+  cartBtn.onclick = () => {
     cart.style.right = "0";
+  };
+if (bottomCartBtn)
+  bottomCartBtn.onclick = () => {
+    cart.style.right = "0";
+  };
+if (closeCart)
+  closeCart.onclick = () => {
+    cart.style.right = "-400px";
+  };
+
+// ===========================
+// NAVBAR MOBIL – CONT
+// ===========================
+if (bottomProfileBtn) {
+  bottomProfileBtn.addEventListener("click", () => {
+    mobileAccountMenu.classList.toggle("hidden");
   });
 }
-if (bottomAccountBtn) {
-  bottomAccountBtn.addEventListener("click", () => openAuthModal("login"));
+
+if (openLogin) {
+  openLogin.addEventListener("click", () => {
+    mobileAccountMenu.classList.add("hidden");
+    openAuthModal("login");
+  });
 }
 
-// quick menu open/close
-if (bottomMoreBtn && quickOverlay) {
+if (logoutBtnMobile) {
+  logoutBtnMobile.addEventListener("click", () => {
+    signOut(auth);
+    mobileAccountMenu.classList.add("hidden");
+  });
+}
+
+if (adminPanelBtn) {
+  adminPanelBtn.addEventListener("click", () => {
+    window.location.href = "/admin.html";
+  });
+}
+
+// nav shortcuts
+if (navCatalog) {
+  navCatalog.addEventListener("click", () => {
+    const section = document.getElementById("productsSection");
+    if (section) section.scrollIntoView({ behavior: "smooth" });
+  });
+}
+if (navPromo) {
+  navPromo.addEventListener("click", () => {
+    const section = document.getElementById("promotions");
+    if (section) section.scrollIntoView({ behavior: "smooth" });
+  });
+}
+if (bottomMoreBtn) {
   bottomMoreBtn.addEventListener("click", () => {
-    quickOverlay.classList.remove("hidden");
+    const section = document.getElementById("contact");
+    if (section) section.scrollIntoView({ behavior: "smooth" });
   });
 }
-if (quickClose && quickOverlay) {
-  quickClose.addEventListener("click", () => {
-    quickOverlay.classList.add("hidden");
-  });
-}
-if (quickOverlay) {
-  quickOverlay.addEventListener("click", (e) => {
-    if (e.target === quickOverlay) {
-      quickOverlay.classList.add("hidden");
-    }
-  });
-}
-
-// butoane meniul rapid
-if (quickAbout) quickAbout.addEventListener("click", () => { quickOverlay.classList.add("hidden"); scrollToSection("about"); });
-if (quickPromo) quickPromo.addEventListener("click", () => { quickOverlay.classList.add("hidden"); scrollToSection("promotions"); });
-if (quickBlog) quickBlog.addEventListener("click", () => { quickOverlay.classList.add("hidden"); scrollToSection("blog"); });
-if (quickContact) quickContact.addEventListener("click", () => { quickOverlay.classList.add("hidden"); scrollToSection("contact"); });
-if (quickCategories) quickCategories.addEventListener("click", () => { quickOverlay.classList.add("hidden"); scrollToSection("categories"); });
-if (quickTestimonials) quickTestimonials.addEventListener("click", () => { quickOverlay.classList.add("hidden"); scrollToSection("testimonials"); });
-
-if (quickAdmin) {
-  quickAdmin.addEventListener("click", () => {
-    quickOverlay.classList.add("hidden");
-    if (isAdmin) {
-      window.location.href = "admin.html";
-    }
-  });
-}
-
-// ===========================
-// EVENT LISTENERS GENERALE
-// ===========================
-searchInput.oninput = renderProductList;
-categoryFilter.onchange = renderProductList;
-sortFilter.onchange = renderProductList;
-minPriceInput.oninput = renderProductList;
-maxPriceInput.oninput = renderProductList;
-
-cartBtn.onclick = () => {
-  cart.style.right = "0";
-};
-closeCart.onclick = () => {
-  cart.style.right = "-400px";
-};
-
-// curățare input numeric (opțional)
-const numericInputs = [minPriceInput, maxPriceInput];
-numericInputs.forEach((input) => {
-  if (!input) return;
-  input.addEventListener("input", () => {
-    input.value = input.value.replace(/[^0-9.,]/g, "");
-  });
-});
 
 // ===========================
 // INITIAL LOAD
@@ -652,61 +635,3 @@ window.addEventListener("load", async () => {
   await loadProducts();
   updateCart();
 });
-// =====================================
-// NAVBAR MOBIL – CONT
-// =====================================
-
-const bottomProfileBtn = document.getElementById("bottomProfileBtn");
-const mobileAccountMenu = document.getElementById("mobileAccountMenu");
-const notLogged = document.getElementById("notLogged");
-const loggedUser = document.getElementById("loggedUser");
-const adminPanelBtn = document.getElementById("adminPanelBtn");
-const logoutBtnMobile = document.getElementById("logoutBtnMobile");
-const openLogin = document.getElementById("openLogin");
-
-// toggle meniu Cont
-if (bottomProfileBtn) {
-  bottomProfileBtn.addEventListener("click", () => {
-    mobileAccountMenu.classList.toggle("hidden");
-  });
-}
-
-// sincronizare cu firebase (logat / nelogat)
-onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    notLogged.classList.add("hidden");
-    loggedUser.classList.remove("hidden");
-
-    // verificăm dacă e admin
-    const adminDoc = await getDoc(doc(db, "admins", user.uid));
-    if (adminDoc.exists()) adminPanelBtn.classList.remove("hidden");
-    else adminPanelBtn.classList.add("hidden");
-
-  } else {
-    notLogged.classList.remove("hidden");
-    loggedUser.classList.add("hidden");
-  }
-});
-
-// deschide login
-if (openLogin) {
-  openLogin.addEventListener("click", () => {
-    mobileAccountMenu.classList.add("hidden");
-    openAuthModal("login");
-  });
-}
-
-// logout
-if (logoutBtnMobile) {
-  logoutBtnMobile.addEventListener("click", () => {
-    signOut(auth);
-    mobileAccountMenu.classList.add("hidden");
-  });
-}
-
-// merge la admin panel
-if (adminPanelBtn) {
-  adminPanelBtn.addEventListener("click", () => {
-    window.location.href = "/admin.html";
-  });
-}

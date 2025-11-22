@@ -86,7 +86,7 @@ body {
 }
 
 /* ===========================
-   SLIDER (dacă mai folosești)
+   SLIDER
 =========================== */
 .slider {
   display: flex;
@@ -143,29 +143,6 @@ body {
   cursor: pointer;
 }
 
-/* =====================================
-   PROMO CARD
-===================================== */
-.promo-card {
-  box-shadow: 0 20px 25px rgba(0, 0, 0, 0.4);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-.promo-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 30px 40px rgba(0, 0, 0, 0.6);
-}
-
-/* =====================================
-   TESTIMONIAL CARD
-===================================== */
-.testimonial-card {
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-.testimonial-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 20px 30px rgba(0, 0, 0, 0.6);
-}
-
 /* ===========================
    MOBILE OPTIMIZED
 =========================== */
@@ -195,4 +172,27 @@ body {
     padding: 0.5rem 1rem;
     font-size: 14px;
   }
+}
+
+/* =====================================
+   PROMO CARD
+===================================== */
+.promo-card {
+  box-shadow: 0 20px 25px rgba(0,0,0,0.4);
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.promo-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 30px 40px rgba(0,0,0,0.6);
+}
+
+/* =====================================
+   TESTIMONIAL CARD
+===================================== */
+.testimonial-card {
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.testimonial-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 30px rgba(0,0,0,0.6);
 }

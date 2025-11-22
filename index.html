@@ -11,39 +11,41 @@
   <meta property="og:description" content="Laptopuri, componente și gadgeturi la prețuri corecte.">
   <meta property="og:type" content="website">
 
-  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
-
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="bg-gray-900 text-gray-100 font-sans">
 
-  <!-- HEADER TOP -->
-  <header class="hidden md:flex items-center justify-between px-6 py-4 bg-black/90 backdrop-blur shadow-lg sticky top-0 z-50">
-    <a href="#" class="text-3xl font-extrabold text-yellow-400">TechStore</a>
-
-    <button id="hamburgerBtn" class="text-white text-2xl bg-gray-800 px-3 py-2 rounded-md">
-        ☰
-    </button>
-
-    <div id="navMenu" class="flex gap-4 items-center">
-        <a href="#products" class="text-white hover:text-yellow-400">Produse</a>
-
-        <a id="adminLink" href="/admin.html" class="text-yellow-400 font-bold hidden">Admin</a>
-
-        <button id="loginBtn" class="bg-yellow-400 text-black px-4 py-2 rounded-full font-semibold">
-            Logare / Cont nou
-        </button>
-
-        <button id="logoutBtn" class="hidden bg-yellow-400 text-black px-4 py-2 rounded-full font-semibold">
-            Logout
-        </button>
-
-        <button id="cartBtn" class="bg-yellow-400 text-black px-4 py-2 rounded-full font-semibold flex items-center gap-1">
-            Coș (<span id="cartCount">0</span>)
-        </button>
+  <!-- HEADER (DESKTOP ONLY) -->
+  <header class="hidden md:flex items-center justify-between p-4 md:p-6 bg-black/90 backdrop-blur shadow-lg sticky top-0 z-40">
+    <div class="flex items-center gap-4">
+      <h1 class="text-3xl md:text-4xl font-extrabold text-yellow-400 tracking-tight">TechStore</h1>
     </div>
-</header>
+
+    <nav id="navMenu" class="flex items-center space-x-6 text-sm md:text-base">
+      <a href="#about" class="hover:text-yellow-400 transition font-medium">Despre Noi</a>
+      <a href="#productsSection" class="hover:text-yellow-400 transition font-medium">Produse</a>
+      <a href="#categories" class="hover:text-yellow-400 transition font-medium">Categorii</a>
+      <a href="#promotions" class="hover:text-yellow-400 transition font-medium">Promoții</a>
+      <a href="#testimonials" class="hover:text-yellow-400 transition font-medium">Testimoniale</a>
+      <a href="#blog" class="hover:text-yellow-400 transition font-medium">Blog</a>
+      <a href="#contact" class="hover:text-yellow-400 transition font-medium">Contact</a>
+      <a href="profile.html" class="hover:text-yellow-400 transition font-medium hidden" id="profileLink">Profil</a>
+      <a href="admin.html" class="hover:text-yellow-400 transition font-medium hidden" id="adminLink">Admin</a>
+    </nav>
+
+    <div class="flex items-center space-x-3 ml-4">
+      <button id="loginBtn" class="bg-yellow-400 text-black px-4 py-2 rounded-full font-semibold hover:bg-yellow-300 transition text-sm md:text-base">
+        Logare / Cont nou
+      </button>
+      <button id="logoutBtn" class="bg-yellow-400 text-black px-4 py-2 rounded-full font-semibold hover:bg-yellow-300 transition hidden text-sm md:text-base">
+        Logout
+      </button>
+      <button id="cartBtn" class="bg-yellow-400 text-black px-4 py-2 rounded-full font-semibold hover:bg-yellow-300 transition text-sm md:text-base">
+        Coș (<span id="cartCount">0</span>)
+      </button>
+    </div>
+  </header>
 
   <!-- HERO -->
   <section class="hero relative bg-gradient-to-b from-black via-gray-900 to-gray-800 text-center text-white py-24 md:py-32 px-6">
@@ -58,7 +60,7 @@
     </a>
   </section>
 
-  <!-- DESPRE NOI -->
+  <!-- ABOUT -->
   <section id="about" class="max-w-6xl mx-auto py-20 px-6 fade-in">
     <h3 class="text-4xl font-bold text-yellow-400 mb-6 text-center slide-left">Despre Noi</h3>
     <p class="text-gray-300 text-lg md:text-xl text-center slide-right">
@@ -68,7 +70,7 @@
     </p>
   </section>
 
-  <!-- PRODUSE POPULARE -->
+  <!-- PRODUCTS -->
   <section id="productsSection" class="max-w-6xl mx-auto py-20 px-6 fade-in">
     <h3 class="text-4xl font-bold text-yellow-400 mb-6 text-center slide-left">Produse Populare</h3>
 
@@ -84,7 +86,6 @@
       </select>
     </div>
 
-    <!-- FILTRU PREȚ -->
     <div class="flex flex-col md:flex-row gap-4 mb-8">
       <input id="minPrice" type="number" class="p-2 rounded bg-gray-800 border border-gray-700 w-full md:w-1/2" placeholder="Preț minim (€)">
       <input id="maxPrice" type="number" class="p-2 rounded bg-gray-800 border border-gray-700 w-full md:w-1/2" placeholder="Preț maxim (€)">
@@ -93,7 +94,7 @@
     <div id="products" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 fade-in"></div>
   </section>
 
-  <!-- CATEGORII RECOMANDATE -->
+  <!-- CATEGORIES -->
   <section id="categories" class="max-w-6xl mx-auto py-20 px-6 fade-in">
     <h3 class="text-4xl font-bold text-yellow-400 mb-10 text-center slide-left">
       Categorii Recomandate
@@ -210,33 +211,27 @@
     </div>
   </section>
 
-  <!-- PROMOȚII -->
+  <!-- PROMOTIONS -->
   <section id="promotions" class="max-w-6xl mx-auto py-20 px-6 fade-in">
     <h3 class="text-4xl font-bold text-yellow-400 mb-10 text-center slide-left">
       Promoții Speciale
     </h3>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <!-- Promo 1 -->
       <div class="promo-card relative overflow-hidden rounded-xl p-6 cursor-pointer group">
         <img src="https://images.pexels.com/photos/374074/pexels-photo-374074.jpeg?auto=compress&cs=tinysrgb&w=1200"
              class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-70 transition">
-
         <div class="absolute inset-0 bg-gradient-to-br from-black/70 via-black/40 to-black/80"></div>
-
         <div class="relative z-10">
           <h4 class="text-yellow-400 font-bold text-xl mb-2">🔥 -15% la Laptopuri Gaming</h4>
           <p class="text-gray-200">Doar până la finalul lunii. Modele ASUS ROG, Acer Nitro, MSI.</p>
         </div>
       </div>
 
-      <!-- Promo 2 -->
       <div class="promo-card relative overflow-hidden rounded-xl p-6 cursor-pointer group">
         <img src="https://images.pexels.com/photos/4792718/pexels-photo-4792718.jpeg?auto=compress&cs=tinysrgb&w=1200"
              class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-70 transition">
-
         <div class="absolute inset-0 bg-gradient-to-br from-black/70 via-black/40 to-black/80"></div>
-
         <div class="relative z-10">
           <h4 class="text-yellow-400 font-bold text-xl mb-2">⚡ SSD + Montaj Gratuit</h4>
           <p class="text-gray-200">La orice SSD peste 500GB – montajul este inclus.</p>
@@ -245,14 +240,13 @@
     </div>
   </section>
 
-  <!-- TESTIMONIALE -->
+  <!-- TESTIMONIALS -->
   <section id="testimonials" class="max-w-6xl mx-auto py-20 px-6 fade-in">
     <h3 class="text-4xl font-bold text-yellow-400 mb-10 text-center slide-left">
       Ce spun clienții noștri
     </h3>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <!-- T1 -->
       <div class="testimonial-card relative overflow-hidden p-6 rounded-xl bg-gray-800/80 backdrop-blur group">
         <div class="flex items-center gap-3 mb-4">
           <img src="https://randomuser.me/api/portraits/men/32.jpg"
@@ -267,7 +261,6 @@
         </p>
       </div>
 
-      <!-- T2 -->
       <div class="testimonial-card relative overflow-hidden p-6 rounded-xl bg-gray-800/80 backdrop-blur group">
         <div class="flex items-center gap-3 mb-4">
           <img src="https://randomuser.me/api/portraits/women/42.jpg"
@@ -282,7 +275,6 @@
         </p>
       </div>
 
-      <!-- T3 -->
       <div class="testimonial-card relative overflow-hidden p-6 rounded-xl bg-gray-800/80 backdrop-blur group">
         <div class="flex items-center gap-3 mb-4">
           <img src="https://randomuser.me/api/portraits/men/85.jpg"
@@ -337,11 +329,11 @@
   </section>
 
   <!-- FOOTER -->
-  <footer class="bg-black text-gray-400 text-center py-6 pb-20 md:pb-6">
+  <footer class="bg-black text-gray-400 text-center py-6">
     &copy; 2025 TechStore. Toate drepturile rezervate.
   </footer>
 
-  <!-- COȘ -->
+  <!-- CART SIDEBAR -->
   <div id="cart"
        class="fixed top-0 right-[-400px] w-96 max-w-full h-full bg-gray-800 text-white p-6 shadow-lg transition-all z-50">
     <h3 class="text-2xl font-bold mb-4">Coș Produse</h3>
@@ -367,7 +359,6 @@
         <button id="checkoutClose" class="text-gray-400 hover:text-white text-2xl leading-none">&times;</button>
       </div>
 
-      <!-- SUMAR COMANDĂ -->
       <div class="mb-4 border border-gray-700 rounded-lg p-3 bg-gray-800">
         <h4 class="font-semibold text-lg mb-2">Produsele tale</h4>
         <div id="checkoutSummary" class="space-y-1 text-sm text-gray-200"></div>
@@ -377,7 +368,6 @@
         </div>
       </div>
 
-      <!-- FORMULAR DATE CLIENT -->
       <form id="checkoutForm" class="space-y-3">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
           <div>
@@ -459,7 +449,6 @@
         </button>
       </div>
 
-      <!-- FORM LOGIN -->
       <form id="loginForm" class="space-y-4">
         <input type="email" id="loginEmail" class="w-full p-2 rounded bg-gray-800 border border-gray-700"
                placeholder="Email">
@@ -473,7 +462,6 @@
         </button>
       </form>
 
-      <!-- FORM REGISTER -->
       <form id="registerForm" class="space-y-4 hidden">
         <input type="email" id="registerEmail" class="w-full p-2 rounded bg-gray-800 border border-gray-700"
                placeholder="Email">
@@ -488,64 +476,50 @@
     </div>
   </div>
 
-  <!-- BOTTOM NAV (MOBILE) -->
- <nav class="fixed bottom-0 left-0 w-full bg-black/95 text-white py-2 border-t border-gray-700 flex justify-around md:hidden z-50">
-    <div class="flex flex-col items-center">
-        <span class="text-xl">%</span>
-        <span class="text-sm">Promo</span>
+  <!-- NAVBAR MOBIL JOS -->
+  <nav class="fixed bottom-0 left-0 w-full bg-black/95 text-white py-2 border-t border-gray-700 flex justify-around md:hidden z-50">
+    <div id="navPromo" class="flex flex-col items-center cursor-pointer">
+      <span class="text-xl">%</span>
+      <span class="text-sm">Promo</span>
     </div>
 
-    <div class="flex flex-col items-center">
-        <span class="text-xl">📄</span>
-        <span class="text-sm">Catalog</span>
+    <div id="navCatalog" class="flex flex-col items-center cursor-pointer">
+      <span class="text-xl">📄</span>
+      <span class="text-sm">Catalog</span>
     </div>
 
-    <div id="bottomCartBtn" class="flex flex-col items-center">
-        <span class="text-xl">🛒</span>
-        <span class="text-sm">Coș</span>
+    <div id="bottomCartBtn" class="flex flex-col items-center cursor-pointer">
+      <span class="text-xl">🛒</span>
+      <span class="text-sm">Coș</span>
     </div>
 
-    <div id="bottomProfileBtn" class="flex flex-col items-center">
-        <span class="text-xl">👤</span>
-        <span class="text-sm">Cont</span>
+    <div id="bottomProfileBtn" class="flex flex-col items-center cursor-pointer">
+      <span class="text-xl">👤</span>
+      <span class="text-sm">Cont</span>
     </div>
 
-    <div id="bottomMoreBtn" class="flex flex-col items-center">
-        <span class="text-xl">⋯</span>
-        <span class="text-sm">Mai multe</span>
+    <div id="bottomMoreBtn" class="flex flex-col items-center cursor-pointer">
+      <span class="text-xl">⋯</span>
+      <span class="text-sm">Mai multe</span>
     </div>
-</nav>
+  </nav>
 
-  <!-- OVERLAY + MENIU RAPID -->
-  <div
-    id="quickOverlay"
-    class="fixed inset-0 bg-black/50 hidden z-40"
-  >
-    <div
-      id="quickMenu"
-      class="absolute inset-x-0 bottom-16 mx-2 max-w-xl bg-gray-900/98 text-white
-             rounded-2xl shadow-2xl border border-gray-700 pb-3"
-    >
-      <div class="flex items-center justify-between px-4 pt-3 pb-2 border-b border-gray-700">
-        <h4 class="font-semibold text-sm">Meniu rapid</h4>
-        <button id="quickClose" class="text-gray-400 text-xl leading-none">&times;</button>
-      </div>
+  <!-- ACCOUNT MENU MOBIL -->
+  <div id="mobileAccountMenu" class="hidden fixed bottom-16 left-0 w-full bg-black/95 text-white p-4 border-t border-gray-700 z-50">
+    <div id="notLogged">
+      <button id="openLogin" class="w-full bg-yellow-400 text-black py-2 rounded-lg font-bold">
+        Logare / Cont nou
+      </button>
+    </div>
 
-      <div class="grid grid-cols-2 gap-3 px-4 py-3 text-sm">
-        <div class="space-y-2">
-          <button id="quickAbout" class="w-full text-left hover:text-yellow-400">Despre noi</button>
-          <button id="quickPromo" class="w-full text-left hover:text-yellow-400">Promoții</button>
-          <button id="quickBlog" class="w-full text-left hover:text-yellow-400">Blog</button>
-          <button id="quickContact" class="w-full text-left hover:text-yellow-400">Contact</button>
-        </div>
-        <div class="space-y-2">
-          <button id="quickCategories" class="w-full text-left hover:text-yellow-400">Categorii</button>
-          <button id="quickTestimonials" class="w-full text-left hover:text-yellow-400">Testimoniale</button>
-          <button id="quickAdmin" class="w-full text-left hover:text-yellow-400 hidden">
-            Panou Admin
-          </button>
-        </div>
-      </div>
+    <div id="loggedUser" class="hidden flex flex-col gap-3">
+      <button id="goToProfile" class="w-full bg-gray-800 py-2 rounded-lg">Profil</button>
+      <button id="adminPanelBtn" class="w-full bg-yellow-500 py-2 rounded-lg hidden">
+        Admin Panel
+      </button>
+      <button id="logoutBtnMobile" class="w-full bg-red-600 py-2 rounded-lg">
+        Logout
+      </button>
     </div>
   </div>
 
