@@ -652,3 +652,61 @@ window.addEventListener("load", async () => {
   await loadProducts();
   updateCart();
 });
+// =====================================
+// NAVBAR MOBIL – CONT
+// =====================================
+
+const bottomProfileBtn = document.getElementById("bottomProfileBtn");
+const mobileAccountMenu = document.getElementById("mobileAccountMenu");
+const notLogged = document.getElementById("notLogged");
+const loggedUser = document.getElementById("loggedUser");
+const adminPanelBtn = document.getElementById("adminPanelBtn");
+const logoutBtnMobile = document.getElementById("logoutBtnMobile");
+const openLogin = document.getElementById("openLogin");
+
+// toggle meniu Cont
+if (bottomProfileBtn) {
+  bottomProfileBtn.addEventListener("click", () => {
+    mobileAccountMenu.classList.toggle("hidden");
+  });
+}
+
+// sincronizare cu firebase (logat / nelogat)
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    notLogged.classList.add("hidden");
+    loggedUser.classList.remove("hidden");
+
+    // verificăm dacă e admin
+    const adminDoc = await getDoc(doc(db, "admins", user.uid));
+    if (adminDoc.exists()) adminPanelBtn.classList.remove("hidden");
+    else adminPanelBtn.classList.add("hidden");
+
+  } else {
+    notLogged.classList.remove("hidden");
+    loggedUser.classList.add("hidden");
+  }
+});
+
+// deschide login
+if (openLogin) {
+  openLogin.addEventListener("click", () => {
+    mobileAccountMenu.classList.add("hidden");
+    openAuthModal("login");
+  });
+}
+
+// logout
+if (logoutBtnMobile) {
+  logoutBtnMobile.addEventListener("click", () => {
+    signOut(auth);
+    mobileAccountMenu.classList.add("hidden");
+  });
+}
+
+// merge la admin panel
+if (adminPanelBtn) {
+  adminPanelBtn.addEventListener("click", () => {
+    window.location.href = "/admin.html";
+  });
+}
