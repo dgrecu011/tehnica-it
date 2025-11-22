@@ -1,3 +1,11 @@
+/* MODAL CARD WRAPPER */
+.modal-card {
+  background-color: #020617;
+  border-radius: 0.75rem;
+  border: 1px solid #1e293b;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.7);
+}
+
 
 /* ===========================
    FONT & GLOBAL
