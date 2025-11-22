@@ -23,4 +23,12 @@ const handleScrollAnimation = () => {
 window.addEventListener("scroll", handleScrollAnimation);
 window.addEventListener("load", handleScrollAnimation);
 
-// (hamburger nu mai este folosit aici – headerul mare e doar pe desktop)
+// Hamburger menu toggle (nav sus)
+const hamburgerBtn = document.getElementById("hamburgerBtn");
+const navMenu = document.getElementById("navMenu");
+
+if (hamburgerBtn && navMenu) {
+  hamburgerBtn.addEventListener("click", () => {
+    navMenu.classList.toggle("hidden");
+  });
+}
