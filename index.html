@@ -16,13 +16,11 @@
 </head>
 <body class="bg-gray-900 text-gray-100 font-sans">
 
-  <!-- HEADER (DESKTOP ONLY) -->
+  <!-- HEADER (desktop) -->
   <header class="hidden md:flex items-center justify-between p-4 md:p-6 bg-black/90 backdrop-blur shadow-lg sticky top-0 z-40">
-    <div class="flex items-center gap-4">
-      <h1 class="text-3xl md:text-4xl font-extrabold text-yellow-400 tracking-tight">TechStore</h1>
-    </div>
+    <h1 class="text-3xl md:text-4xl font-extrabold text-yellow-400 tracking-tight">TechStore</h1>
 
-    <nav id="navMenu" class="flex items-center space-x-6 text-sm md:text-base">
+    <nav class="flex items-center space-x-6 text-sm md:text-base">
       <a href="#about" class="hover:text-yellow-400 transition font-medium">Despre Noi</a>
       <a href="#productsSection" class="hover:text-yellow-400 transition font-medium">Produse</a>
       <a href="#categories" class="hover:text-yellow-400 transition font-medium">Categorii</a>
@@ -60,7 +58,7 @@
     </a>
   </section>
 
-  <!-- ABOUT -->
+  <!-- DESPRE NOI -->
   <section id="about" class="max-w-6xl mx-auto py-20 px-6 fade-in">
     <h3 class="text-4xl font-bold text-yellow-400 mb-6 text-center slide-left">Despre Noi</h3>
     <p class="text-gray-300 text-lg md:text-xl text-center slide-right">
@@ -70,7 +68,7 @@
     </p>
   </section>
 
-  <!-- PRODUCTS -->
+  <!-- PRODUSE POPULARE -->
   <section id="productsSection" class="max-w-6xl mx-auto py-20 px-6 fade-in">
     <h3 class="text-4xl font-bold text-yellow-400 mb-6 text-center slide-left">Produse Populare</h3>
 
@@ -94,7 +92,7 @@
     <div id="products" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 fade-in"></div>
   </section>
 
-  <!-- CATEGORIES -->
+  <!-- CATEGORII -->
   <section id="categories" class="max-w-6xl mx-auto py-20 px-6 fade-in">
     <h3 class="text-4xl font-bold text-yellow-400 mb-10 text-center slide-left">
       Categorii Recomandate
@@ -211,7 +209,7 @@
     </div>
   </section>
 
-  <!-- PROMOTIONS -->
+  <!-- PROMOȚII -->
   <section id="promotions" class="max-w-6xl mx-auto py-20 px-6 fade-in">
     <h3 class="text-4xl font-bold text-yellow-400 mb-10 text-center slide-left">
       Promoții Speciale
@@ -240,7 +238,7 @@
     </div>
   </section>
 
-  <!-- TESTIMONIALS -->
+  <!-- TESTIMONIALE -->
   <section id="testimonials" class="max-w-6xl mx-auto py-20 px-6 fade-in">
     <h3 class="text-4xl font-bold text-yellow-400 mb-10 text-center slide-left">
       Ce spun clienții noștri
@@ -257,7 +255,7 @@
           </div>
         </div>
         <p class="text-gray-300 italic">
-          “Produsele sunt de calitate, livrare rapidă și suport excelent. Recomand!”
+          „Produsele sunt de calitate, livrare rapidă și suport excelent. Recomand!”
         </p>
       </div>
 
@@ -271,7 +269,7 @@
           </div>
         </div>
         <p class="text-gray-300 italic">
-          “Am găsit toate componentele pentru PC-ul meu. Prețuri corecte și livrare rapidă.”
+          „Am găsit toate componentele pentru PC-ul meu. Prețuri corecte și livrare rapidă.”
         </p>
       </div>
 
@@ -285,7 +283,7 @@
           </div>
         </div>
         <p class="text-gray-300 italic">
-          “Site-ul arată modern și comanda a ajuns în 24h. Super experiență!”
+          „Site-ul arată modern și comanda a ajuns în 24h. Super experiență!”
         </p>
       </div>
     </div>
@@ -333,7 +331,7 @@
     &copy; 2025 TechStore. Toate drepturile rezervate.
   </footer>
 
-  <!-- CART SIDEBAR -->
+  <!-- COȘ -->
   <div id="cart"
        class="fixed top-0 right-[-400px] w-96 max-w-full h-full bg-gray-800 text-white p-6 shadow-lg transition-all z-50">
     <h3 class="text-2xl font-bold mb-4">Coș Produse</h3>
@@ -359,6 +357,7 @@
         <button id="checkoutClose" class="text-gray-400 hover:text-white text-2xl leading-none">&times;</button>
       </div>
 
+      <!-- SUMAR COMANDĂ -->
       <div class="mb-4 border border-gray-700 rounded-lg p-3 bg-gray-800">
         <h4 class="font-semibold text-lg mb-2">Produsele tale</h4>
         <div id="checkoutSummary" class="space-y-1 text-sm text-gray-200"></div>
@@ -368,6 +367,7 @@
         </div>
       </div>
 
+      <!-- FORMULAR DATE CLIENT -->
       <form id="checkoutForm" class="space-y-3">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
           <div>
@@ -437,7 +437,7 @@
     <div class="bg-gray-900 rounded-xl shadow-xl w-full max-w-md p-6">
       <div class="flex justify-between items-center mb-4">
         <h3 id="authTitle" class="text-2xl font-bold text-yellow-400">Logare</h3>
-        <button id="authClose" class="text-gray-400 hover:text-white">&times;</button>
+        <button id="authClose" class="text-gray-400 hover:text-white text-xl">&times;</button>
       </div>
 
       <div class="flex mb-4 border-b border-gray-700 text-sm">
@@ -449,6 +449,7 @@
         </button>
       </div>
 
+      <!-- FORM LOGIN -->
       <form id="loginForm" class="space-y-4">
         <input type="email" id="loginEmail" class="w-full p-2 rounded bg-gray-800 border border-gray-700"
                placeholder="Email">
@@ -462,6 +463,7 @@
         </button>
       </form>
 
+      <!-- FORM REGISTER -->
       <form id="registerForm" class="space-y-4 hidden">
         <input type="email" id="registerEmail" class="w-full p-2 rounded bg-gray-800 border border-gray-700"
                placeholder="Email">
@@ -476,48 +478,48 @@
     </div>
   </div>
 
-  <!-- NAVBAR MOBIL JOS -->
-  <nav class="fixed bottom-0 left-0 w-full bg-black/95 text-white py-2 border-t border-gray-700 flex justify-around md:hidden z-50">
-    <div id="navPromo" class="flex flex-col items-center cursor-pointer">
+  <!-- NAVBAR JOS (MOBILE) -->
+  <nav class="fixed bottom-0 left-0 w-full bg-black/95 text-white py-2 border-t border-gray-700 flex justify-around md:hidden z-40">
+    <button id="navPromo" class="flex flex-col items-center text-xs">
       <span class="text-xl">%</span>
-      <span class="text-sm">Promo</span>
-    </div>
+      <span>Promo</span>
+    </button>
 
-    <div id="navCatalog" class="flex flex-col items-center cursor-pointer">
+    <button id="navCatalog" class="flex flex-col items-center text-xs">
       <span class="text-xl">📄</span>
-      <span class="text-sm">Catalog</span>
-    </div>
+      <span>Catalog</span>
+    </button>
 
-    <div id="bottomCartBtn" class="flex flex-col items-center cursor-pointer">
+    <button id="bottomCartBtn" class="flex flex-col items-center text-xs">
       <span class="text-xl">🛒</span>
-      <span class="text-sm">Coș</span>
-    </div>
+      <span>Coș</span>
+    </button>
 
-    <div id="bottomProfileBtn" class="flex flex-col items-center cursor-pointer">
+    <button id="bottomProfileBtn" class="flex flex-col items-center text-xs">
       <span class="text-xl">👤</span>
-      <span class="text-sm">Cont</span>
-    </div>
-
-    <div id="bottomMoreBtn" class="flex flex-col items-center cursor-pointer">
-      <span class="text-xl">⋯</span>
-      <span class="text-sm">Mai multe</span>
-    </div>
+      <span>Cont</span>
+    </button>
   </nav>
 
-  <!-- ACCOUNT MENU MOBIL -->
-  <div id="mobileAccountMenu" class="hidden fixed bottom-16 left-0 w-full bg-black/95 text-white p-4 border-t border-gray-700 z-50">
-    <div id="notLogged">
-      <button id="openLogin" class="w-full bg-yellow-400 text-black py-2 rounded-lg font-bold">
+  <!-- MENIU CONT (MOBILE) -->
+  <div id="mobileAccountMenu" class="fixed inset-x-0 bottom-12 mx-4 mb-4 bg-gray-900 border border-gray-700 rounded-xl shadow-xl p-4 hidden z-40">
+    <!-- ne-logat -->
+    <div id="notLogged" class="space-y-2">
+      <p class="text-sm text-gray-200">Nu ești logat.</p>
+      <button id="openLogin" class="w-full bg-yellow-400 text-black py-2 rounded font-semibold hover:bg-yellow-300">
         Logare / Cont nou
       </button>
     </div>
 
-    <div id="loggedUser" class="hidden flex flex-col gap-3">
-      <button id="goToProfile" class="w-full bg-gray-800 py-2 rounded-lg">Profil</button>
-      <button id="adminPanelBtn" class="w-full bg-yellow-500 py-2 rounded-lg hidden">
+    <!-- logat -->
+    <div id="loggedUser" class="space-y-2 hidden">
+      <button id="goToProfile" class="w-full bg-gray-800 text-white py-2 rounded hover:bg-gray-700 text-sm">
+        Profil & comenzi
+      </button>
+      <button id="adminPanelBtn" class="w-full bg-gray-800 text-white py-2 rounded hover:bg-gray-700 text-sm hidden">
         Admin Panel
       </button>
-      <button id="logoutBtnMobile" class="w-full bg-red-600 py-2 rounded-lg">
+      <button id="logoutBtnMobile" class="w-full bg-red-500 text-white py-2 rounded hover:bg-red-400 text-sm">
         Logout
       </button>
     </div>

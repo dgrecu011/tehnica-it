@@ -109,16 +109,20 @@ body {
 /* ===========================
    CATEGORY CARD – GLOW / HOVER
 =========================== */
+
 .category-card {
   position: relative;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
   transform: translateY(0);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
+
 .category-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 25px 45px rgba(0, 0, 0, 0.7);
 }
+
+/* mic chip în colțul dreapta-sus */
 .category-chip {
   position: absolute;
   top: 10px;
@@ -132,6 +136,7 @@ body {
   border-radius: 999px;
   font-weight: 700;
 }
+
 
 /* ===========================
    AUTH MODAL
@@ -173,7 +178,6 @@ body {
     font-size: 14px;
   }
 }
-
 /* =====================================
    PROMO CARD
 ===================================== */
