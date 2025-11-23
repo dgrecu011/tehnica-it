@@ -1,24 +1,49 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8">
-  <title>TechStore - Detalii comandă</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comandă – TechZone</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-gray-900 text-gray-100">
-  <header class="p-4 bg-black flex justify-between items-center">
-    <h1 class="text-2xl font-bold text-yellow-400">Detalii comandă</h1>
-    <a href="index.html" class="text-sm text-gray-300 hover:text-yellow-400">← Înapoi la magazin</a>
-  </header>
+<body>
 
-  <main class="max-w-3xl mx-auto p-4">
-    <div id="orderContent" class="text-sm text-gray-200">
-      Se încarcă detaliile comenzii...
+<header class="navbar">
+    <div class="nav-logo">TechZone</div>
+    <nav class="nav-links" id="navLinks">
+        <a href="index.html">Acasă</a>
+        <a href="profile.html">Profil</a>
+        <a href="admin.html">Admin</a>
+    </nav>
+
+    <div class="burger" id="burgerBtn">
+        <span></span><span></span><span></span>
     </div>
-  </main>
+</header>
 
-  <script type="module" src="order.js"></script>
+
+<section class="order-container">
+
+    <div id="orderDetails" class="order-card glass-card">
+        <!-- Produsul va fi încărcat din order.js -->
+    </div>
+
+    <form id="orderForm" class="glass-card order-form">
+
+        <h3>Completează comanda</h3>
+
+        <input type="text" id="clientName" placeholder="Nume complet" required>
+        <input type="text" id="clientPhone" placeholder="Telefon" required>
+        <input type="text" id="clientAddress" placeholder="Adresă livrare" required>
+        <textarea id="clientNote" placeholder="Observații (opțional)"></textarea>
+
+        <button type="submit" class="btn-dark">Plasează comanda</button>
+    </form>
+
+</section>
+
+<script src="order.js"></script>
+<script src="app.js"></script>
+
 </body>
 </html>

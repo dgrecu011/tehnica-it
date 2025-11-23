@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Favorite – TechZone</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="navbar">
+    <div class="nav-logo">TechZone</div>
+    <nav class="nav-links" id="navLinks">
+        <a href="index.html">Acasă</a>
+        <a href="favorite.html">Favorite</a>
+        <a href="profile.html">Profil</a>
+    </nav>
+    <div class="burger" id="burgerBtn"><span></span><span></span><span></span></div>
+</header>
+
+<section class="admin-container fade-in">
+    <h2>Produsele tale favorite</h2>
+    <p class="text-dim" style="margin-bottom:20px;">Produse salvate pentru mai târziu</p>
+
+    <div id="favoriteList" class="products-grid"></div>
+</section>
+
+<script src="js/ui.js"></script>
+<script>
+// Load favorites
+const favContainer = document.getElementById("favoriteList");
+let favs = JSON.parse(localStorage.getItem("favorites") || "[]");
+
+function renderFavorites(){
+    favContainer.innerHTML = "";
+    if(favs.length === 0){
+        favContainer.innerHTML = "<p class='text-dim'>Nu ai încă produse favorite.</p>";
+        return;
+    }
+
+    favs.forEach(prod => {
+        const card = document.createElement("div");
+        card.className = "product-card glass-card";
+        card.innerHTML = `
+            <img src="${prod.imageURL}" alt="${prod.title}">
+            <h4>${prod.title}</h4>
+            <p>${prod.price} MDL</p>
+            <button class="btn-dark" onclick="removeFavorite('${prod.id}')">Șterge</button>
+        `;
+        favContainer.appendChild(card);
+    });
+}
+
+function removeFavorite(id){
+    favs = favs.filter(p => p.id !== id);
+    localStorage.setItem("favorites", JSON.stringify(favs));
+    renderFavorites();
+}
+
+renderFavorites();
+</script>
+
+</body>
+</html>

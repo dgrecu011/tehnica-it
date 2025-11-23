@@ -1,0 +1,48 @@
+
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detalii produs</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="navbar">
+  <div class="nav-logo">TechZone</div>
+  <nav class="nav-links">
+    <a href="index.html">Acasă</a>
+    <a href="favorite.html">Favorite</a>
+  </nav>
+</header>
+
+<section class="admin-container fade-in">
+  <div id="productBox"></div>
+
+  <h3>Recenzii</h3>
+  <div id="reviewsList" class="reviews"></div>
+
+  <h4>Adaugă o recenzie</h4>
+  <textarea id="reviewText" placeholder="Scrie recenzia..." class="input"></textarea>
+  <select id="reviewStars">
+    <option value="5">5 stele</option>
+    <option value="4">4 stele</option>
+    <option value="3">3 stele</option>
+    <option value="2">2 stele</option>
+    <option value="1">1 stea</option>
+  </select>
+  <button id="submitReview" class="btn-dark">Trimite</button>
+
+  <hr class="divider">
+
+  <section id="recommendedSection" class="recommended-section fade-in">
+    <h3>Recomandate</h3>
+    <div id="recommendedList" class="products-grid"></div>
+  </section>
+</section>
+
+
+<script type="module" src="js/reviews.js"></script>
+</body>
+</html>

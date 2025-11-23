@@ -1,33 +1,45 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8">
-  <title>TechStore - Profil</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil – TechZone</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-gray-900 text-gray-100">
-  <header class="p-4 bg-black flex justify-between items-center">
-    <h1 class="text-2xl font-bold text-yellow-400">Profil utilizator</h1>
-    <a href="index.html" class="text-sm text-gray-300 hover:text-yellow-400">← Înapoi la magazin</a>
-  </header>
+<body>
 
-  <main class="max-w-4xl mx-auto p-4 space-y-6">
-    <section class="bg-gray-800 rounded-xl p-4">
-      <h2 class="text-xl font-semibold text-yellow-400 mb-2">Date cont</h2>
-      <p id="userEmail" class="text-gray-200 text-sm">Email: -</p>
-      <p id="userId" class="text-gray-500 text-xs mt-1 break-all">UID: -</p>
-    </section>
+<header class="navbar">
+    <div class="nav-logo">TechZone</div>
 
-    <section class="bg-gray-800 rounded-xl p-4">
-      <h2 class="text-xl font-semibold text-yellow-400 mb-2">Comenzile mele</h2>
-      <div id="ordersList" class="space-y-3 text-sm text-gray-200">
-        <p>Se încarcă comenzile...</p>
-      </div>
-    </section>
-  </main>
+    <nav class="nav-links" id="navLinks">
+        <a href="index.html">Acasă</a>
+        <a href="order.html">Comenzi</a>
+        <a href="admin.html">Admin</a>
+    </nav>
 
-  <script type="module" src="profile.js"></script>
+    <div class="burger" id="burgerBtn">
+        <span></span><span></span><span></span>
+    </div>
+</header>
+
+<section class="profile-container">
+
+    <div class="glass-card profile-card">
+        <h2>Profil utilizator</h2>
+        <p><strong>Nume:</strong> <span id="profName">-</span></p>
+        <p><strong>Telefon:</strong> <span id="profPhone">-</span></p>
+        <p><strong>Adresă:</strong> <span id="profAddress">-</span></p>
+    </div>
+
+    <div class="glass-card orders-card">
+        <h3>Comenzile tale</h3>
+
+        <div id="profileOrders" class="orders-list"></div>
+    </div>
+
+</section>
+
+<script src="profile.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
