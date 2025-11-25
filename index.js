@@ -30,6 +30,8 @@ const newsletterBtn = document.getElementById("newsletterBtn");
 const menuToggle = document.getElementById("menuToggle");
 const mobileNav = document.getElementById("mobileNav");
 const searchInputMobile = document.getElementById("searchInputMobile");
+const searchResults = document.getElementById("searchResults");
+const searchResultsMobile = document.getElementById("searchResultsMobile");
 const authBtnMobile = document.getElementById("authBtnMobile");
 const userEmailMobile = document.getElementById("userEmailMobile");
 const toAdminMobile = document.getElementById("toAdminMobile");
@@ -177,6 +179,43 @@ function filterProducts(term) {
   renderProducts(filtered);
 }
 
+function renderSearchResults(list, target) {
+  if (!target) return;
+  if (!list.length) {
+    target.innerHTML = `<div class="text-slate-400 text-sm px-2 py-1">Nicio potrivire</div>`;
+    target.classList.add("open");
+    return;
+  }
+
+  target.innerHTML = list
+    .slice(0, 6)
+    .map(
+      p => `
+      <a class="search-item" href="product.html?id=${p.id}">
+        <span>${p.name}</span>
+        <span class="text-blue-300 font-bold text-sm">${formatPrice(p.price)}</span>
+      </a>
+    `
+    )
+    .join("");
+  target.classList.add("open");
+}
+
+function handleSearch(term, target, renderList = true) {
+  const t = term.trim().toLowerCase();
+  if (!t) {
+    target?.classList.remove("open");
+    return products;
+  }
+  const filtered = products.filter(
+    p =>
+      (p.name || "").toLowerCase().includes(t) ||
+      (p.category || "").toLowerCase().includes(t)
+  );
+  if (renderList) renderSearchResults(filtered, target);
+  return filtered;
+}
+
 function closeMobileNav() {
   mobileNav?.classList.remove("open");
 }
@@ -185,7 +224,11 @@ function initMobileNav() {
   if (!menuToggle || !mobileNav) return;
 
   menuToggle.addEventListener("click", () => {
+    const willOpen = !mobileNav.classList.contains("open");
     mobileNav.classList.toggle("open");
+    if (willOpen) {
+      mobileNav.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   });
 
   mobileNav.querySelectorAll("a").forEach(link => {
@@ -196,6 +239,14 @@ function initMobileNav() {
     if (window.innerWidth >= 768) {
       closeMobileNav();
     }
+  });
+
+  document.addEventListener("click", e => {
+    if (!mobileNav.classList.contains("open")) return;
+    const target = e.target;
+    if (target === menuToggle || menuToggle.contains(target)) return;
+    if (mobileNav.contains(target)) return;
+    closeMobileNav();
   });
 }
 
@@ -313,9 +364,26 @@ function initAuth() {
 }
 
 function initSearch() {
-  const onInput = e => filterProducts(e.target.value);
-  searchInput?.addEventListener("input", onInput);
-  searchInputMobile?.addEventListener("input", onInput);
+  const onInputDesktop = e => {
+    const filtered = handleSearch(e.target.value, searchResults, true);
+    renderProducts(filtered);
+  };
+  const onInputMobile = e => {
+    const filtered = handleSearch(e.target.value, searchResultsMobile, true);
+    renderProducts(filtered);
+  };
+
+  searchInput?.addEventListener("input", onInputDesktop);
+  searchInputMobile?.addEventListener("input", onInputMobile);
+
+  document.addEventListener("click", e => {
+    if (searchResults && !searchResults.contains(e.target) && e.target !== searchInput) {
+      searchResults.classList.remove("open");
+    }
+    if (searchResultsMobile && !searchResultsMobile.contains(e.target) && e.target !== searchInputMobile) {
+      searchResultsMobile.classList.remove("open");
+    }
+  });
 }
 
 function initReload() {
