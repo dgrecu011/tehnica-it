@@ -32,6 +32,11 @@ const mobileNav = document.getElementById("mobileNav");
 const searchInputMobile = document.getElementById("searchInputMobile");
 const searchResults = document.getElementById("searchResults");
 const searchResultsMobile = document.getElementById("searchResultsMobile");
+const cartCountMobile = document.getElementById("cartCountMobile");
+const bottomSearch = document.getElementById("bottomSearch");
+const bottomProfile = document.getElementById("bottomProfile");
+const mobileSearchPanel = document.getElementById("mobileSearchPanel");
+const closeMobileSearch = document.getElementById("closeMobileSearch");
 const latestStrip = document.getElementById("latestStrip");
 const authBtnMobile = document.getElementById("authBtnMobile");
 const userEmailMobile = document.getElementById("userEmailMobile");
@@ -70,6 +75,7 @@ function updateCartBadge() {
   const cart = normalizeCart();
   const total = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
   cartCount.textContent = total;
+  if (cartCountMobile) cartCountMobile.textContent = total;
 }
 
 function showToast(message) {
@@ -280,7 +286,7 @@ function setAdminVisibility(isAdmin) {
 }
 
 function setProfileVisibility(show) {
-  [profileLink, profileLinkMobile].forEach(link => {
+  [profileLink, profileLinkMobile, bottomProfile].forEach(link => {
     if (!link) return;
     link.classList.toggle("hidden", !show);
   });
@@ -423,6 +429,20 @@ function initShortcuts() {
   });
 }
 
+function initBottomNav() {
+  bottomSearch?.addEventListener("click", () => {
+    if (mobileSearchPanel) {
+      mobileSearchPanel.classList.add("open");
+      setTimeout(() => searchInputMobile?.focus(), 200);
+    }
+  });
+
+  closeMobileSearch?.addEventListener("click", () => mobileSearchPanel?.classList.remove("open"));
+  mobileSearchPanel?.addEventListener("click", e => {
+    if (e.target === mobileSearchPanel) mobileSearchPanel.classList.remove("open");
+  });
+}
+
 function renderLatestStrip(data) {
   if (!latestStrip) return;
   if (!data.length) {
@@ -459,6 +479,7 @@ function boot() {
   initReload();
   initNewsletter();
   initShortcuts();
+  initBottomNav();
 }
 
 boot();

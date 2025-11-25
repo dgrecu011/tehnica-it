@@ -10,7 +10,7 @@
 </head>
 <body class="min-h-screen">
   <div class="max-w-7xl mx-auto px-5 py-6">
-    <header class="flex items-center justify-between gap-4 glass px-5 py-4 sticky top-4 z-40 responsive-header site-header">
+    <header class="flex items-center justify-between gap-4 glass px-5 py-4 responsive-header site-header">
       <a href="index.html" class="flex items-center gap-3 text-white no-underline hover:opacity-90 transition">
         <div class="brand-mark text-lg">TS</div>
         <div>
@@ -27,13 +27,9 @@
       </nav>
 
       <div class="flex items-center gap-3 w-full md:w-auto justify-end header-actions">
-        <button id="menuToggle" class="md:hidden btn-ghost inline-flex items-center gap-2">
-          <i class="fa-solid fa-bars"></i>
-          <span>Meniu</span>
-        </button>
         <div class="hidden md:flex items-center gap-2 flex-1 relative">
           <i class="fa-solid fa-magnifying-glass text-slate-400"></i>
-          <input id="searchInput" class="input" placeholder="Cauta laptopuri, monitoare, componente...">
+          <input id="searchInput" class="input" placeholder="Cauta">
           <div id="searchResults" class="search-popover"></div>
         </div>
         <a id="profileLink" href="profile.html" class="btn-ghost items-center gap-2 hidden">
@@ -47,30 +43,31 @@
         </a>
         <button id="authBtn" class="btn-primary hidden md:inline-flex">Autentificare</button>
       </div>
-      <div id="mobileNav" class="mobile-drawer md:hidden">
+    </header>
+
+    <div id="mobileSearchPanel" class="mobile-search md:hidden">
+      <div class="mobile-search-inner glass">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-white font-bold">Cauta produse</h3>
+          <button id="closeMobileSearch" class="text-slate-300"><i class="fa-solid fa-xmark"></i></button>
+        </div>
         <div class="flex items-center gap-2 search-wrapper">
           <i class="fa-solid fa-magnifying-glass text-slate-400"></i>
-          <input id="searchInputMobile" class="input" placeholder="Cauta laptopuri, monitoare, componente...">
+          <input id="searchInputMobile" class="input" placeholder="Laptop, monitor, gadget...">
           <div id="searchResultsMobile" class="search-popover"></div>
         </div>
-        <div class="grid grid-cols-2 gap-2 text-sm">
-          <a class="nav-link block text-center py-2 border border-white/10 rounded-xl" href="#produse">Produse</a>
-          <a class="nav-link block text-center py-2 border border-white/10 rounded-xl" href="#categorii">Categorii</a>
-          <a class="nav-link block text-center py-2 border border-white/10 rounded-xl" href="#beneficii">Avantaje</a>
-          <a class="nav-link block text-center py-2 border border-white/10 rounded-xl" href="#contact">Contact</a>
-        </div>
-        <div class="flex flex-wrap gap-2">
-          <a id="profileLinkMobile" href="profile.html" class="btn-ghost inline-flex items-center gap-2 flex-1 hidden">
-            <i class="fa-regular fa-user"></i>
-            <span id="userEmailMobile">Profil</span>
-          </a>
-        </div>
-        <div class="flex flex-wrap gap-2">
-          <button id="authBtnMobile" class="btn-primary flex-1">Autentificare</button>
-          <button id="toAdminMobile" class="btn-ghost flex-1 hidden">Panou admin</button>
-        </div>
       </div>
-    </header>
+    </div>
+
+    <nav class="bottom-nav md:hidden">
+      <a href="#produse" class="bottom-btn"><i class="fa-solid fa-house"></i><span>Home</span></a>
+      <button id="bottomSearch" class="bottom-btn"><i class="fa-solid fa-magnifying-glass"></i><span>Cauta</span></button>
+      <a href="order.html" class="bottom-btn relative">
+        <i class="fa-solid fa-cart-shopping"></i><span>Cos</span>
+        <span id="cartCountMobile" class="badge-dot">0</span>
+      </a>
+      <a id="bottomProfile" href="profile.html" class="bottom-btn"><i class="fa-regular fa-user"></i><span>Profil</span></a>
+    </nav>
 
     <section class="hero-grid mt-8 items-center">
       <div class="glass p-8 lg:p-10">
