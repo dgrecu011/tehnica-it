@@ -32,15 +32,11 @@ const mobileNav = document.getElementById("mobileNav");
 const searchInputMobile = document.getElementById("searchInputMobile");
 const searchResults = document.getElementById("searchResults");
 const searchResultsMobile = document.getElementById("searchResultsMobile");
-const sortSelect = document.getElementById("sortSelect");
 const cartCountMobile = document.getElementById("cartCountMobile");
-const cartCountFloat = document.getElementById("cartCountFloat");
 const bottomSearch = document.getElementById("bottomSearch");
 const bottomProfile = document.getElementById("bottomProfile");
 const mobileSearchPanel = document.getElementById("mobileSearchPanel");
 const closeMobileSearch = document.getElementById("closeMobileSearch");
-const floatSearch = document.getElementById("floatSearch");
-const floatProfile = document.getElementById("floatProfile");
 const latestStrip = document.getElementById("latestStrip");
 const authBtnMobile = document.getElementById("authBtnMobile");
 const userEmailMobile = document.getElementById("userEmailMobile");
@@ -50,9 +46,7 @@ const profileLinkMobile = document.getElementById("profileLinkMobile");
 let isAdminUser = false;
 
 let authMode = "login";
-let productsBase = [];
 let products = [];
-let sortMode = "default";
 const fallbackImg =
   "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' x2='1' y1='0' y2='1'%3E%3Cstop offset='0%' stop-color='%230ea5e9' stop-opacity='0.25'/%3E%3Cstop offset='100%' stop-color='%234f8bff' stop-opacity='0.55'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='800' height='600' fill='%23050915'/%3E%3Crect x='60' y='60' width='680' height='480' rx='28' fill='url(%23g)' opacity='0.6'/%3E%3Ctext x='50%' y='50%' fill='%23e2e8f0' font-family='Arial, sans-serif' font-size='46' font-weight='700' text-anchor='middle'%3EPlaceholder imagine%3C/text%3E%3C/svg%3E";
 
@@ -82,7 +76,6 @@ function updateCartBadge() {
   const total = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
   cartCount.textContent = total;
   if (cartCountMobile) cartCountMobile.textContent = total;
-  if (cartCountFloat) cartCountFloat.textContent = total;
 }
 
 function showToast(message) {
@@ -148,25 +141,11 @@ function renderProducts(list) {
   });
 }
 
-function applySort(list) {
-  const copy = [...list];
-  if (sortMode === "asc") {
-    return copy.sort((a, b) => (a.price || 0) - (b.price || 0));
-  }
-  if (sortMode === "desc") {
-    return copy.sort((a, b) => (b.price || 0) - (a.price || 0));
-  }
-  if (sortMode === "recent") {
-    return copy.reverse();
-  }
-  return copy;
-}
-
 async function loadProducts() {
   renderSkeleton();
   try {
     const snapshot = await getDocs(collection(db, "products"));
-    productsBase = snapshot.docs.map(p => {
+    products = snapshot.docs.map(p => {
       const data = p.data() || {};
       return {
         id: p.id,
@@ -177,8 +156,12 @@ async function loadProducts() {
         img: data.img || data.imageURL || data.imageUrl || ""
       };
     });
-    products = applySort(productsBase);
     renderProducts(products);
+const tagged = products.filter(p => (p.tag || "").toLowerCase().includes("nou"));
+    const pool = tagged.length ? tagged : products;
+    const uniquePool = pool.slice(-10); // ultimele din lista incarcata
+    const recommended = uniquePool.slice(-5).slice(-Math.max(3, Math.min(5, uniquePool.length)));
+    renderLatestStrip(products);
   } catch (err) {
     console.error("Nu pot incarca produsele", err);
     showToast("Eroare la incarcarea produselor");
@@ -201,11 +184,15 @@ function addToCart(id) {
 
 function filterProducts(term) {
   const t = term.toLowerCase();
-  const filtered = productsBase.filter(p =>
+  const filtered = products.filter(p =>
     (p.name || "").toLowerCase().includes(t) ||
     (p.category || "").toLowerCase().includes(t)
   );
-  return applySort(filtered);
+  renderProducts(filtered);
+}
+
+function renderRecommended(list) {
+  return; // carousel removed
 }
 
 function renderSearchResults(list, target) {
@@ -234,9 +221,13 @@ function handleSearch(term, target, renderList = true) {
   const t = term.trim().toLowerCase();
   if (!t) {
     target?.classList.remove("open");
-    return applySort(productsBase);
+    return products;
   }
-  const filtered = filterProducts(t);
+  const filtered = products.filter(
+    p =>
+      (p.name || "").toLowerCase().includes(t) ||
+      (p.category || "").toLowerCase().includes(t)
+  );
   if (renderList) renderSearchResults(filtered, target);
   return filtered;
 }
@@ -295,7 +286,7 @@ function setAdminVisibility(isAdmin) {
 }
 
 function setProfileVisibility(show) {
-  [profileLink, profileLinkMobile, floatProfile].forEach(link => {
+  [profileLink, profileLinkMobile].forEach(link => {
     if (!link) return;
     link.classList.toggle("hidden", !show);
   });
@@ -450,24 +441,30 @@ function initBottomNav() {
   mobileSearchPanel?.addEventListener("click", e => {
     if (e.target === mobileSearchPanel) mobileSearchPanel.classList.remove("open");
   });
-
-  floatSearch?.addEventListener("click", () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    setTimeout(() => searchInput?.focus(), 300);
-  });
 }
 
 function renderLatestStrip(data) {
-  return;
-}
-
-function initSort() {
-  sortSelect?.addEventListener("change", e => {
-    sortMode = e.target.value || "default";
-    const term = (searchInput?.value || "").trim();
-    const filtered = term ? handleSearch(term, null, false) : applySort(productsBase);
-    renderProducts(filtered);
-  });
+  if (!latestStrip) return;
+  if (!data.length) {
+    latestStrip.innerHTML = `<div class="text-slate-400 text-sm">Nu exista produse.</div>`;
+    return;
+  }
+  const items = data.slice(-5);
+  const doubled = [...items, ...items];
+  latestStrip.innerHTML = `<div class="strip-inner">${doubled
+    .map(
+      item => `
+        <a class="strip-item" href="product.html?id=${item.id}">
+          <img src="${item.img || fallbackImg}" alt="${item.name}">
+          <div>
+            <p class="text-xs text-slate-400">${item.category || "Produs"}</p>
+            <p class="text-white font-bold">${item.name}</p>
+            <p class="text-blue-300 font-black text-sm">${formatPrice(item.price)}</p>
+          </div>
+        </a>
+      `
+    )
+    .join("")}</div>`;
 }
 
 function boot() {
@@ -483,7 +480,6 @@ function boot() {
   initNewsletter();
   initShortcuts();
   initBottomNav();
-  initSort();
 }
 
 boot();

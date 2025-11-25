@@ -68,14 +68,8 @@
       </a>
       <a id="bottomProfile" href="profile.html" class="bottom-btn"><i class="fa-regular fa-user"></i><span>Profil</span></a>
     </nav>
-    <div class="floating-nav hidden md:flex">
-      <a href="#produse"><i class="fa-solid fa-house"></i></a>
-      <button id="floatSearch"><i class="fa-solid fa-magnifying-glass"></i></button>
-      <a href="order.html" class="relative"><i class="fa-solid fa-cart-shopping"></i><span id="cartCountFloat" class="badge-dot">0</span></a>
-      <a id="floatProfile" href="profile.html"><i class="fa-regular fa-user"></i></a>
-    </div>
 
-    <section class="hero-grid mt-4 items-center">
+    <section class="hero-grid mt-8 items-center">
       <div class="glass p-8 lg:p-10">
         <span class="tag mb-5 inline-flex"><i class="fa-solid fa-bolt"></i> Lansari rapide</span>
         <h1 class="text-4xl lg:text-5xl font-black leading-tight text-white">
@@ -126,6 +120,23 @@
       </div>
     </section>
 
+    <section class="glass p-5 mt-10 flex items-center gap-6 overflow-x-auto" aria-label="Branduri">
+      <img class="h-7 opacity-80 hover:opacity-100 transition" src="https://cdn.simpleicons.org/lenovo/ccd7e6" alt="Lenovo">
+      <img class="h-7 opacity-80 hover:opacity-100 transition" src="https://cdn.simpleicons.org/dell/ccd7e6" alt="Dell">
+      <img class="h-7 opacity-90 hover:opacity-100 transition" src="https://cdn.simpleicons.org/intel/0ea5e9" alt="Intel">
+      <img class="h-7 opacity-80 hover:opacity-100 transition" src="https://cdn.simpleicons.org/amd/ccd7e6" alt="AMD">
+      <img class="h-7 opacity-80 hover:opacity-100 transition" src="https://cdn.simpleicons.org/nvidia/ccd7e6" alt="Nvidia">
+      <img class="h-7 opacity-80 hover:opacity-100 transition" src="https://cdn.simpleicons.org/asus/ccd7e6" alt="Asus">
+    </section>
+
+    <section class="glass p-4 mt-10">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-xl font-bold text-white">Ultimele produse</h2>
+        <span class="tag inline-flex"><i class="fa-solid fa-rotate"></i> Live</span>
+      </div>
+      <div id="latestStrip" class="strip-track"></div>
+    </section>
+
     <section id="categorii" class="mt-12">
       <div class="flex items-center justify-between mb-5">
         <div>
@@ -163,29 +174,6 @@
             <p class="text-slate-400 text-sm">Workstation si accesorii</p>
           </div>
         </div>
-      </div>
-    </section>
-
-    <section class="glass p-5 mt-8 space-y-3">
-      <div class="flex items-center justify-between">
-        <div>
-          <h2 class="text-2xl font-bold text-white">Filtre rapide</h2>
-          <p class="text-slate-400 text-sm">Alege categoria sau bugetul</p>
-        </div>
-      </div>
-      <div class="flex flex-wrap gap-2 quick-filters">
-        <button class="chip">Laptopuri</button>
-        <button class="chip">Gaming</button>
-        <button class="chip">Monitoare</button>
-        <button class="chip">GPU</button>
-        <button class="chip">Sub 1000 €</button>
-        <button class="chip">Noutati</button>
-        <select id="sortSelect" class="input w-auto">
-          <option value="default">Sorteaza: Implicit</option>
-          <option value="asc">Pret crescator</option>
-          <option value="desc">Pret descrescator</option>
-          <option value="recent">Recente</option>
-        </select>
       </div>
     </section>
 
