@@ -32,13 +32,12 @@ const mobileNav = document.getElementById("mobileNav");
 const searchInputMobile = document.getElementById("searchInputMobile");
 const searchResults = document.getElementById("searchResults");
 const searchResultsMobile = document.getElementById("searchResultsMobile");
+const latestStrip = document.getElementById("latestStrip");
 const authBtnMobile = document.getElementById("authBtnMobile");
 const userEmailMobile = document.getElementById("userEmailMobile");
 const toAdminMobile = document.getElementById("toAdminMobile");
 const profileLink = document.getElementById("profileLink");
 const profileLinkMobile = document.getElementById("profileLinkMobile");
-const recTrackMarquee = document.getElementById("recMarqueeTrack");
-const recDots = document.getElementById("recDots");
 let isAdminUser = false;
 
 let authMode = "login";
@@ -152,11 +151,11 @@ async function loadProducts() {
       };
     });
     renderProducts(products);
-    const tagged = products.filter(p => (p.tag || "").toLowerCase().includes("nou"));
+const tagged = products.filter(p => (p.tag || "").toLowerCase().includes("nou"));
     const pool = tagged.length ? tagged : products;
     const uniquePool = pool.slice(-10); // ultimele din lista incarcata
     const recommended = uniquePool.slice(-5).slice(-Math.max(3, Math.min(5, uniquePool.length)));
-    startRecommendedSlider(recommended);
+    renderLatestStrip(products);
   } catch (err) {
     console.error("Nu pot incarca produsele", err);
     showToast("Eroare la incarcarea produselor");
@@ -187,7 +186,7 @@ function filterProducts(term) {
 }
 
 function renderRecommended(list) {
-  if (!recommendedCarousel) return;
+  return; // carousel removed
 }
 
 function renderSearchResults(list, target) {
@@ -424,62 +423,28 @@ function initShortcuts() {
   });
 }
 
-let sliderInterval;
-function startRecommendedSlider(data) {
-  if (!recTrackMarquee || !data.length) return;
-  const slides = Math.min(5, Math.max(3, data.length));
-  const items = data.slice(-slides);
-
-  recTrackMarquee.innerHTML = items
+function renderLatestStrip(data) {
+  if (!latestStrip) return;
+  if (!data.length) {
+    latestStrip.innerHTML = `<div class="text-slate-400 text-sm">Nu exista produse.</div>`;
+    return;
+  }
+  const items = data.slice(-5);
+  const doubled = [...items, ...items];
+  latestStrip.innerHTML = `<div class="strip-inner">${doubled
     .map(
       item => `
-      <article class="slider-card">
-        ${item.tag ? `<span class="badge badge-admin">${item.tag}</span>` : ""}
-        <img src="${item.img || fallbackImg}" alt="${item.name}">
-        <div class="card-body space-y-1">
-          <p class="text-xs text-slate-400">${item.category || "Produs"}</p>
-          <p class="font-bold text-white leading-tight text-sm">${item.name}</p>
-          <p class="text-blue-300 font-black text-sm">${formatPrice(item.price)}</p>
-          <a class="btn-ghost w-full text-center block text-sm" href="product.html?id=${item.id}">Detalii</a>
-        </div>
-      </article>
-    `
+        <a class="strip-item" href="product.html?id=${item.id}">
+          <img src="${item.img || fallbackImg}" alt="${item.name}">
+          <div>
+            <p class="text-xs text-slate-400">${item.category || "Produs"}</p>
+            <p class="text-white font-bold">${item.name}</p>
+            <p class="text-blue-300 font-black text-sm">${formatPrice(item.price)}</p>
+          </div>
+        </a>
+      `
     )
-    .join("");
-
-  recDots.innerHTML = items
-    .map((_, idx) => `<button class="rec-dot${idx === 0 ? " active" : ""}" data-idx="${idx}"></button>`)
-    .join("");
-
-  let index = 0;
-  const moveTo = idx => {
-    const card = recTrackMarquee.querySelector(".slider-card");
-    if (!card) return;
-    const gap = 12;
-    const cardWidth = card.offsetWidth + gap;
-    recTrackMarquee.style.transform = `translateX(-${idx * cardWidth}px)`;
-    recDots.querySelectorAll(".rec-dot").forEach(dot => {
-      dot.classList.toggle("active", Number(dot.dataset.idx) === idx);
-    });
-  };
-
-  const next = () => {
-    index = (index + 1) % items.length;
-    moveTo(index);
-  };
-
-  moveTo(index);
-  if (sliderInterval) clearInterval(sliderInterval);
-  sliderInterval = setInterval(next, 2800);
-
-  recDots.querySelectorAll(".rec-dot").forEach(dot => {
-    dot.addEventListener("click", () => {
-      index = Number(dot.dataset.idx);
-      moveTo(index);
-      if (sliderInterval) clearInterval(sliderInterval);
-      sliderInterval = setInterval(next, 2800);
-    });
-  });
+    .join("")}</div>`;
 }
 
 function boot() {

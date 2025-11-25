@@ -45,6 +45,9 @@ body {
 
 .nav-link:hover {
   color: white;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  padding: 6px 10px;
 }
 
 .tag {
@@ -325,6 +328,51 @@ body {
   border: 1px solid var(--border);
 }
 
+.strip-track {
+  display: flex;
+  gap: 14px;
+  overflow: hidden;
+  position: relative;
+}
+
+.strip-track::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, var(--bg), transparent 12%, transparent 88%, var(--bg));
+  pointer-events: none;
+}
+
+.strip-inner {
+  display: flex;
+  gap: 14px;
+  animation: strip-scroll 14s linear infinite;
+  min-width: max-content;
+}
+
+.strip-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border);
+}
+
+.strip-item img {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+
+@keyframes strip-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
 .carousel {
   display: grid;
   grid-auto-flow: column;
@@ -373,53 +421,6 @@ body {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
-.rec-marquee {
-  position: relative;
-  overflow: hidden;
-  min-height: 320px;
-}
-
-.rec-track-marquee {
-  display: flex;
-  gap: 12px;
-  transition: transform 0.6s ease;
-  will-change: transform;
-}
-
-.rec-track-marquee .slider-card {
-  width: clamp(200px, 30vw, 260px);
-}
-
-.rec-dots {
-  display: flex;
-  gap: 8px;
-  margin-top: 12px;
-  justify-content: center;
-}
-
-.rec-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.2);
-  border: 1px solid var(--border);
-  cursor: pointer;
-}
-
-.rec-dot.active {
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  box-shadow: 0 0 0 4px rgba(79, 139, 255, 0.15);
-}
-
-@media (max-width: 960px) {
-  .rec-track-marquee {
-    gap: 10px;
-  }
-  .rec-track-marquee .slider-card {
-    width: clamp(180px, 80vw, 260px);
-  }
-}
-
 .search-popover {
   position: absolute;
   top: 110%;
@@ -491,6 +492,10 @@ body {
 
 .site-header {
   position: relative;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.35);
 }
 
 .search-wrapper {
