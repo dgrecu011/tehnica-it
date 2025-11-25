@@ -10,7 +10,7 @@
 </head>
 <body class="min-h-screen">
   <div class="max-w-6xl mx-auto px-5 py-6">
-    <header class="glass p-5 flex items-center justify-between gap-3">
+    <header class="glass p-5 flex items-center justify-between gap-3 responsive-header">
       <div>
         <p class="tag mb-2">TechStore Admin</p>
         <h1 class="text-3xl font-bold text-white">Colectia "products" din Firestore</h1>
@@ -26,13 +26,46 @@
       <h2 class="text-xl font-bold text-white flex items-center gap-2"><i class="fa-solid fa-plus"></i> Adauga produs</h2>
       <div class="grid md:grid-cols-2 gap-4">
         <input id="name" class="input" placeholder="Nume produs">
-        <input id="price" type="number" class="input" placeholder="Pret (Lei)">
+        <input id="price" type="number" class="input" placeholder="Pret (€)">
         <input id="category" class="input" placeholder="Categorie (ex: Laptop)">
         <input id="tag" class="input" placeholder="Badge optional (ex: Nou)">
-        <input id="imageFile" type="file" accept="image/*" class="input md:col-span-2">
+        <input id="imageUrl" class="input md:col-span-2" placeholder="URL imagine">
       </div>
       <button id="addProductBtn" class="btn-primary w-full md:w-auto">Salveaza produs</button>
       <p class="text-slate-400 text-sm">Necesita autentificare Firebase. Imaginile merg in Storage la /products/...</p>
+    </section>
+
+    <section class="glass p-6 mt-6 space-y-4">
+      <div class="flex items-center justify-between gap-4">
+        <h2 class="text-xl font-bold text-white flex items-center gap-2"><i class="fa-solid fa-chart-line"></i> Vanzari & comenzi</h2>
+        <button id="refreshOrders" class="btn-ghost flex items-center gap-2"><i class="fa-solid fa-rotate"></i> Reincarca</button>
+      </div>
+      <div class="grid md:grid-cols-2 gap-3">
+        <div class="glass p-4 flex items-center justify-between">
+          <div>
+            <p class="text-sm text-slate-400">Total incasari</p>
+            <p id="totalSales" class="text-2xl font-black text-white">0 €</p>
+          </div>
+          <i class="fa-solid fa-coins text-blue-300 text-2xl"></i>
+        </div>
+        <div class="glass p-4 flex items-center justify-between">
+          <div>
+            <p class="text-sm text-slate-400">Numar comenzi</p>
+            <p id="totalOrders" class="text-2xl font-black text-white">0</p>
+          </div>
+          <i class="fa-solid fa-bag-shopping text-cyan-300 text-2xl"></i>
+        </div>
+      </div>
+      <div id="ordersChart" class="chart-grid"></div>
+      <p class="text-xs text-slate-500">Datele vin din colectia "orders". Sumele folosesc campul total/amount/price sau suma itemelor.</p>
+    </section>
+
+    <section class="glass p-6 mt-6 space-y-4">
+      <div class="flex items-center justify-between">
+        <h2 class="text-xl font-bold text-white">Comenzi</h2>
+        <span class="text-sm text-slate-400">Schimba statusul sau sterge o comanda.</span>
+      </div>
+      <div id="ordersList" class="grid-auto-fit"></div>
     </section>
 
     <section class="mt-10">
@@ -42,6 +75,27 @@
       </div>
       <div id="productsList" class="grid-auto-fit"></div>
     </section>
+  </div>
+
+  <div id="editModal" class="modal">
+    <div class="glass p-6 w-full max-w-lg relative space-y-3">
+      <button id="closeEdit" class="absolute right-4 top-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+      <h3 class="text-xl font-bold text-white">Editeaza produs</h3>
+      <div class="grid md:grid-cols-2 gap-3">
+        <input id="editName" class="input" placeholder="Nume">
+        <input id="editPrice" type="number" class="input" placeholder="Pret">
+        <input id="editCategory" class="input" placeholder="Categorie">
+        <input id="editTag" class="input" placeholder="Badge (optional)">
+        <input id="editImageUrl" class="input md:col-span-2" placeholder="URL imagine">
+      </div>
+      <div class="flex items-center gap-3">
+        <img id="editPreview" class="w-24 h-24 object-cover rounded-xl border border-white/10" alt="Preview">
+        <p class="text-sm text-slate-400">Completeaza URL-ul imaginii produsului.</p>
+      </div>
+      <div class="flex gap-3 justify-end">
+        <button id="saveEdit" class="btn-primary">Salveaza</button>
+      </div>
+    </div>
   </div>
 
   <div id="toast"></div>

@@ -1,5 +1,4 @@
-import { db } from "./firebase.js";
-import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { db, addDoc, collection, doc, getDoc, serverTimestamp } from "./firebase.js";
 
 const cartContainer = document.getElementById("cartContainer");
 const totalPriceEl = document.getElementById("totalPrice");
@@ -9,6 +8,14 @@ const clearCartBtn = document.getElementById("clearCart");
 const toast = document.getElementById("toast");
 
 const cartKey = "cart";
+let cartDetails = [];
+const formatPrice = value =>
+  Number(value || 0).toLocaleString("de-DE", {
+    style: "currency",
+    currency: "EUR",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  });
 
 function showToast(message) {
   toast.textContent = message;
@@ -31,11 +38,12 @@ function saveCart(data) {
 async function loadCart() {
   const cart = normalizeCart();
   cartContainer.innerHTML = "";
+  cartDetails = [];
 
   if (!cart.length) {
     cartContainer.innerHTML = `<div class="text-center text-slate-400 py-10">Cosul este gol.</div>`;
-    subtotalEl.textContent = "0 Lei";
-    totalPriceEl.textContent = "0 Lei";
+    subtotalEl.textContent = formatPrice(0);
+    totalPriceEl.textContent = formatPrice(0);
     return;
   }
 
@@ -46,10 +54,26 @@ async function loadCart() {
     const snap = await getDoc(ref);
     if (!snap.exists()) continue;
 
-    const data = snap.data();
-    const price = Number(data.price || 0);
+    const raw = snap.data() || {};
+    const data = {
+      name: raw.name || raw.title || "Produs",
+      category: raw.category || "Produs",
+      img: raw.img || raw.imageURL || raw.imageUrl || "",
+      price: Number(raw.price || 0)
+    };
+    const price = data.price;
     const lineTotal = price * (item.qty || 1);
     total += lineTotal;
+
+    const detail = {
+      id: item.id,
+      name: data.name,
+      price,
+      qty: item.qty || 1,
+      category: data.category,
+      img: data.img
+    };
+    cartDetails.push(detail);
 
     cartContainer.innerHTML += `
       <div class="product-card flex gap-4 p-4 items-center">
@@ -57,7 +81,7 @@ async function loadCart() {
         <div class="flex-1">
           <p class="text-sm text-slate-400">${data.category || "Produs"}</p>
           <h3 class="text-lg font-bold text-white">${data.name}</h3>
-          <p class="text-blue-300 font-black">${price.toLocaleString("ro-RO")} Lei</p>
+          <p class="text-blue-300 font-black">${formatPrice(price)}</p>
           <div class="flex items-center gap-2 mt-2">
             <button class="btn-ghost px-3" data-dec="${item.id}">-</button>
             <span class="pill">${item.qty || 1} buc</span>
@@ -66,15 +90,15 @@ async function loadCart() {
         </div>
         <div class="text-right">
           <p class="text-slate-400 text-sm">Total</p>
-          <p class="font-bold text-white">${lineTotal.toLocaleString("ro-RO")} Lei</p>
+          <p class="font-bold text-white">${formatPrice(lineTotal)}</p>
           <button class="btn-ghost mt-2" data-remove="${item.id}">Sterge</button>
         </div>
       </div>
     `;
   }
 
-  subtotalEl.textContent = `${total.toLocaleString("ro-RO")} Lei`;
-  totalPriceEl.textContent = `${total.toLocaleString("ro-RO")} Lei`;
+  subtotalEl.textContent = formatPrice(total);
+  totalPriceEl.textContent = formatPrice(total);
 
   cartContainer.querySelectorAll("[data-remove]").forEach(btn => {
     btn.addEventListener("click", () => removeItem(btn.dataset.remove));
@@ -109,9 +133,35 @@ function clearCart() {
   loadCart();
 }
 
+async function checkout() {
+  if (!cartDetails.length) {
+    showToast("Cosul este gol");
+    return;
+  }
+  const total = cartDetails.reduce((sum, item) => sum + item.price * item.qty, 0);
+  checkoutBtn.disabled = true;
+  try {
+    await addDoc(collection(db, "orders"), {
+      items: cartDetails,
+      total,
+      status: "new",
+      createdAt: serverTimestamp(),
+      name: "Guest",
+      email: ""
+    });
+    showToast("Comanda plasata");
+    clearCart();
+  } catch (err) {
+    console.error("Nu pot salva comanda", err);
+    showToast("Eroare la checkout");
+  } finally {
+    checkoutBtn.disabled = false;
+  }
+}
+
 function boot() {
   loadCart();
-  checkoutBtn.addEventListener("click", () => showToast("Checkout demonstrativ"));
+  checkoutBtn.addEventListener("click", checkout);
   clearCartBtn.addEventListener("click", clearCart);
 }
 

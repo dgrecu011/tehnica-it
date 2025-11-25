@@ -6,7 +6,9 @@ import {
   createUserWithEmailAndPassword,
   signOut,
   collection,
-  getDocs
+  getDocs,
+  getDoc,
+  doc
 } from "./firebase.js";
 
 const productsGrid = document.getElementById("productsGrid");
@@ -25,6 +27,15 @@ const authPass = document.getElementById("authPass");
 const userEmail = document.getElementById("userEmail");
 const toAdmin = document.getElementById("toAdmin");
 const newsletterBtn = document.getElementById("newsletterBtn");
+const menuToggle = document.getElementById("menuToggle");
+const mobileNav = document.getElementById("mobileNav");
+const searchInputMobile = document.getElementById("searchInputMobile");
+const authBtnMobile = document.getElementById("authBtnMobile");
+const userEmailMobile = document.getElementById("userEmailMobile");
+const toAdminMobile = document.getElementById("toAdminMobile");
+const profileLink = document.getElementById("profileLink");
+const profileLinkMobile = document.getElementById("profileLinkMobile");
+let isAdminUser = false;
 
 let authMode = "login";
 let products = [];
@@ -32,6 +43,13 @@ const fallbackImg =
   "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' x2='1' y1='0' y2='1'%3E%3Cstop offset='0%' stop-color='%230ea5e9' stop-opacity='0.25'/%3E%3Cstop offset='100%' stop-color='%234f8bff' stop-opacity='0.55'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='800' height='600' fill='%23050915'/%3E%3Crect x='60' y='60' width='680' height='480' rx='28' fill='url(%23g)' opacity='0.6'/%3E%3Ctext x='50%' y='50%' fill='%23e2e8f0' font-family='Arial, sans-serif' font-size='46' font-weight='700' text-anchor='middle'%3EPlaceholder imagine%3C/text%3E%3C/svg%3E";
 
 const cartKey = "cart";
+const formatPrice = value =>
+  Number(value || 0).toLocaleString("de-DE", {
+    style: "currency",
+    currency: "EUR",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  });
 
 function normalizeCart() {
   const raw = JSON.parse(localStorage.getItem(cartKey)) || [];
@@ -81,26 +99,29 @@ function renderProducts(list) {
   }
 
   list.forEach(item => {
-    const price = Number(item.price || 0).toLocaleString("ro-RO");
+    const price = formatPrice(item.price);
     const imgSrc = item.img || fallbackImg;
     productsGrid.innerHTML += `
       <article class="product-card">
         ${item.tag ? `<span class="badge">${item.tag}</span>` : ""}
-        <img class="product-img" src="${imgSrc}" alt="${item.name || "Produs"}" onerror="this.onerror=null;this.src='${fallbackImg}'">
+        <a href="product.html?id=${item.id}" class="block">
+          <img class="product-img" src="${imgSrc}" alt="${item.name || "Produs"}" onerror="this.onerror=null;this.src='${fallbackImg}'">
+        </a>
         <div class="p-5 space-y-3">
           <div class="flex items-start justify-between gap-3">
             <div>
               <p class="text-sm text-slate-400">${item.category || "IT"}</p>
-              <h3 class="text-lg font-bold text-white leading-tight">${item.name || "Produs"}</h3>
+              <a href="product.html?id=${item.id}" class="text-lg font-bold text-white leading-tight hover:text-blue-300 transition">${item.name || "Produs"}</a>
             </div>
             <div class="text-right">
               <p class="text-slate-400 text-xs">Pret</p>
-              <p class="text-xl font-black text-blue-300">${price} Lei</p>
+              <p class="text-xl font-black text-blue-300">${price}</p>
             </div>
           </div>
           <button class="btn-primary w-full flex items-center justify-center gap-2" data-id="${item.id}">
             <i class="fa-solid fa-cart-plus"></i> Adauga in cos
           </button>
+          <a class="btn-ghost w-full text-center block" href="product.html?id=${item.id}">Vezi detalii</a>
         </div>
       </article>
     `;
@@ -115,10 +136,17 @@ async function loadProducts() {
   renderSkeleton();
   try {
     const snapshot = await getDocs(collection(db, "products"));
-    products = snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    }));
+    products = snapshot.docs.map(p => {
+      const data = p.data() || {};
+      return {
+        id: p.id,
+        name: data.name || data.title || "Produs",
+        price: Number(data.price || 0),
+        category: data.category || "IT",
+        tag: data.tag || "",
+        img: data.img || data.imageURL || data.imageUrl || ""
+      };
+    });
     renderProducts(products);
   } catch (err) {
     console.error("Nu pot incarca produsele", err);
@@ -149,6 +177,58 @@ function filterProducts(term) {
   renderProducts(filtered);
 }
 
+function closeMobileNav() {
+  mobileNav?.classList.remove("open");
+}
+
+function initMobileNav() {
+  if (!menuToggle || !mobileNav) return;
+
+  menuToggle.addEventListener("click", () => {
+    mobileNav.classList.toggle("open");
+  });
+
+  mobileNav.querySelectorAll("a").forEach(link => {
+    link.addEventListener("click", () => closeMobileNav());
+  });
+
+  window.addEventListener("resize", () => {
+    if (window.innerWidth >= 768) {
+      closeMobileNav();
+    }
+  });
+}
+
+function setAdminVisibility(isAdmin) {
+  [toAdmin, toAdminMobile].forEach(btn => {
+    if (!btn) return;
+    btn.classList.toggle("hidden", !isAdmin);
+  });
+  const footerAdmin = document.getElementById("footerAdmin");
+  if (footerAdmin) footerAdmin.classList.toggle("hidden", !isAdmin);
+}
+
+function setProfileVisibility(show) {
+  [profileLink, profileLinkMobile].forEach(link => {
+    if (!link) return;
+    link.classList.toggle("hidden", !show);
+  });
+}
+
+async function resolveAdmin(user) {
+  if (!user) return false;
+  try {
+    const snap = await getDoc(doc(db, "admins", user.uid));
+    if (snap.exists() && (snap.data()?.role || "").toLowerCase() === "admin") {
+      return true;
+    }
+    return false;
+  } catch (err) {
+    console.error("Nu pot verifica rolul admin", err);
+    return false;
+  }
+}
+
 function openAuth(mode) {
   authMode = mode;
   tabLogin.classList.toggle("btn-primary", mode === "login");
@@ -163,12 +243,13 @@ function closeAuthModal() {
 }
 
 function initAuth() {
-  tabLogin.addEventListener("click", () => openAuth("login"));
-  tabRegister.addEventListener("click", () => openAuth("register"));
-  authBtn.addEventListener("click", () => openAuth("login"));
-  closeAuth.addEventListener("click", closeAuthModal);
+  tabLogin?.addEventListener("click", () => openAuth("login"));
+  tabRegister?.addEventListener("click", () => openAuth("register"));
+  authBtn?.addEventListener("click", () => openAuth("login"));
+  authBtnMobile?.addEventListener("click", () => openAuth("login"));
+  closeAuth?.addEventListener("click", closeAuthModal);
 
-  submitAuth.addEventListener("click", async () => {
+  submitAuth?.addEventListener("click", async () => {
     const email = authEmail.value;
     const pass = authPass.value;
     if (!email || !pass) {
@@ -191,24 +272,50 @@ function initAuth() {
     }
   });
 
-  onAuthStateChanged(auth, user => {
+  onAuthStateChanged(auth, async user => {
+    isAdminUser = await resolveAdmin(user);
     if (user) {
-      userEmail.textContent = user.email;
-      authBtn.textContent = "Logout";
-      authBtn.onclick = async () => {
-        await signOut(auth);
-        showToast("Delogat");
-      };
+      if (userEmail) userEmail.textContent = user.email;
+      if (userEmailMobile) userEmailMobile.textContent = user.email;
+      setProfileVisibility(true);
     } else {
-      userEmail.textContent = "Conecteaza-te";
-      authBtn.textContent = "Autentificare";
-      authBtn.onclick = () => openAuth("login");
+      if (userEmail) userEmail.textContent = "Conecteaza-te";
+      if (userEmailMobile) userEmailMobile.textContent = "Profil";
+      setProfileVisibility(false);
     }
+
+    const setAuthButton = btn => {
+      if (!btn) return;
+      if (user) {
+        btn.textContent = "Logout";
+        btn.onclick = async () => {
+          await signOut(auth);
+          showToast("Delogat");
+          closeMobileNav();
+          setAdminVisibility(false);
+          setProfileVisibility(false);
+        };
+      } else {
+        btn.textContent = "Autentificare";
+        btn.onclick = () => {
+          openAuth("login");
+          closeMobileNav();
+          setAdminVisibility(false);
+          setProfileVisibility(false);
+        };
+      }
+    };
+
+    setAuthButton(authBtn);
+    setAuthButton(authBtnMobile);
+    setAdminVisibility(isAdminUser);
   });
 }
 
 function initSearch() {
-  searchInput?.addEventListener("input", e => filterProducts(e.target.value));
+  const onInput = e => filterProducts(e.target.value);
+  searchInput?.addEventListener("input", onInput);
+  searchInputMobile?.addEventListener("input", onInput);
 }
 
 function initReload() {
@@ -220,14 +327,22 @@ function initNewsletter() {
 }
 
 function initShortcuts() {
-  toAdmin?.addEventListener("click", () => (window.location = "admin.html"));
+  [toAdmin, toAdminMobile].forEach(btn => {
+    btn?.addEventListener("click", () => {
+      window.location = "admin.html";
+      closeMobileNav();
+    });
+  });
 }
 
 function boot() {
+  setAdminVisibility(false);
+  setProfileVisibility(false);
   updateCartBadge();
   renderSkeleton();
   loadProducts();
   initAuth();
+  initMobileNav();
   initSearch();
   initReload();
   initNewsletter();
