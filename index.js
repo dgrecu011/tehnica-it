@@ -28,6 +28,8 @@ const newsletterBtn = document.getElementById("newsletterBtn");
 
 let authMode = "login";
 let products = [];
+const fallbackImg =
+  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' x2='1' y1='0' y2='1'%3E%3Cstop offset='0%' stop-color='%230ea5e9' stop-opacity='0.25'/%3E%3Cstop offset='100%' stop-color='%234f8bff' stop-opacity='0.55'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='800' height='600' fill='%23050915'/%3E%3Crect x='60' y='60' width='680' height='480' rx='28' fill='url(%23g)' opacity='0.6'/%3E%3Ctext x='50%' y='50%' fill='%23e2e8f0' font-family='Arial, sans-serif' font-size='46' font-weight='700' text-anchor='middle'%3EPlaceholder imagine%3C/text%3E%3C/svg%3E";
 
 const cartKey = "cart";
 
@@ -80,10 +82,11 @@ function renderProducts(list) {
 
   list.forEach(item => {
     const price = Number(item.price || 0).toLocaleString("ro-RO");
+    const imgSrc = item.img || fallbackImg;
     productsGrid.innerHTML += `
       <article class="product-card">
         ${item.tag ? `<span class="badge">${item.tag}</span>` : ""}
-        <img class="product-img" src="${item.img}" alt="${item.name || "Produs"}">
+        <img class="product-img" src="${imgSrc}" alt="${item.name || "Produs"}" onerror="this.onerror=null;this.src='${fallbackImg}'">
         <div class="p-5 space-y-3">
           <div class="flex items-start justify-between gap-3">
             <div>
