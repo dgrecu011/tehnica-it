@@ -391,6 +391,138 @@ body {
   to { transform: translateX(-50%); }
 }
 
+.floating-nav {
+  position: fixed;
+  right: 20px;
+  bottom: 80px;
+  display: flex;
+  gap: 10px;
+  background: rgba(10, 16, 28, 0.9);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 10px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+  z-index: 40;
+}
+
+.floating-nav a,
+.floating-nav button {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border);
+  color: white;
+}
+
+.floating-nav .badge-dot {
+  top: 4px;
+  right: 6px;
+}
+
+@media (max-width: 767px) {
+  .floating-nav {
+    display: none;
+  }
+}
+
+.best-strip {
+  overflow: auto;
+  padding-bottom: 6px;
+}
+
+.best-inner {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 220px;
+  gap: 12px;
+}
+
+.best-card {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 10px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+}
+
+.best-card img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+
+.promo-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.chip {
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text);
+  transition: 0.2s ease;
+}
+
+.chip:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.testimonial {
+  padding: 14px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+}
+
+.blog-card {
+  padding: 14px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border);
+}
+
+.faq {
+  display: grid;
+  gap: 8px;
+}
+
+.faq-q {
+  width: 100%;
+  text-align: left;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.04);
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.faq-a {
+  display: none;
+  padding: 10px 12px;
+  border-left: 2px solid var(--accent);
+  color: var(--text);
+}
+
+.faq-a.open {
+  display: block;
+}
 .carousel {
   display: grid;
   grid-auto-flow: column;
