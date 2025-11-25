@@ -18,8 +18,11 @@
 
 body {
   font-family: "Space Grotesk", "Segoe UI", sans-serif;
-  background: radial-gradient(circle at 20% 20%, rgba(79, 139, 255, 0.08), transparent 30%),
-    radial-gradient(circle at 80% 0%, rgba(14, 165, 233, 0.08), transparent 28%),
+  background:
+    linear-gradient(135deg, rgba(20, 31, 60, 0.75), rgba(5, 9, 21, 0.92)),
+    radial-gradient(circle at 20% 20%, rgba(79, 139, 255, 0.12), transparent 30%),
+    radial-gradient(circle at 80% 0%, rgba(14, 165, 233, 0.12), transparent 28%),
+    url("https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1600&q=80") center/cover fixed,
     var(--bg);
   color: var(--text);
   scroll-behavior: smooth;
@@ -320,6 +323,101 @@ body {
   object-fit: cover;
   border-radius: 18px;
   border: 1px solid var(--border);
+}
+
+.carousel {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: clamp(180px, 28vw, 220px);
+  gap: 14px;
+  overflow-x: auto;
+  padding: 2px 2px 6px;
+  scroll-snap-type: x mandatory;
+}
+.carousel-slider {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  overflow: hidden;
+  min-height: 320px;
+}
+
+.slider-card {
+  width: clamp(240px, 40vw, 320px);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.03);
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+  position: relative;
+  animation: fadeSlide 0.5s ease;
+}
+
+.slider-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.slider-card .badge {
+  top: 12px;
+  right: 12px;
+}
+
+.slider-card .card-body {
+  padding: 12px;
+}
+
+@keyframes fadeSlide {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.rec-marquee {
+  position: relative;
+  overflow: hidden;
+  min-height: 320px;
+}
+
+.rec-track-marquee {
+  display: flex;
+  gap: 12px;
+  transition: transform 0.6s ease;
+  will-change: transform;
+}
+
+.rec-track-marquee .slider-card {
+  width: clamp(200px, 30vw, 260px);
+}
+
+.rec-dots {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  justify-content: center;
+}
+
+.rec-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--border);
+  cursor: pointer;
+}
+
+.rec-dot.active {
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  box-shadow: 0 0 0 4px rgba(79, 139, 255, 0.15);
+}
+
+@media (max-width: 960px) {
+  .rec-track-marquee {
+    gap: 10px;
+  }
+  .rec-track-marquee .slider-card {
+    width: clamp(180px, 80vw, 260px);
+  }
 }
 
 .search-popover {
