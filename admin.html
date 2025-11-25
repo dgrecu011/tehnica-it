@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin | TechStore</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="min-h-screen">
+  <div class="max-w-6xl mx-auto px-5 py-6">
+    <header class="glass p-5 flex items-center justify-between gap-3">
+      <div>
+        <p class="tag mb-2">TechStore Admin</p>
+        <h1 class="text-3xl font-bold text-white">Colectia "products" din Firestore</h1>
+        <p class="text-slate-400 text-sm">Adauga / editeaza produse + upload imagini in Firebase Storage.</p>
+      </div>
+      <div class="flex gap-2">
+        <a href="index.html" class="btn-ghost">Intoarce-te la magazin</a>
+        <a href="profile.html" class="btn-ghost">Profil</a>
+      </div>
+    </header>
+
+    <section class="glass p-6 mt-6 space-y-4">
+      <h2 class="text-xl font-bold text-white flex items-center gap-2"><i class="fa-solid fa-plus"></i> Adauga produs</h2>
+      <div class="grid md:grid-cols-2 gap-4">
+        <input id="name" class="input" placeholder="Nume produs">
+        <input id="price" type="number" class="input" placeholder="Pret (Lei)">
+        <input id="category" class="input" placeholder="Categorie (ex: Laptop)">
+        <input id="tag" class="input" placeholder="Badge optional (ex: Nou)">
+        <input id="imageFile" type="file" accept="image/*" class="input md:col-span-2">
+      </div>
+      <button id="addProductBtn" class="btn-primary w-full md:w-auto">Salveaza produs</button>
+      <p class="text-slate-400 text-sm">Necesita autentificare Firebase. Imaginile merg in Storage la /products/...</p>
+    </section>
+
+    <section class="mt-10">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-xl font-bold text-white">Produse existente</h2>
+        <button id="refreshProducts" class="btn-ghost flex items-center gap-2"><i class="fa-solid fa-rotate"></i> Reincarca</button>
+      </div>
+      <div id="productsList" class="grid-auto-fit"></div>
+    </section>
+  </div>
+
+  <div id="toast"></div>
+  <script type="module" src="admin.js"></script>
+</body>
+</html>

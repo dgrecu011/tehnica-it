@@ -1,0 +1,234 @@
+import {
+  auth,
+  db,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut,
+  collection,
+  getDocs
+} from "./firebase.js";
+
+const productsGrid = document.getElementById("productsGrid");
+const cartCount = document.getElementById("cartCount");
+const toast = document.getElementById("toast");
+const searchInput = document.getElementById("searchInput");
+const reloadBtn = document.getElementById("reloadProducts");
+const authBtn = document.getElementById("authBtn");
+const authModal = document.getElementById("authModal");
+const closeAuth = document.getElementById("closeAuth");
+const tabLogin = document.getElementById("tabLogin");
+const tabRegister = document.getElementById("tabRegister");
+const submitAuth = document.getElementById("submitAuth");
+const authEmail = document.getElementById("authEmail");
+const authPass = document.getElementById("authPass");
+const userEmail = document.getElementById("userEmail");
+const toAdmin = document.getElementById("toAdmin");
+const newsletterBtn = document.getElementById("newsletterBtn");
+
+let authMode = "login";
+let products = [];
+
+const cartKey = "cart";
+
+function normalizeCart() {
+  const raw = JSON.parse(localStorage.getItem(cartKey)) || [];
+  if (raw.length && typeof raw[0] === "string") {
+    return raw.map(id => ({ id, qty: 1 }));
+  }
+  return raw;
+}
+
+function saveCart(data) {
+  localStorage.setItem(cartKey, JSON.stringify(data));
+}
+
+function updateCartBadge() {
+  const cart = normalizeCart();
+  const total = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
+  cartCount.textContent = total;
+}
+
+function showToast(message) {
+  toast.textContent = message;
+  toast.style.display = "block";
+  setTimeout(() => (toast.style.display = "none"), 2200);
+}
+
+function renderSkeleton() {
+  productsGrid.innerHTML = "";
+  for (let i = 0; i < 6; i++) {
+    productsGrid.innerHTML += `
+      <div class="product-card p-5">
+        <div class="skeleton product-img"></div>
+        <div class="mt-4 space-y-3">
+          <div class="skeleton h-4 w-2/3"></div>
+          <div class="skeleton h-4 w-1/2"></div>
+          <div class="skeleton h-10 w-full"></div>
+        </div>
+      </div>
+    `;
+  }
+}
+
+function renderProducts(list) {
+  productsGrid.innerHTML = "";
+  if (!list.length) {
+    productsGrid.innerHTML = `<div class="glass p-6 text-center text-slate-400 col-span-full">Nu exista produse in Firestore inca. Adauga din admin.</div>`;
+    return;
+  }
+
+  list.forEach(item => {
+    const price = Number(item.price || 0).toLocaleString("ro-RO");
+    productsGrid.innerHTML += `
+      <article class="product-card">
+        ${item.tag ? `<span class="badge">${item.tag}</span>` : ""}
+        <img class="product-img" src="${item.img}" alt="${item.name || "Produs"}">
+        <div class="p-5 space-y-3">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <p class="text-sm text-slate-400">${item.category || "IT"}</p>
+              <h3 class="text-lg font-bold text-white leading-tight">${item.name || "Produs"}</h3>
+            </div>
+            <div class="text-right">
+              <p class="text-slate-400 text-xs">Pret</p>
+              <p class="text-xl font-black text-blue-300">${price} Lei</p>
+            </div>
+          </div>
+          <button class="btn-primary w-full flex items-center justify-center gap-2" data-id="${item.id}">
+            <i class="fa-solid fa-cart-plus"></i> Adauga in cos
+          </button>
+        </div>
+      </article>
+    `;
+  });
+
+  productsGrid.querySelectorAll("button[data-id]").forEach(btn => {
+    btn.addEventListener("click", () => addToCart(btn.dataset.id));
+  });
+}
+
+async function loadProducts() {
+  renderSkeleton();
+  try {
+    const snapshot = await getDocs(collection(db, "products"));
+    products = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+    renderProducts(products);
+  } catch (err) {
+    console.error("Nu pot incarca produsele", err);
+    showToast("Eroare la incarcarea produselor");
+    renderProducts([]);
+  }
+}
+
+function addToCart(id) {
+  const cart = normalizeCart();
+  const existing = cart.find(item => item.id === id);
+  if (existing) {
+    existing.qty = (existing.qty || 1) + 1;
+  } else {
+    cart.push({ id, qty: 1 });
+  }
+  saveCart(cart);
+  updateCartBadge();
+  showToast("Produs adaugat in cos");
+}
+
+function filterProducts(term) {
+  const t = term.toLowerCase();
+  const filtered = products.filter(p =>
+    (p.name || "").toLowerCase().includes(t) ||
+    (p.category || "").toLowerCase().includes(t)
+  );
+  renderProducts(filtered);
+}
+
+function openAuth(mode) {
+  authMode = mode;
+  tabLogin.classList.toggle("btn-primary", mode === "login");
+  tabLogin.classList.toggle("btn-ghost", mode !== "login");
+  tabRegister.classList.toggle("btn-primary", mode === "register");
+  tabRegister.classList.toggle("btn-ghost", mode !== "register");
+  authModal.classList.add("open");
+}
+
+function closeAuthModal() {
+  authModal.classList.remove("open");
+}
+
+function initAuth() {
+  tabLogin.addEventListener("click", () => openAuth("login"));
+  tabRegister.addEventListener("click", () => openAuth("register"));
+  authBtn.addEventListener("click", () => openAuth("login"));
+  closeAuth.addEventListener("click", closeAuthModal);
+
+  submitAuth.addEventListener("click", async () => {
+    const email = authEmail.value;
+    const pass = authPass.value;
+    if (!email || !pass) {
+      showToast("Completeaza email si parola");
+      return;
+    }
+
+    try {
+      if (authMode === "login") {
+        await signInWithEmailAndPassword(auth, email, pass);
+        showToast("Logat");
+      } else {
+        await createUserWithEmailAndPassword(auth, email, pass);
+        showToast("Cont creat");
+      }
+      closeAuthModal();
+    } catch (err) {
+      console.error(err);
+      showToast("Eroare la autentificare");
+    }
+  });
+
+  onAuthStateChanged(auth, user => {
+    if (user) {
+      userEmail.textContent = user.email;
+      authBtn.textContent = "Logout";
+      authBtn.onclick = async () => {
+        await signOut(auth);
+        showToast("Delogat");
+      };
+    } else {
+      userEmail.textContent = "Conecteaza-te";
+      authBtn.textContent = "Autentificare";
+      authBtn.onclick = () => openAuth("login");
+    }
+  });
+}
+
+function initSearch() {
+  searchInput?.addEventListener("input", e => filterProducts(e.target.value));
+}
+
+function initReload() {
+  reloadBtn?.addEventListener("click", loadProducts);
+}
+
+function initNewsletter() {
+  newsletterBtn?.addEventListener("click", () => showToast("Salvat (demo)"));
+}
+
+function initShortcuts() {
+  toAdmin?.addEventListener("click", () => (window.location = "admin.html"));
+}
+
+function boot() {
+  updateCartBadge();
+  renderSkeleton();
+  loadProducts();
+  initAuth();
+  initSearch();
+  initReload();
+  initNewsletter();
+  initShortcuts();
+}
+
+boot();

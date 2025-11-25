@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cos | TechStore</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="min-h-screen">
+  <div class="max-w-5xl mx-auto px-5 py-6">
+    <header class="flex items-center justify-between glass p-5 mb-6">
+      <div>
+        <p class="tag mb-2">TechStore</p>
+        <h1 class="text-3xl font-bold text-white">Cosul tau</h1>
+        <p class="text-slate-400 text-sm">Produsele se salveaza in localStorage. Preturile vin din Firestore live.</p>
+      </div>
+      <a href="index.html" class="btn-ghost">Continua cumparaturile</a>
+    </header>
+
+    <div class="grid md:grid-cols-3 gap-5">
+      <div class="md:col-span-2 glass p-5 space-y-4" id="cartContainer"></div>
+      <div class="glass p-5 space-y-4">
+        <div class="flex items-center justify-between">
+          <p class="text-slate-400">Subtotal</p>
+          <p class="font-bold text-white" id="subtotal">0 Lei</p>
+        </div>
+        <div class="flex items-center justify-between">
+          <p class="text-slate-400">Transport</p>
+          <p class="font-bold text-white">Gratis</p>
+        </div>
+        <div class="flex items-center justify-between text-xl font-black text-blue-300">
+          <p>Total</p>
+          <p id="totalPrice">0 Lei</p>
+        </div>
+        <button id="checkoutBtn" class="btn-primary w-full flex items-center justify-center gap-2"><i class="fa-solid fa-lock"></i> Checkout demo</button>
+        <button id="clearCart" class="btn-ghost w-full">Goleste cosul</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast"></div>
+  <script type="module" src="order.js"></script>
+</body>
+</html>

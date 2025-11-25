@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TechStore | Magazin IT cu Firebase</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="min-h-screen">
+  <div class="max-w-7xl mx-auto px-5 py-6">
+    <header class="flex items-center justify-between gap-4 glass px-5 py-4 sticky top-4 z-40">
+      <div class="flex items-center gap-3">
+        <div class="h-11 w-11 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center text-white font-black text-xl shadow-lg">T</div>
+        <div>
+          <p class="font-bold text-xl text-white">TechStore</p>
+          <p class="text-sm text-slate-400">Hardware. Gaming. Creators.</p>
+        </div>
+      </div>
+
+      <nav class="hidden md:flex items-center gap-5 text-slate-300 text-sm font-medium">
+        <a class="nav-link" href="#produse">Produse</a>
+        <a class="nav-link" href="#categorii">Categorii</a>
+        <a class="nav-link" href="#beneficii">Avantaje</a>
+        <a class="nav-link" href="#contact">Contact</a>
+      </nav>
+
+      <div class="flex items-center gap-3 w-full md:w-auto">
+        <div class="hidden md:flex items-center gap-2 flex-1">
+          <i class="fa-solid fa-magnifying-glass text-slate-400"></i>
+          <input id="searchInput" class="input" placeholder="Cauta laptopuri, monitoare, componente...">
+        </div>
+        <a href="profile.html" class="btn-ghost hidden md:inline-flex items-center gap-2">
+          <i class="fa-regular fa-user"></i>
+          <span id="userEmail">Conecteaza-te</span>
+        </a>
+        <a href="order.html" class="btn-ghost inline-flex items-center gap-2 relative">
+          <i class="fa-solid fa-cart-shopping"></i>
+          <span>Cos</span>
+          <span id="cartCount" class="absolute -top-2 -right-2 bg-blue-500 text-xs px-2 py-0.5 rounded-full font-bold">0</span>
+        </a>
+        <button id="authBtn" class="btn-primary hidden md:inline-flex">Autentificare</button>
+      </div>
+    </header>
+
+    <section class="hero-grid mt-8 items-center">
+      <div class="glass p-8 lg:p-10">
+        <span class="tag mb-5 inline-flex"><i class="fa-solid fa-bolt"></i> Lansari rapide</span>
+        <h1 class="text-4xl lg:text-5xl font-black leading-tight text-white">
+          Magazin IT conectat la Firebase. Produse live. Cos salvat local.
+        </h1>
+        <p class="text-slate-300 mt-4 text-lg">
+          Stocurile vin din Firestore, imaginile din Storage, iar autentificarea se face prin Firebase Auth.
+          Totul gata de folosit pentru un magazin real.
+        </p>
+        <div class="flex flex-wrap gap-3 mt-7">
+          <a href="#produse" class="btn-primary inline-flex items-center gap-2">Vezi produsele <i class="fa-solid fa-arrow-right"></i></a>
+          <button id="toAdmin" class="btn-ghost inline-flex items-center gap-2">Panou admin</button>
+        </div>
+        <div class="flex flex-wrap gap-3 mt-8 text-sm text-slate-400">
+          <span class="pill"><i class="fa-solid fa-shield-halved text-blue-400"></i> Auth cu email</span>
+          <span class="pill"><i class="fa-solid fa-database text-cyan-400"></i> Firestore live</span>
+          <span class="pill"><i class="fa-solid fa-cloud-arrow-up text-blue-400"></i> Storage imagini</span>
+        </div>
+      </div>
+
+      <div class="grid gap-4">
+        <div class="glass p-6 flex items-center justify-between">
+          <div>
+            <p class="text-slate-400 text-sm">Best-sellers</p>
+            <p class="text-2xl font-bold text-white">GPU-uri si laptopuri</p>
+            <p class="text-slate-300 text-sm">Livrare in 24h</p>
+          </div>
+          <img class="h-24 rounded-2xl border border-white/10" src="https://images.unsplash.com/photo-1587202372616-b43abea06c2c?auto=format&fit=crop&w=600&q=80" alt="Laptop">
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div class="glass p-4 flex flex-col justify-between">
+            <p class="text-sm text-slate-400">Set complet</p>
+            <p class="text-xl font-bold">Gaming Desk</p>
+            <img class="rounded-xl mt-2 border border-white/10" src="https://images.unsplash.com/photo-1484704849700-f032a568e944?auto=format&fit=crop&w=500&q=80" alt="Desk">
+          </div>
+          <div class="glass p-4 flex flex-col justify-between">
+            <p class="text-sm text-slate-400">Studio</p>
+            <p class="text-xl font-bold">Editare & 3D</p>
+            <img class="rounded-xl mt-2 border border-white/10" src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=500&q=80" alt="Audio">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="glass p-5 mt-10 flex items-center gap-6 overflow-x-auto" aria-label="Branduri">
+      <img class="h-8 opacity-70 hover:opacity-100 transition" src="https://upload.wikimedia.org/wikipedia/commons/4/44/Lenovo_logo_2015.svg" alt="Lenovo">
+      <img class="h-8 opacity-70 hover:opacity-100 transition" src="https://upload.wikimedia.org/wikipedia/commons/3/3e/Dell_Logo.svg" alt="Dell">
+      <img class="h-8 opacity-70 hover:opacity-100 transition" src="https://upload.wikimedia.org/wikipedia/commons/6/6a/Intel_logo_%282020%2C_dark_blue%29.svg" alt="Intel">
+      <img class="h-8 opacity-70 hover:opacity-100 transition" src="https://upload.wikimedia.org/wikipedia/commons/2/21/AMD_Logo.svg" alt="AMD">
+      <img class="h-8 opacity-70 hover:opacity-100 transition" src="https://upload.wikimedia.org/wikipedia/commons/a/a4/Nvidia_logo.svg" alt="Nvidia">
+      <img class="h-8 opacity-70 hover:opacity-100 transition" src="https://upload.wikimedia.org/wikipedia/commons/9/92/AsusTek_logo.svg" alt="Asus">
+    </section>
+
+    <section id="categorii" class="mt-12">
+      <div class="flex items-center justify-between mb-5">
+        <div>
+          <p class="tag mb-2">Catalog TechStore</p>
+          <h2 class="text-3xl font-bold text-white">Categorii rapide</h2>
+        </div>
+        <a href="#produse" class="text-sm text-blue-300">Vezi toate produsele</a>
+      </div>
+      <div class="grid-auto-fit">
+        <div class="glass p-5 flex items-center gap-4">
+          <i class="fa-solid fa-laptop text-2xl text-blue-400"></i>
+          <div>
+            <p class="font-bold text-white">Laptopuri</p>
+            <p class="text-slate-400 text-sm">Ultrabook, gaming, business</p>
+          </div>
+        </div>
+        <div class="glass p-5 flex items-center gap-4">
+          <i class="fa-solid fa-gamepad text-2xl text-cyan-400"></i>
+          <div>
+            <p class="font-bold text-white">Gaming</p>
+            <p class="text-slate-400 text-sm">PC-uri, monitoare, periferice</p>
+          </div>
+        </div>
+        <div class="glass p-5 flex items-center gap-4">
+          <i class="fa-solid fa-microchip text-2xl text-blue-300"></i>
+          <div>
+            <p class="font-bold text-white">Componente</p>
+            <p class="text-slate-400 text-sm">GPU, CPU, RAM, SSD</p>
+          </div>
+        </div>
+        <div class="glass p-5 flex items-center gap-4">
+          <i class="fa-solid fa-briefcase text-2xl text-emerald-300"></i>
+          <div>
+            <p class="font-bold text-white">Office</p>
+            <p class="text-slate-400 text-sm">Workstation si accesorii</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="produse" class="mt-14">
+      <div class="flex items-center justify-between mb-5">
+        <div>
+          <p class="tag mb-2">Live din Firebase</p>
+          <h2 class="text-3xl font-bold text-white">Produse recomandate</h2>
+          <p class="text-slate-400">Datele vin din colectia "products" din Firestore. Butonul adauga in cos salveaza in localStorage.</p>
+        </div>
+        <button id="reloadProducts" class="btn-ghost flex items-center gap-2"><i class="fa-solid fa-rotate"></i> Reincarca</button>
+      </div>
+      <div id="productsGrid" class="grid-auto-fit"></div>
+    </section>
+
+    <section id="beneficii" class="grid md:grid-cols-3 gap-4 glass p-6 mt-14">
+      <div class="flex gap-3">
+        <div class="h-12 w-12 rounded-2xl bg-white/5 flex items-center justify-center text-blue-300"><i class="fa-solid fa-truck-fast"></i></div>
+        <div>
+          <p class="font-bold text-white">Livrare in 24h</p>
+          <p class="text-slate-400 text-sm">Warehouse in Bucuresti, curier rapid.</p>
+        </div>
+      </div>
+      <div class="flex gap-3">
+        <div class="h-12 w-12 rounded-2xl bg-white/5 flex items-center justify-center text-blue-300"><i class="fa-solid fa-shield-halved"></i></div>
+        <div>
+          <p class="font-bold text-white">Garantie 24 luni</p>
+          <p class="text-slate-400 text-sm">Produse noi, retur 30 de zile.</p>
+        </div>
+      </div>
+      <div class="flex gap-3">
+        <div class="h-12 w-12 rounded-2xl bg-white/5 flex items-center justify-center text-blue-300"><i class="fa-solid fa-headset"></i></div>
+        <div>
+          <p class="font-bold text-white">Support tehnic</p>
+          <p class="text-slate-400 text-sm">Consultanta la configuratii si upgrade.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="glass mt-14 p-8 lg:p-10" id="contact">
+      <div class="grid lg:grid-cols-2 gap-6 items-center">
+        <div>
+          <p class="tag mb-3">Newsletter</p>
+          <h3 class="text-3xl font-bold text-white">Ramai la curent cu ofertele TechStore</h3>
+          <p class="text-slate-400 mt-3">Primeste reduceri si noutati hardware. Formularul este mock, pentru demo.</p>
+          <div class="flex flex-col sm:flex-row gap-3 mt-5">
+            <input id="newsletterEmail" class="input flex-1" placeholder="you@example.com">
+            <button id="newsletterBtn" class="btn-primary">Aboneaza-ma</button>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div class="glass p-4 text-center">
+            <p class="text-3xl font-black text-blue-300">24/7</p>
+            <p class="text-slate-400 text-sm">Suport</p>
+          </div>
+          <div class="glass p-4 text-center">
+            <p class="text-3xl font-black text-blue-300">30k+</p>
+            <p class="text-slate-400 text-sm">Livrari</p>
+          </div>
+          <div class="glass p-4 text-center">
+            <p class="text-3xl font-black text-blue-300">100%</p>
+            <p class="text-slate-400 text-sm">Secure checkout</p>
+          </div>
+          <div class="glass p-4 text-center">
+            <p class="text-3xl font-black text-blue-300">4.9</p>
+            <p class="text-slate-400 text-sm">Rating clienti</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="mt-14 border-t border-white/10 py-8 text-slate-400 text-sm">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div>
+          <p class="font-bold text-white">TechStore</p>
+          <p>Magazin IT powered by Firebase.</p>
+        </div>
+        <div class="flex gap-4">
+          <a class="hover:text-white" href="#produse">Produse</a>
+          <a class="hover:text-white" href="#beneficii">Avantaje</a>
+          <a class="hover:text-white" href="admin.html">Admin</a>
+          <a class="hover:text-white" href="profile.html">Profil</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <div id="authModal" class="modal">
+    <div class="glass p-7 w-full max-w-md relative">
+      <button id="closeAuth" class="absolute right-4 top-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+      <div class="flex gap-2 mb-5">
+        <button id="tabLogin" class="btn-primary flex-1 text-center">Autentificare</button>
+        <button id="tabRegister" class="btn-ghost flex-1 text-center">Cont nou</button>
+      </div>
+      <div class="space-y-3">
+        <input id="authEmail" class="input" type="email" placeholder="Email">
+        <input id="authPass" class="input" type="password" placeholder="Parola">
+        <button id="submitAuth" class="btn-primary w-full">Continua</button>
+        <p class="text-sm text-slate-400">Auth foloseste Firebase email/password. Dupa login, vezi profilul si panoul admin.</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast"></div>
+  <script type="module" src="index.js"></script>
+</body>
+</html>
