@@ -290,6 +290,20 @@ function setProfileVisibility(show) {
     if (!link) return;
     link.classList.toggle("hidden", !show);
   });
+  if (!bottomProfile) return;
+  const label = bottomProfile.querySelector("span");
+  if (show) {
+    if (label) label.textContent = "Profil";
+    bottomProfile.href = "profile.html";
+    bottomProfile.onclick = null;
+  } else {
+    if (label) label.textContent = "Autentificare";
+    bottomProfile.href = "#";
+    bottomProfile.onclick = e => {
+      e.preventDefault();
+      openAuth("login");
+    };
+  }
 }
 
 async function resolveAdmin(user) {
@@ -351,13 +365,16 @@ function initAuth() {
 
   onAuthStateChanged(auth, async user => {
     isAdminUser = await resolveAdmin(user);
+    const bottomProfileLabel = bottomProfile?.querySelector("span");
     if (user) {
       if (userEmail) userEmail.textContent = user.email;
       if (userEmailMobile) userEmailMobile.textContent = user.email;
+      if (bottomProfileLabel) bottomProfileLabel.textContent = "Profil";
       setProfileVisibility(true);
     } else {
       if (userEmail) userEmail.textContent = "Conecteaza-te";
       if (userEmailMobile) userEmailMobile.textContent = "Profil";
+      if (bottomProfileLabel) bottomProfileLabel.textContent = "Profil";
       setProfileVisibility(false);
     }
 

@@ -29,6 +29,10 @@
         <input id="price" type="number" class="input" placeholder="Pret (€)">
         <input id="category" class="input" placeholder="Categorie (ex: Laptop)">
         <input id="tag" class="input" placeholder="Badge optional (ex: Nou)">
+        <input id="stock" type="number" class="input" placeholder="Stoc">
+        <label class="flex items-center gap-2 text-slate-300">
+          <input id="active" type="checkbox" checked> Activ
+        </label>
         <input id="imageUrl" class="input md:col-span-2" placeholder="URL imagine">
       </div>
       <button id="addProductBtn" class="btn-primary w-full md:w-auto">Salveaza produs</button>
@@ -69,9 +73,18 @@
     </section>
 
     <section class="mt-10">
-      <div class="flex items-center justify-between mb-4">
+      <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between mb-4">
         <h2 class="text-xl font-bold text-white">Produse existente</h2>
-        <button id="refreshProducts" class="btn-ghost flex items-center gap-2"><i class="fa-solid fa-rotate"></i> Reincarca</button>
+        <div class="flex flex-wrap gap-2 items-center">
+          <input id="searchProducts" class="input w-52" placeholder="Cauta produs...">
+          <select id="sortProducts" class="input w-48">
+            <option value="recent">Recente</option>
+            <option value="priceAsc">Pret ↑</option>
+            <option value="priceDesc">Pret ↓</option>
+            <option value="name">Nume A-Z</option>
+          </select>
+          <button id="refreshProducts" class="btn-ghost flex items-center gap-2"><i class="fa-solid fa-rotate"></i> Reincarca</button>
+        </div>
       </div>
       <div id="productsList" class="grid-auto-fit"></div>
     </section>

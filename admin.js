@@ -16,9 +16,13 @@ const priceInput = document.getElementById("price");
 const categoryInput = document.getElementById("category");
 const tagInput = document.getElementById("tag");
 const imageUrlInput = document.getElementById("imageUrl");
+const stockInput = document.getElementById("stock");
+const activeInput = document.getElementById("active");
 const addBtn = document.getElementById("addProductBtn");
 const refreshBtn = document.getElementById("refreshProducts");
 const list = document.getElementById("productsList");
+const searchProducts = document.getElementById("searchProducts");
+const sortProducts = document.getElementById("sortProducts");
 const toast = document.getElementById("toast");
 const editModal = document.getElementById("editModal");
 const editName = document.getElementById("editName");
@@ -35,6 +39,7 @@ const ordersChart = document.getElementById("ordersChart");
 const refreshOrders = document.getElementById("refreshOrders");
 const ordersList = document.getElementById("ordersList");
 const productCache = new Map();
+let productsAll = [];
 const STATUS_OPTIONS = [
   { value: "new", label: "Noua" },
   { value: "processing", label: "In lucru" },
@@ -72,6 +77,8 @@ async function addProduct() {
   const category = categoryInput.value.trim() || "IT";
   const tag = tagInput.value.trim();
   const img = imageUrlInput.value.trim();
+  const stock = Number(stockInput.value || 0);
+  const active = !!activeInput.checked;
 
   if (!name || !price || !img) {
     showToast("Completeaza nume, pret si URL imagine");
@@ -80,13 +87,15 @@ async function addProduct() {
 
   try {
     addBtn.disabled = true;
-    await addDoc(collection(db, "products"), { name, price, category, tag, img });
+    await addDoc(collection(db, "products"), { name, price, category, tag, img, stock, active });
     showToast("Produs adaugat");
     nameInput.value = "";
     priceInput.value = "";
     categoryInput.value = "";
     tagInput.value = "";
     imageUrlInput.value = "";
+    stockInput.value = "";
+    activeInput.checked = true;
     loadProducts();
   } catch (err) {
     console.error(err);
@@ -102,25 +111,74 @@ async function deleteProduct(id) {
   loadProducts();
 }
 
+async function toggleActive(id) {
+  const current = productCache.get(id);
+  if (!current) return;
+  const newStatus = !current.active;
+  await updateDoc(doc(db, "products", id), { active: newStatus });
+  showToast(newStatus ? "Produs activat" : "Produs dezactivat");
+  loadProducts();
+}
+
+function applyFilters() {
+  let items = [...productsAll];
+  const term = (searchProducts?.value || "").toLowerCase();
+  if (term) {
+    items = items.filter(
+      p =>
+        (p.name || "").toLowerCase().includes(term) ||
+        (p.category || "").toLowerCase().includes(term) ||
+        (p.tag || "").toLowerCase().includes(term)
+    );
+  }
+  const sort = sortProducts?.value || "recent";
+  if (sort === "priceAsc") {
+    items.sort((a, b) => a.price - b.price);
+  } else if (sort === "priceDesc") {
+    items.sort((a, b) => b.price - a.price);
+  } else if (sort === "name") {
+    items.sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+  } else {
+    items = items.reverse(); // recent = ultima intrare
+  }
+  renderProductsList(items);
+}
+
 async function loadProducts() {
   list.innerHTML = "";
   productCache.clear();
   const snapshot = await getDocs(collection(db, "products"));
   if (snapshot.empty) {
     list.innerHTML = `<div class="glass p-6 text-center text-slate-400 col-span-full">Niciun produs. Adauga mai sus.</div>`;
+    productsAll = [];
     return;
   }
 
-  snapshot.forEach(p => {
+  productsAll = snapshot.docs.map(p => {
     const raw = p.data() || {};
     const data = {
       name: raw.name || raw.title || "Produs",
       category: raw.category || "IT",
       img: raw.img || raw.imageURL || raw.imageUrl || "",
       price: Number(raw.price || 0),
-      tag: raw.tag || ""
+      tag: raw.tag || "",
+      stock: Number(raw.stock || 0),
+      active: raw.active !== false
     };
     productCache.set(p.id, data);
+    return { id: p.id, ...data };
+  });
+
+  renderProductsList(productsAll);
+}
+
+function renderProductsList(items) {
+  list.innerHTML = "";
+  if (!items.length) {
+    list.innerHTML = `<div class="glass p-6 text-center text-slate-400 col-span-full">Niciun produs. Ajusteaza filtrele.</div>`;
+    return;
+  }
+  items.forEach(data => {
     const price = formatPrice(data.price);
     list.innerHTML += `
       <div class="product-card">
@@ -136,9 +194,12 @@ async function loadProducts() {
             </div>
             <p class="text-blue-300 font-black">${price}</p>
           </div>
+          <p class="text-xs text-slate-400">Stoc: ${data.stock}</p>
+          <p class="text-xs ${data.active ? "text-emerald-300" : "text-slate-500"}">Status: ${data.active ? "Activ" : "Inactiv"}</p>
           <div class="flex gap-2">
-            <button class="btn-primary flex-1" data-edit="${p.id}">Editeaza</button>
-            <button class="btn-ghost flex-1" data-delete="${p.id}">Sterge</button>
+            <button class="btn-primary flex-1" data-edit="${data.id}">Editeaza</button>
+            <button class="btn-ghost flex-1" data-delete="${data.id}">Sterge</button>
+            <button class="btn-ghost flex-1" data-toggle="${data.id}">${data.active ? "Dezactiveaza" : "Activeaza"}</button>
           </div>
         </div>
       </div>
@@ -151,6 +212,10 @@ async function loadProducts() {
 
   list.querySelectorAll("[data-edit]").forEach(btn => {
     btn.addEventListener("click", () => openEditModal(btn.dataset.edit, productCache.get(btn.dataset.edit)));
+  });
+
+  list.querySelectorAll("[data-toggle]").forEach(btn => {
+    btn.addEventListener("click", () => toggleActive(btn.dataset.toggle));
   });
 }
 
@@ -183,6 +248,8 @@ function openEditModal(id, data) {
   editCategory.value = data.category || "IT";
   editTag.value = data.tag || "";
   editImageUrl.value = data.img || "";
+  stockInput.value = data.stock || 0;
+  activeInput.checked = data.active !== false;
   editPreview.src = data.img || "https://via.placeholder.com/150?text=Preview";
   editModal.classList.add("open");
 }
@@ -202,8 +269,10 @@ async function saveEditProduct() {
   }
 
   const img = editImageUrl.value.trim() || existing.img || "";
+  const stock = Number(stockInput.value || existing.stock || 0);
+  const active = activeInput.checked;
 
-  await updateDoc(doc(db, "products", id), { name, price, category, tag, img });
+  await updateDoc(doc(db, "products", id), { name, price, category, tag, img, stock, active });
   showToast("Produs actualizat");
   closeEditModal();
   loadProducts();
@@ -377,6 +446,8 @@ function boot() {
   guardAuth();
   addBtn.addEventListener("click", addProduct);
   refreshBtn.addEventListener("click", loadProducts);
+  searchProducts?.addEventListener("input", applyFilters);
+  sortProducts?.addEventListener("change", applyFilters);
   closeEdit?.addEventListener("click", closeEditModal);
   editModal?.addEventListener("click", e => {
     if (e.target === editModal) closeEditModal();
