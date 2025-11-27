@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ro">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TechStore | Magazin IT cu Firebase</title>
+  <title>TechStore | Magazin IT</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="style.css">
@@ -31,6 +31,10 @@
           <i class="fa-solid fa-magnifying-glass text-slate-400"></i>
           <input id="searchInput" class="input" placeholder="Cauta">
           <div id="searchResults" class="search-popover"></div>
+        </div>
+        <div class="relative hidden md:block">
+          <button id="notifyBtn" class="notify-btn"><i class="fa-regular fa-bell"></i><span id="notifyBadge" class="notify-badge">0</span></button>
+          <div id="notifyPanel" class="notify-panel"></div>
         </div>
         <a id="profileLink" href="profile.html" class="btn-ghost items-center gap-2 hidden">
           <i class="fa-regular fa-user"></i>
@@ -62,6 +66,7 @@
     <nav class="bottom-nav md:hidden">
       <a href="#produse" class="bottom-btn"><i class="fa-solid fa-house"></i><span>Home</span></a>
       <button id="bottomSearch" class="bottom-btn"><i class="fa-solid fa-magnifying-glass"></i><span>Cauta</span></button>
+      <button id="bottomNotify" class="bottom-btn relative"><i class="fa-regular fa-bell"></i><span>Notificari</span><span id="bottomNotifyBadge" class="badge-dot">0</span></button>
       <a href="order.html" class="bottom-btn relative">
         <i class="fa-solid fa-cart-shopping"></i><span>Cos</span>
         <span id="cartCountMobile" class="badge-dot">0</span>
@@ -73,20 +78,20 @@
       <div class="glass p-8 lg:p-10">
         <span class="tag mb-5 inline-flex"><i class="fa-solid fa-bolt"></i> Lansari rapide</span>
         <h1 class="text-4xl lg:text-5xl font-black leading-tight text-white">
-          Magazin IT conectat la Firebase. Produse live. Cos salvat local.
+          Bine ai venit la TechStore. Hardware de top, gata de livrare.
         </h1>
         <p class="text-slate-300 mt-4 text-lg">
-          Stocurile vin din Firestore, imaginile din Storage, iar autentificarea se face prin Firebase Auth.
-          Totul gata de folosit pentru un magazin real.
+          Alege laptopuri, PC-uri si componente verificate, cu stoc real si livrare rapida in toata tara.
+          Cosul si preferintele tale raman salvate in siguranta, ca sa continui oricand.
         </p>
         <div class="flex flex-wrap gap-3 mt-7">
           <a href="#produse" class="btn-primary inline-flex items-center gap-2">Vezi produsele <i class="fa-solid fa-arrow-right"></i></a>
           <button id="toAdmin" class="btn-ghost inline-flex items-center gap-2 hidden">Panou admin</button>
         </div>
         <div class="flex flex-wrap gap-3 mt-8 text-sm text-slate-400">
-          <span class="pill"><i class="fa-solid fa-shield-halved text-blue-400"></i> Auth cu email</span>
-          <span class="pill"><i class="fa-solid fa-database text-cyan-400"></i> Firestore live</span>
-          <span class="pill"><i class="fa-solid fa-cloud-arrow-up text-blue-400"></i> Storage imagini</span>
+          <span class="pill"><i class="fa-solid fa-shield-halved text-blue-400"></i> Login securizat</span>
+          <span class="pill"><i class="fa-solid fa-database text-cyan-400"></i> Stoc actualizat</span>
+          <span class="pill"><i class="fa-solid fa-cloud-arrow-up text-blue-400"></i> Imagini HD</span>
         </div>
       </div>
 
@@ -180,9 +185,9 @@
     <section id="produse" class="mt-14">
       <div class="flex items-center justify-between mb-5">
         <div>
-          <p class="tag mb-2">Live din Firebase</p>
+          <p class="tag mb-2">Catalog actualizat</p>
           <h2 class="text-3xl font-bold text-white">Produse recomandate</h2>
-          <p class="text-slate-400">Datele vin din colectia "products" din Firestore. Butonul adauga in cos salveaza in localStorage.</p>
+          <p class="text-slate-400">Stocul si preturile sunt actualizate in timp real, iar cosul ramane salvat pe dispozitivul tau.</p>
         </div>
         <button id="reloadProducts" class="btn-ghost flex items-center gap-2"><i class="fa-solid fa-rotate"></i> Reincarca</button>
       </div>
@@ -218,7 +223,7 @@
         <div>
           <p class="tag mb-3">Newsletter</p>
           <h3 class="text-3xl font-bold text-white">Ramai la curent cu ofertele TechStore</h3>
-          <p class="text-slate-400 mt-3">Primeste reduceri si noutati hardware. Formularul este mock, pentru demo.</p>
+          <p class="text-slate-400 mt-3">Primeste reduceri si noutati hardware. Formular real, te poti dezabona oricand.</p>
           <div class="flex flex-col sm:flex-row gap-3 mt-5">
             <input id="newsletterEmail" class="input flex-1" placeholder="you@example.com">
             <button id="newsletterBtn" class="btn-primary">Aboneaza-ma</button>
@@ -249,7 +254,7 @@
       <div class="grid md:grid-cols-3 gap-6">
         <div class="space-y-2">
           <p class="font-bold text-white text-lg">TechStore</p>
-          <p>Magazin IT conectat la Firebase.</p>
+          <p>Magazin IT cu livrare rapida si suport dedicat.</p>
           <p class="text-slate-500">Hardware. Gaming. Creators.</p>
         </div>
         <div class="space-y-2">
@@ -268,7 +273,7 @@
           <p>Bucuresti, Bd. Unirii 24</p>
           <p>Luni - Vineri: 10:00 - 18:00</p>
           <div class="flex gap-3">
-            <a class="hover:text-white" href="https://maps.google.com/?q=TechStore Bucuresti Bd Unirii 24" target="_blank" rel="noreferrer"><i class="fa-solid fa-location-dot"></i> Hartă</a>
+            <a class="hover:text-white" href="https://maps.google.com/?q=TechStore Bucuresti Bd Unirii 24" target="_blank" rel="noreferrer"><i class="fa-solid fa-location-dot"></i> Harta</a>
             <a class="hover:text-white" href="mailto:contact@techstore.ro"><i class="fa-solid fa-envelope"></i> contact@techstore.ro</a>
           </div>
           <div class="flex gap-3 text-lg text-white">
@@ -292,7 +297,9 @@
         <input id="authEmail" class="input" type="email" placeholder="Email">
         <input id="authPass" class="input" type="password" placeholder="Parola">
         <button id="submitAuth" class="btn-primary w-full">Continua</button>
-        <p class="text-sm text-slate-400">Auth foloseste Firebase email/password. Dupa login, vezi profilul si panoul admin.</p>
+        <button id="resetPass" class="btn-ghost w-full">Resetare parola pe email</button>
+        <button id="googleLogin" class="btn-ghost w-full flex items-center justify-center gap-2"><i class="fa-brands fa-google"></i> Continua cu Google</button>
+        <p class="text-sm text-slate-400">Autentificare securizata cu email/parola sau Google. Pentru email/parola, confirma adresa inainte de acces.</p>
       </div>
     </div>
   </div>

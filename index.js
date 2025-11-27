@@ -5,6 +5,15 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signOut,
+  sendEmailVerification,
+  sendPasswordResetEmail,
+  GoogleAuthProvider,
+  signInWithPopup,
+  onSnapshot,
+  query,
+  orderBy,
+  limit,
+  where,
   collection,
   getDocs,
   getDoc,
@@ -24,6 +33,8 @@ const tabRegister = document.getElementById("tabRegister");
 const submitAuth = document.getElementById("submitAuth");
 const authEmail = document.getElementById("authEmail");
 const authPass = document.getElementById("authPass");
+const resetPassBtn = document.getElementById("resetPass");
+const googleLoginBtn = document.getElementById("googleLogin");
 const userEmail = document.getElementById("userEmail");
 const toAdmin = document.getElementById("toAdmin");
 const newsletterBtn = document.getElementById("newsletterBtn");
@@ -33,6 +44,11 @@ const searchInputMobile = document.getElementById("searchInputMobile");
 const searchResults = document.getElementById("searchResults");
 const searchResultsMobile = document.getElementById("searchResultsMobile");
 const cartCountMobile = document.getElementById("cartCountMobile");
+const notifyBtn = document.getElementById("notifyBtn");
+const notifyBadge = document.getElementById("notifyBadge");
+const notifyPanel = document.getElementById("notifyPanel");
+const bottomNotify = document.getElementById("bottomNotify");
+const bottomNotifyBadge = document.getElementById("bottomNotifyBadge");
 const bottomSearch = document.getElementById("bottomSearch");
 const bottomProfile = document.getElementById("bottomProfile");
 const mobileSearchPanel = document.getElementById("mobileSearchPanel");
@@ -44,9 +60,48 @@ const toAdminMobile = document.getElementById("toAdminMobile");
 const profileLink = document.getElementById("profileLink");
 const profileLinkMobile = document.getElementById("profileLinkMobile");
 let isAdminUser = false;
+let currentUser = null;
 
 let authMode = "login";
 let products = [];
+let unsubscribeUserNotifications = null;
+let notifications = [];
+let notificationsMap = new Map();
+let seenNotificationIds = new Set();
+const getSeenKey = user => `seenNotifs:${(user?.email || "").toLowerCase()}`;
+const loadSeenNotifications = user => {
+  try {
+    const raw = localStorage.getItem(getSeenKey(user));
+    seenNotificationIds = new Set(Array.isArray(JSON.parse(raw)) ? JSON.parse(raw) : []);
+  } catch {
+    seenNotificationIds = new Set();
+  }
+};
+const persistSeenNotifications = user => {
+  try {
+    const key = getSeenKey(user);
+    localStorage.setItem(key, JSON.stringify(Array.from(seenNotificationIds).slice(-200)));
+  } catch {
+    /* ignore */
+  }
+};
+const formatNotifTime = ts => {
+  try {
+    const d = ts?.toDate ? ts.toDate() : ts instanceof Date ? ts : null;
+    return d
+      ? d.toLocaleString("ro-RO", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit"
+        })
+      : "";
+  } catch {
+    return "";
+  }
+};
 const fallbackImg =
   "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' x2='1' y1='0' y2='1'%3E%3Cstop offset='0%' stop-color='%230ea5e9' stop-opacity='0.25'/%3E%3Cstop offset='100%' stop-color='%234f8bff' stop-opacity='0.55'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='800' height='600' fill='%23050915'/%3E%3Crect x='60' y='60' width='680' height='480' rx='28' fill='url(%23g)' opacity='0.6'/%3E%3Ctext x='50%' y='50%' fill='%23e2e8f0' font-family='Arial, sans-serif' font-size='46' font-weight='700' text-anchor='middle'%3EPlaceholder imagine%3C/text%3E%3C/svg%3E";
 
@@ -58,6 +113,68 @@ const formatPrice = value =>
     minimumFractionDigits: 0,
     maximumFractionDigits: 0
   });
+
+function isPasswordUser(user) {
+  return (user?.providerData || []).some(p => p.providerId === "password");
+}
+
+function subscribeUserNotifications(user, isAdmin = false) {
+  if (unsubscribeUserNotifications) {
+    unsubscribeUserNotifications();
+    unsubscribeUserNotifications = null;
+  }
+  notifications = [];
+  notificationsMap = new Map();
+  loadSeenNotifications(user);
+  renderNotifications();
+  if (!user?.email) return;
+  const q = query(collection(db, "notifications"), orderBy("createdAt", "desc"), limit(30));
+  let initialized = false;
+  unsubscribeUserNotifications = onSnapshot(
+    q,
+    snap => {
+      if (!initialized) {
+        snap.docs.forEach(docSnap => {
+          if (docSnap.metadata.hasPendingWrites) return;
+          const data = docSnap.data() || {};
+          const audience = (data.audience || "users").toLowerCase();
+          const matchesUser =
+            audience === "all" ||
+            audience === "users" ||
+            (audience === "user" &&
+              (data.userId === user.uid || (data.email || "").toLowerCase() === user.email.toLowerCase())) ||
+            (audience === "admin" && isAdmin);
+          if (!matchesUser) return;
+          const ts = data.createdAt || new Date();
+          pushNotification(data.message || "Notificare", data.link || "", ts, docSnap.id);
+        });
+        initialized = true;
+        return;
+      }
+      snap.docChanges().forEach(change => {
+        if (!(change.type === "added" || change.type === "modified")) return;
+        const data = change.doc.data() || {};
+        if (change.doc.metadata.hasPendingWrites) return; // asteptam timestampul de pe server
+        const audience = (data.audience || "users").toLowerCase();
+        const isOwnerAdmin = isAdmin;
+        const matchesUser =
+          audience === "all" ||
+          audience === "users" ||
+          (audience === "user" && (data.userId === user.uid || (data.email || "").toLowerCase() === user.email.toLowerCase())) ||
+          (audience === "admin" && isOwnerAdmin);
+        if (!matchesUser) return;
+        const msg = data.message || "Notificare";
+        if (initialized) showToast(msg);
+        const ts = data.createdAt || new Date();
+        pushNotification(msg, data.link || "", ts, change.doc.id);
+      });
+      initialized = true;
+    },
+    err => {
+      console.error("Notificari user", err);
+    }
+  );
+}
 
 function normalizeCart() {
   const raw = JSON.parse(localStorage.getItem(cartKey)) || [];
@@ -84,6 +201,64 @@ function showToast(message) {
   setTimeout(() => (toast.style.display = "none"), 2200);
 }
 
+function renderNotifications() {
+  if (!notifyBadge || !notifyPanel) return;
+  // asiguram ordonare desc dupa createdAt
+  const ordered = [...notificationsMap.values()].sort(
+    (a, b) => (b.createdAt?.getTime?.() || 0) - (a.createdAt?.getTime?.() || 0)
+  );
+  notifications = ordered;
+  const unread = notifications.filter(n => !n.read).length;
+  notifyBadge.textContent = unread;
+  notifyBadge.style.display = unread ? "inline-flex" : "none";
+  if (bottomNotifyBadge) {
+    bottomNotifyBadge.textContent = unread;
+    bottomNotifyBadge.style.display = unread ? "inline-flex" : "none";
+  }
+  const items = notifications.slice(0, 20);
+  notifyPanel.innerHTML = `
+    <div class="notify-header">
+      <span>Notificari</span>
+      <button id="markAllNotify" class="text-blue-300 text-xs">Marcheaza citite</button>
+    </div>
+    ${
+      items.length
+        ? items
+            .map(
+              (n, idx) =>
+                `<div class="notify-item ${n.read ? "" : "unread"}" data-notify-idx="${
+                  notifications.length - 1 - idx
+                }" ${n.link ? `data-link="${n.link}"` : ""}>
+                  <span>${n.message}</span>
+                  <span class="text-xs text-slate-400">${n.time}</span>
+                </div>`
+            )
+            .join("")
+        : `<div class="text-sm text-slate-400">Fara notificari</div>`
+    }
+  `;
+}
+
+function pushNotification(message, link = "", createdAt = null, id = null) {
+  const ts = createdAt || new Date();
+  const d = ts?.toDate ? ts.toDate() : ts;
+  const time = formatNotifTime(d || ts);
+  const ms = d?.getTime?.() || (ts instanceof Date ? ts.getTime() : 0) || 0;
+  const read = id && seenNotificationIds.has(id);
+  const key = id || `${message}|${link}|${ms}`;
+  const base = { id, message, time, link, createdAt: d || ts, read };
+  const existing = notificationsMap.get(key);
+  const entry = existing ? { ...existing, ...base, read: existing.read || read } : base;
+  notificationsMap.set(key, entry);
+  if (notificationsMap.size > 40) {
+    const latest = [...notificationsMap.values()].sort(
+      (a, b) => (b.createdAt?.getTime?.() || 0) - (a.createdAt?.getTime?.() || 0)
+    );
+    notificationsMap = new Map(latest.slice(0, 40).map(n => [n.id || `${n.message}|${n.link}|${n.createdAt?.getTime?.() || 0}`, n]));
+  }
+  renderNotifications();
+}
+
 function renderSkeleton() {
   productsGrid.innerHTML = "";
   for (let i = 0; i < 6; i++) {
@@ -103,7 +278,7 @@ function renderSkeleton() {
 function renderProducts(list) {
   productsGrid.innerHTML = "";
   if (!list.length) {
-    productsGrid.innerHTML = `<div class="glass p-6 text-center text-slate-400 col-span-full">Nu exista produse in Firestore inca. Adauga din admin.</div>`;
+    productsGrid.innerHTML = `<div class="glass p-6 text-center text-slate-400 col-span-full">Momentan nu sunt produse listate. Revino curand sau contacteaza echipa noastra.</div>`;
     return;
   }
 
@@ -276,6 +451,51 @@ function initMobileNav() {
   });
 }
 
+function initNotificationsBell() {
+  if (!notifyBtn || !notifyPanel) return;
+  notifyBtn.addEventListener("click", () => {
+    notifyPanel.classList.toggle("open");
+    notifyBtn.classList.toggle("active");
+  });
+  bottomNotify?.addEventListener("click", () => {
+    notifyPanel.classList.toggle("open");
+    notifyBtn?.classList.toggle("active");
+  });
+  document.addEventListener("click", e => {
+    if (notifyPanel.contains(e.target) || notifyBtn.contains(e.target)) return;
+    if (bottomNotify && bottomNotify.contains(e.target)) return;
+    notifyPanel.classList.remove("open");
+    notifyBtn?.classList.remove("active");
+  });
+
+  notifyPanel.addEventListener("click", e => {
+    const markAll = e.target.closest("#markAllNotify");
+    if (markAll) {
+      notifications = notifications.map(n => {
+        if (n.id) seenNotificationIds.add(n.id);
+        return { ...n, read: true };
+      });
+      persistSeenNotifications(currentUser);
+      renderNotifications();
+      return;
+    }
+    const item = e.target.closest("[data-notify-idx]");
+    if (item) {
+      const idx = Number(item.dataset.notifyIdx);
+      const notif = notifications[idx];
+      if (!notif) return;
+      notifications[idx].read = true;
+      if (notif.id) {
+        seenNotificationIds.add(notif.id);
+        persistSeenNotifications(currentUser);
+      }
+      renderNotifications();
+      if (notif.link) window.location = notif.link;
+    }
+  });
+  renderNotifications();
+}
+
 function setAdminVisibility(isAdmin) {
   [toAdmin, toAdminMobile].forEach(btn => {
     if (!btn) return;
@@ -310,7 +530,15 @@ async function resolveAdmin(user) {
   if (!user) return false;
   try {
     const snap = await getDoc(doc(db, "admins", user.uid));
-    if (snap.exists() && (snap.data()?.role || "").toLowerCase() === "admin") {
+    const roleUid = (snap.data()?.role || "").toLowerCase();
+    const byUid = snap.exists() && (roleUid === "admin" || roleUid === "owner");
+    let byEmail = false;
+    if (user.email) {
+      const snapEmail = await getDoc(doc(db, "adminEmails", user.email.toLowerCase()));
+      const roleEmail = (snapEmail.data()?.role || "").toLowerCase();
+      byEmail = snapEmail.exists() && (roleEmail === "admin" || roleEmail === "owner");
+    }
+    if (byUid || byEmail) {
       return true;
     }
     return false;
@@ -350,21 +578,46 @@ function initAuth() {
 
     try {
       if (authMode === "login") {
-        await signInWithEmailAndPassword(auth, email, pass);
+        const cred = await signInWithEmailAndPassword(auth, email, pass);
+        if (!cred.user.emailVerified) {
+          await sendEmailVerification(cred.user);
+          showToast("Verifica email-ul trimis pentru confirmare");
+          await signOut(auth);
+          return;
+        }
         showToast("Logat");
       } else {
-        await createUserWithEmailAndPassword(auth, email, pass);
-        showToast("Cont creat");
+        const cred = await createUserWithEmailAndPassword(auth, email, pass);
+        await sendEmailVerification(cred.user);
+        showToast("Verifica email-ul trimis pentru confirmare");
+        await signOut(auth);
+        return;
       }
       closeAuthModal();
     } catch (err) {
-      console.error(err);
-      showToast("Eroare la autentificare");
+      console.error("Auth error", err);
+      const map = {
+        "auth/popup-blocked": "Permite fereastra de login",
+        "auth/popup-closed-by-user": "Fereastra de login inchisa",
+        "auth/invalid-credential": "Email sau parola invalida",
+        "auth/user-not-found": "Cont inexistent",
+        "auth/wrong-password": "Parola gresita",
+        "auth/too-many-requests": "Prea multe incercari, asteapta putin"
+      };
+      const msg = map[err?.code] || "Eroare la autentificare";
+      showToast(msg);
     }
   });
 
   onAuthStateChanged(auth, async user => {
+    currentUser = user;
+    if (user && isPasswordUser(user) && !user.emailVerified) {
+      showToast("Verifica email-ul pentru a continua");
+      await signOut(auth);
+      return;
+    }
     isAdminUser = await resolveAdmin(user);
+    subscribeUserNotifications(user, isAdminUser);
     const bottomProfileLabel = bottomProfile?.querySelector("span");
     if (user) {
       if (userEmail) userEmail.textContent = user.email;
@@ -404,6 +657,39 @@ function initAuth() {
     setAuthButton(authBtnMobile);
     setAdminVisibility(isAdminUser);
   });
+
+  resetPassBtn?.addEventListener("click", async () => {
+    const email = authEmail.value.trim();
+    if (!email) {
+      showToast("Introdu emailul pentru resetare");
+      return;
+    }
+    try {
+      await sendPasswordResetEmail(auth, email);
+      showToast("Link de resetare trimis");
+    } catch (err) {
+      console.error("Nu pot trimite resetarea", err);
+      showToast("Eroare la resetare");
+    }
+  });
+
+  googleLoginBtn?.addEventListener("click", async () => {
+    try {
+      const provider = new GoogleAuthProvider();
+      const cred = await signInWithPopup(auth, provider);
+      showToast("Logat cu Google");
+      closeAuthModal();
+    } catch (err) {
+      console.error("Google login esuat", err);
+      const map = {
+        "auth/popup-blocked": "Permite fereastra de login",
+        "auth/popup-closed-by-user": "Fereastra de login inchisa",
+        "auth/unauthorized-domain": "Adauga domeniul in Firebase > Authorized domains"
+      };
+      const msg = map[err?.code] || "Eroare la login Google";
+      showToast(msg);
+    }
+  });
 }
 
 function initSearch() {
@@ -434,7 +720,7 @@ function initReload() {
 }
 
 function initNewsletter() {
-  newsletterBtn?.addEventListener("click", () => showToast("Salvat (demo)"));
+  newsletterBtn?.addEventListener("click", () => showToast("Te-ai abonat la newsletter"));
 }
 
 function initShortcuts() {
@@ -492,6 +778,7 @@ function boot() {
   loadProducts();
   initAuth();
   initMobileNav();
+  initNotificationsBell();
   initSearch();
   initReload();
   initNewsletter();

@@ -1,4 +1,4 @@
-import { db, addDoc, collection, doc, getDoc, serverTimestamp } from "./firebase.js";
+import { db, auth, addDoc, collection, doc, getDoc, serverTimestamp, onAuthStateChanged } from "./firebase.js";
 
 const cartContainer = document.getElementById("cartContainer");
 const totalPriceEl = document.getElementById("totalPrice");
@@ -9,6 +9,7 @@ const toast = document.getElementById("toast");
 
 const cartKey = "cart";
 let cartDetails = [];
+let currentUser = null;
 const formatPrice = value =>
   Number(value || 0).toLocaleString("de-DE", {
     style: "currency",
@@ -141,13 +142,28 @@ async function checkout() {
   const total = cartDetails.reduce((sum, item) => sum + item.price * item.qty, 0);
   checkoutBtn.disabled = true;
   try {
-    await addDoc(collection(db, "orders"), {
+    const orderRef = await addDoc(collection(db, "orders"), {
       items: cartDetails,
       total,
       status: "new",
       createdAt: serverTimestamp(),
-      name: "Guest",
-      email: ""
+      name: currentUser?.displayName || currentUser?.email || "Guest",
+      email: currentUser?.email || "",
+      userId: currentUser?.uid || ""
+    });
+    await addDoc(collection(db, "notifications"), {
+      audience: "user",
+      userId: currentUser?.uid || "",
+      email: (currentUser?.email || "").toLowerCase(),
+      message: "Comanda plasata. Multumim!",
+      link: "order.html",
+      createdAt: serverTimestamp()
+    });
+    await addDoc(collection(db, "notifications"), {
+      audience: "admin",
+      message: `Comanda noua: ${orderRef.id.slice(0, 6)}`,
+      link: "admin.html#ordersSection",
+      createdAt: serverTimestamp()
     });
     showToast("Comanda plasata");
     clearCart();
@@ -161,6 +177,9 @@ async function checkout() {
 
 function boot() {
   loadCart();
+  onAuthStateChanged(auth, user => {
+    currentUser = user;
+  });
   checkoutBtn.addEventListener("click", checkout);
   clearCartBtn.addEventListener("click", clearCart);
 }

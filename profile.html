@@ -13,19 +13,126 @@
     <header class="glass p-6 mb-6 flex items-center justify-between responsive-header">
       <div>
         <p class="tag mb-2">Profil utilizator</p>
-        <h1 class="text-3xl font-bold text-white">Firebase Auth</h1>
-        <p class="text-slate-400 text-sm">Datele vin din contul curent. Logout intoarce la landing.</p>
+        <h1 class="text-3xl font-bold text-white">Cont TechStore</h1>
+        <p class="text-slate-400 text-sm">Datele afisate sunt legate de contul tau. Logout te intoarce in magazin.</p>
       </div>
       <a href="index.html" class="btn-ghost">Inapoi la magazin</a>
     </header>
 
-    <section class="glass p-6 space-y-4">
-      <div id="profileData" class="text-slate-300 text-lg">Se incarca...</div>
-      <div class="flex gap-3">
-        <button id="logoutBtn" class="btn-primary flex-1">Logout</button>
-        <button id="toAdmin" class="btn-ghost hidden">Admin</button>
+    <div class="grid gap-4 lg:grid-cols-3">
+      <section class="glass p-6 space-y-4 lg:col-span-2">
+        <div class="flex items-center justify-between">
+          <h2 class="text-xl font-bold text-white">Date cont</h2>
+          <button id="copyUid" class="btn-ghost text-sm flex items-center gap-2"><i class="fa-regular fa-copy"></i> Copiaza UID</button>
+        </div>
+        <div class="grid sm:grid-cols-2 gap-3 text-slate-300" id="profileData">
+          <div class="glass p-4">
+            <p class="text-xs text-slate-400">Email</p>
+            <p id="userEmailLabel" class="font-bold text-white">-</p>
+          </div>
+          <div class="glass p-4">
+            <p class="text-xs text-slate-400">UID</p>
+            <p id="userUidLabel" class="font-bold text-white break-all">-</p>
+          </div>
+          <div class="glass p-4">
+            <p class="text-xs text-slate-400">Creat la</p>
+            <p id="userCreatedLabel" class="font-bold text-white">-</p>
+          </div>
+          <div class="glass p-4">
+            <p class="text-xs text-slate-400">Ultima logare</p>
+            <p id="userLastLoginLabel" class="font-bold text-white">-</p>
+          </div>
+          <div class="glass p-4">
+            <p class="text-xs text-slate-400">Provider</p>
+            <p id="userProviderLabel" class="font-bold text-white">-</p>
+          </div>
+          <div class="glass p-4">
+            <p class="text-xs text-slate-400">Rol</p>
+            <p id="userRoleLabel" class="font-bold text-white">Utilizator</p>
+          </div>
+        </div>
+        <div class="flex flex-wrap gap-3">
+          <button id="logoutBtn" class="btn-primary">Logout</button>
+          <a href="order.html" class="btn-ghost">Vezi cosul</a>
+          <button id="toAdmin" class="btn-ghost hidden">Admin</button>
+        </div>
+      </section>
+
+      <section class="glass p-6 space-y-4">
+        <div class="flex items-center justify-between">
+          <h2 class="text-xl font-bold text-white">Securitate</h2>
+          <span id="userVerifiedLabel" class="pill">-</span>
+        </div>
+        <ul class="space-y-3 text-slate-300">
+          <li class="flex items-start gap-3">
+            <i class="fa-solid fa-shield-halved text-blue-300 mt-1"></i>
+            <div>
+              <p class="font-semibold text-white">Autentificare sigura</p>
+              <p class="text-sm text-slate-400">Pastreaza datele de acces doar pentru tine. Schimba parola din clientul de email.</p>
+            </div>
+          </li>
+          <li class="flex items-start gap-3">
+            <i class="fa-solid fa-bell text-amber-300 mt-1"></i>
+            <div>
+              <p class="font-semibold text-white">Notificari comenzi</p>
+              <p class="text-sm text-slate-400">Confirma email-ul pentru a primi update-uri despre comenzi.</p>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <section class="glass p-6 space-y-3 lg:col-span-3">
+        <div class="flex items-center justify-between">
+          <h2 class="text-xl font-bold text-white">Activitate</h2>
+          <a href="order.html" class="text-sm text-blue-300">Deschide comenzi</a>
+        </div>
+        <div class="grid sm:grid-cols-3 gap-3 text-slate-300">
+          <div class="glass p-4">
+            <p class="text-xs text-slate-400">Comenzi plasate</p>
+            <p id="orderCount" class="text-2xl font-black text-white">0</p>
+          </div>
+          <div class="glass p-4">
+            <p class="text-xs text-slate-400">Ultima comanda</p>
+            <p id="lastOrderLabel" class="font-bold text-white">-</p>
+          </div>
+          <div class="glass p-4">
+            <p class="text-xs text-slate-400">Status</p>
+            <p id="accountStatusLabel" class="font-bold text-white">Activ</p>
+          </div>
+        </div>
+        <div class="space-y-3">
+          <p class="text-sm text-slate-400">Ultimele comenzi</p>
+          <div id="recentOrders" class="space-y-2 text-slate-300"></div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div id="orderDetailModal" class="modal">
+    <div class="modal-content glass max-w-3xl">
+      <div class="flex items-center justify-between mb-3">
+        <div>
+          <p class="text-xs text-slate-400">Comanda</p>
+          <p id="detailOrderId" class="text-lg font-bold text-white">-</p>
+        </div>
+        <button id="closeOrderDetail" class="btn-ghost text-sm">Inchide</button>
       </div>
-    </section>
+      <div class="grid sm:grid-cols-3 gap-3 text-slate-300 mb-4">
+        <div class="glass p-3">
+          <p class="text-xs text-slate-400">Data</p>
+          <p id="detailOrderDate" class="font-bold text-white">-</p>
+        </div>
+        <div class="glass p-3">
+          <p class="text-xs text-slate-400">Status</p>
+          <p id="detailOrderStatus" class="font-bold text-white">-</p>
+        </div>
+        <div class="glass p-3">
+          <p class="text-xs text-slate-400">Total</p>
+          <p id="detailOrderTotal" class="font-bold text-blue-300">-</p>
+        </div>
+      </div>
+      <div id="detailItems" class="space-y-2"></div>
+    </div>
   </div>
 
   <div id="toast"></div>

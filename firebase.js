@@ -6,6 +6,10 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
+  sendEmailVerification,
+  sendPasswordResetEmail,
+  GoogleAuthProvider,
+  signInWithPopup,
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
@@ -18,6 +22,12 @@ import {
   doc,
   updateDoc,
   getDoc,
+  setDoc,
+  where,
+  query,
+  orderBy,
+  limit,
+  onSnapshot,
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
@@ -60,6 +70,10 @@ export {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
+  sendEmailVerification,
+  sendPasswordResetEmail,
+  GoogleAuthProvider,
+  signInWithPopup,
   onAuthStateChanged,
   collection,
   getDocs,
@@ -68,6 +82,12 @@ export {
   deleteDoc,
   updateDoc,
   doc,
+  setDoc,
+  where,
+  query,
+  orderBy,
+  limit,
+  onSnapshot,
   serverTimestamp,
   ref,
   uploadBytes,
