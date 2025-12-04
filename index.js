@@ -131,6 +131,11 @@ function subscribeUserNotifications(user, isAdmin = false) {
   if (!user?.email) return;
   const q = query(collection(db, "notifications"), orderBy("createdAt", "desc"), limit(30));
   let initialized = false;
+  const isAdminOnly = data => {
+    const audience = (data.audience || "").toLowerCase();
+    const link = (data.link || "").toLowerCase();
+    return audience === "admin" || link.includes("admin.html");
+  };
   unsubscribeUserNotifications = onSnapshot(
     q,
     snap => {
@@ -139,6 +144,7 @@ function subscribeUserNotifications(user, isAdmin = false) {
           if (docSnap.metadata.hasPendingWrites) return;
           const data = docSnap.data() || {};
           const audience = (data.audience || "users").toLowerCase();
+          if (!isAdmin && isAdminOnly(data)) return;
           const matchesUser =
             audience === "all" ||
             audience === "users" ||
@@ -157,6 +163,7 @@ function subscribeUserNotifications(user, isAdmin = false) {
         const data = change.doc.data() || {};
         if (change.doc.metadata.hasPendingWrites) return; // asteptam timestampul de pe server
         const audience = (data.audience || "users").toLowerCase();
+        if (!isAdmin && isAdminOnly(data)) return;
         const isOwnerAdmin = isAdmin;
         const matchesUser =
           audience === "all" ||
@@ -495,6 +502,10 @@ function initNotificationsBell() {
   const handlePanelClick = panel => panel?.addEventListener("click", e => {
     const markAll = e.target.closest("#markAllNotify");
     if (markAll) {
+      notificationsMap.forEach((val, key) => {
+        if (val.id) seenNotificationIds.add(val.id);
+        notificationsMap.set(key, { ...val, read: true });
+      });
       notifications = notifications.map(n => {
         if (n.id) seenNotificationIds.add(n.id);
         return { ...n, read: true };
@@ -509,6 +520,9 @@ function initNotificationsBell() {
       const notif = notifications[idx];
       if (!notif) return;
       notifications[idx].read = true;
+      const key = notif.id || `${notif.message}|${notif.link}|${notif.createdAt?.getTime?.() || 0}`;
+      const existing = notificationsMap.get(key);
+      if (existing) notificationsMap.set(key, { ...existing, read: true });
       if (notif.id) {
         seenNotificationIds.add(notif.id);
         persistSeenNotifications(currentUser);
