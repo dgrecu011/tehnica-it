@@ -47,6 +47,7 @@ const cartCountMobile = document.getElementById("cartCountMobile");
 const notifyBtn = document.getElementById("notifyBtn");
 const notifyBadge = document.getElementById("notifyBadge");
 const notifyPanel = document.getElementById("notifyPanel");
+const notifyPanelMobile = document.getElementById("notifyPanelMobile");
 const bottomNotify = document.getElementById("bottomNotify");
 const bottomNotifyBadge = document.getElementById("bottomNotifyBadge");
 const bottomSearch = document.getElementById("bottomSearch");
@@ -191,8 +192,13 @@ function saveCart(data) {
 function updateCartBadge() {
   const cart = normalizeCart();
   const total = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
+  const show = total > 0;
   cartCount.textContent = total;
-  if (cartCountMobile) cartCountMobile.textContent = total;
+  cartCount.style.display = show ? "inline-flex" : "none";
+  if (cartCountMobile) {
+    cartCountMobile.textContent = total;
+    cartCountMobile.style.display = show ? "inline-flex" : "none";
+  }
 }
 
 function showToast(message) {
@@ -216,7 +222,7 @@ function renderNotifications() {
     bottomNotifyBadge.style.display = unread ? "inline-flex" : "none";
   }
   const items = notifications.slice(0, 20);
-  notifyPanel.innerHTML = `
+  const panelContent = `
     <div class="notify-header">
       <span>Notificari</span>
       <button id="markAllNotify" class="text-blue-300 text-xs">Marcheaza citite</button>
@@ -237,6 +243,10 @@ function renderNotifications() {
         : `<div class="text-sm text-slate-400">Fara notificari</div>`
     }
   `;
+  notifyPanel.innerHTML = panelContent;
+  if (notifyPanelMobile) {
+    notifyPanelMobile.innerHTML = panelContent;
+  }
 }
 
 function pushNotification(message, link = "", createdAt = null, id = null) {
@@ -453,22 +463,36 @@ function initMobileNav() {
 
 function initNotificationsBell() {
   if (!notifyBtn || !notifyPanel) return;
+  const closePanels = () => {
+    notifyPanel.classList.remove("open");
+    notifyPanelMobile?.classList.remove("open");
+    notifyBtn?.classList.remove("active");
+  };
+
   notifyBtn.addEventListener("click", () => {
-    notifyPanel.classList.toggle("open");
-    notifyBtn.classList.toggle("active");
+    const isOpen = notifyPanel.classList.contains("open");
+    closePanels();
+    if (!isOpen) notifyPanel.classList.add("open");
+    notifyBtn.classList.toggle("active", !isOpen);
   });
+
   bottomNotify?.addEventListener("click", () => {
-    notifyPanel.classList.toggle("open");
-    notifyBtn?.classList.toggle("active");
+    const useMobilePanel = window.innerWidth <= 900 && notifyPanelMobile;
+    const targetPanel = useMobilePanel ? notifyPanelMobile : notifyPanel;
+    const isOpen = targetPanel.classList.contains("open");
+    closePanels();
+    if (!isOpen) targetPanel.classList.add("open");
+    notifyBtn?.classList.toggle("active", !isOpen);
   });
+
   document.addEventListener("click", e => {
     if (notifyPanel.contains(e.target) || notifyBtn.contains(e.target)) return;
     if (bottomNotify && bottomNotify.contains(e.target)) return;
-    notifyPanel.classList.remove("open");
-    notifyBtn?.classList.remove("active");
+    if (notifyPanelMobile && notifyPanelMobile.contains(e.target)) return;
+    closePanels();
   });
 
-  notifyPanel.addEventListener("click", e => {
+  const handlePanelClick = panel => panel?.addEventListener("click", e => {
     const markAll = e.target.closest("#markAllNotify");
     if (markAll) {
       notifications = notifications.map(n => {
@@ -493,6 +517,9 @@ function initNotificationsBell() {
       if (notif.link) window.location = notif.link;
     }
   });
+
+  handlePanelClick(notifyPanel);
+  handlePanelClick(notifyPanelMobile);
   renderNotifications();
 }
 

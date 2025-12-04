@@ -117,6 +117,7 @@ body {
   position: absolute;
   top: 12px;
   left: 12px;
+  z-index: 3;
   padding: 6px 12px;
   border-radius: 999px;
   background: rgba(14, 165, 233, 0.15);
@@ -156,7 +157,7 @@ body {
 .badge-admin {
   top: 10px;
   left: 10px;
-  z-index: 2;
+  z-index: 4;
 }
 
 .badge-warning {
@@ -164,6 +165,7 @@ body {
   bottom: 12px;
   right: 12px;
   left: auto;
+  z-index: 4;
   background: rgba(251, 191, 36, 0.2);
   color: #fbbf24;
 }
@@ -196,7 +198,7 @@ body {
 
 .notify-panel {
   position: absolute;
-  top: calc(100% + 8px);
+  top: calc(100% + 10px);
   right: 0;
   width: min(320px, 90vw);
   background: rgba(10, 16, 28, 0.95);
@@ -205,12 +207,33 @@ body {
   box-shadow: var(--shadow);
   padding: 10px;
   display: none;
-  z-index: 120;
-  max-height: 360px;
+  z-index: 180;
+  max-height: min(60vh, 420px);
   overflow-y: auto;
 }
 
 .notify-panel.open {
+  display: block;
+}
+
+.notify-panel-mobile {
+  position: fixed;
+  left: 12px;
+  right: 12px;
+  bottom: 88px;
+  width: auto;
+  background: rgba(10, 16, 28, 0.95);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  padding: 10px;
+  display: none;
+  z-index: 220;
+  max-height: min(60vh, 420px);
+  overflow-y: auto;
+}
+
+.notify-panel-mobile.open {
   display: block;
 }
 
@@ -350,11 +373,33 @@ body {
   justify-content: center;
   backdrop-filter: blur(10px);
   background: rgba(0, 0, 0, 0.6);
-  z-index: 50;
+  z-index: 200;
 }
 
 .modal.open {
   display: flex;
+}
+
+.modal {
+  padding: 40px 20px;
+}
+
+@media (max-width: 900px) {
+  .modal {
+    align-items: flex-start;
+    justify-content: center;
+    padding: 90px 14px 24px;
+  }
+
+  .modal .glass {
+    width: 100%;
+    max-width: 520px;
+  }
+}
+.modal .glass {
+  margin-top: 20px;
+  max-height: calc(100vh - 140px);
+  overflow-y: auto;
 }
 
 .hero-thumb {
@@ -399,6 +444,13 @@ body {
   color: white;
   font-weight: 900;
   letter-spacing: 0.5px;
+  box-shadow: 0 14px 35px rgba(79, 139, 255, 0.35), inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.brand-logo {
+  height: 46px;
+  width: 46px;
+  border-radius: 14px;
   box-shadow: 0 14px 35px rgba(79, 139, 255, 0.35), inset 0 0 0 1px rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
@@ -796,13 +848,5 @@ body {
 @media (min-width: 768px) {
   .bottom-nav {
     display: none;
-  }
-}
-
-@media (max-width: 768px) {
-  .notify-panel {
-    position: fixed;
-    inset: auto 12px 74px 12px;
-    width: auto;
   }
 }

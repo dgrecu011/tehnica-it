@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Export logo TechStore</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0b1224;
+      color: #e2e8f0;
+      display: grid;
+      place-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 20px;
+      max-width: 420px;
+      width: 100%;
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.4);
+    }
+    .preview {
+      display: grid;
+      place-items: center;
+      background: #0f172a;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 16px;
+    }
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    button {
+      flex: 1;
+      min-width: 120px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: linear-gradient(135deg, #0ea5e9, #4f8bff);
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 14px 35px rgba(79, 139, 255, 0.35);
+    }
+    button.secondary {
+      background: rgba(255, 255, 255, 0.05);
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="preview">
+      <img id="logo" src="logo-techstore.svg" alt="TechStore logo" width="96" height="96">
+    </div>
+    <div class="actions">
+      <button id="savePng">Descarca PNG</button>
+      <button id="saveJpg" class="secondary">Descarca JPG</button>
+    </div>
+  </div>
+
+  <script>
+    async function loadSvg() {
+      const res = await fetch('logo-techstore.svg');
+      return await res.text();
+    }
+
+    async function exportLogo(type) {
+      const svgText = await loadSvg();
+      const svgBlob = new Blob([svgText], { type: 'image/svg+xml' });
+      const svgUrl = URL.createObjectURL(svgBlob);
+
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.src = svgUrl;
+
+      await new Promise((resolve, reject) => {
+        img.onload = resolve;
+        img.onerror = reject;
+      });
+
+      const size = 512;
+      const canvas = document.createElement('canvas');
+      canvas.width = size;
+      canvas.height = size;
+      const ctx = canvas.getContext('2d');
+
+      // background for JPG to avoid transparent black
+      if (type === 'image/jpeg') {
+        const gradient = ctx.createLinearGradient(0, 0, size, size);
+        gradient.addColorStop(0, '#0ea5e9');
+        gradient.addColorStop(1, '#4f8bff');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, size, size);
+      } else {
+        ctx.clearRect(0, 0, size, size);
+      }
+
+      const margin = 24;
+      ctx.drawImage(img, margin, margin, size - margin * 2, size - margin * 2);
+
+      const dataUrl = canvas.toDataURL(type, 0.96);
+      const a = document.createElement('a');
+      a.href = dataUrl;
+      a.download = type === 'image/png' ? 'logo-techstore.png' : 'logo-techstore.jpg';
+      a.click();
+      URL.revokeObjectURL(svgUrl);
+    }
+
+    document.getElementById('savePng').onclick = () => exportLogo('image/png');
+    document.getElementById('saveJpg').onclick = () => exportLogo('image/jpeg');
+  </script>
+</body>
+</html>
