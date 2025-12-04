@@ -3,13 +3,26 @@ import { db, auth, addDoc, collection, doc, getDoc, serverTimestamp, onAuthState
 const cartContainer = document.getElementById("cartContainer");
 const totalPriceEl = document.getElementById("totalPrice");
 const subtotalEl = document.getElementById("subtotal");
+const discountRow = document.getElementById("discountRow");
+const discountValueEl = document.getElementById("discountValue");
 const checkoutBtn = document.getElementById("checkoutBtn");
 const clearCartBtn = document.getElementById("clearCart");
 const toast = document.getElementById("toast");
+const voucherInput = document.getElementById("voucherInput");
+const voucherBtn = document.getElementById("applyVoucher");
+const voucherMessage = document.getElementById("voucherMessage");
+const shippingName = document.getElementById("shippingName");
+const shippingEmail = document.getElementById("shippingEmail");
+const shippingPhone = document.getElementById("shippingPhone");
+const shippingAddress = document.getElementById("shippingAddress");
+const shippingNotes = document.getElementById("shippingNotes");
 
 const cartKey = "cart";
 let cartDetails = [];
 let currentUser = null;
+let currentSubtotal = 0;
+let appliedVoucher = "";
+let discountValue = 0;
 const formatPrice = value =>
   Number(value || 0).toLocaleString("de-DE", {
     style: "currency",
@@ -36,6 +49,38 @@ function saveCart(data) {
   localStorage.setItem(cartKey, JSON.stringify(data));
 }
 
+function updateSummary(subtotal) {
+  currentSubtotal = subtotal;
+  const totalBefore = Math.max(subtotal, 0);
+  const eligibleDiscount =
+    appliedVoucher === "TECH10" ? Math.min(Math.round(totalBefore * 0.1), totalBefore) : 0;
+  discountValue = totalBefore ? eligibleDiscount : 0;
+  const totalAfter = Math.max(totalBefore - discountValue, 0);
+
+  if (subtotalEl) subtotalEl.textContent = formatPrice(totalBefore);
+  if (discountValueEl) discountValueEl.textContent = `-${formatPrice(discountValue)}`;
+  discountRow?.classList.toggle("hidden", !discountValue);
+  if (totalPriceEl) totalPriceEl.textContent = formatPrice(totalAfter);
+}
+
+function applyVoucher() {
+  const code = (voucherInput?.value || "").trim().toUpperCase();
+  if (!code) {
+    voucherMessage.textContent = "Introdu un cod pentru a aplica reducerea.";
+    return;
+  }
+  if (code === "TECH10") {
+    appliedVoucher = code;
+    voucherMessage.textContent = "Reducere de 10% aplicata pe subtotal.";
+    updateSummary(currentSubtotal);
+    return;
+  }
+  appliedVoucher = "";
+  discountValue = 0;
+  voucherMessage.textContent = "Cod invalid sau expirat.";
+  updateSummary(currentSubtotal);
+}
+
 async function loadCart() {
   const cart = normalizeCart();
   cartContainer.innerHTML = "";
@@ -43,8 +88,7 @@ async function loadCart() {
 
   if (!cart.length) {
     cartContainer.innerHTML = `<div class="text-center text-slate-400 py-10">Cosul este gol.</div>`;
-    subtotalEl.textContent = formatPrice(0);
-    totalPriceEl.textContent = formatPrice(0);
+    updateSummary(0);
     return;
   }
 
@@ -98,8 +142,7 @@ async function loadCart() {
     `;
   }
 
-  subtotalEl.textContent = formatPrice(total);
-  totalPriceEl.textContent = formatPrice(total);
+  updateSummary(total);
 
   cartContainer.querySelectorAll("[data-remove]").forEach(btn => {
     btn.addEventListener("click", () => removeItem(btn.dataset.remove));
@@ -134,27 +177,69 @@ function clearCart() {
   loadCart();
 }
 
+function getPaymentMethod() {
+  const checked = document.querySelector("input[name='paymentMethod']:checked");
+  return checked?.value || "card";
+}
+
+function getDeliveryData() {
+  return {
+    name: shippingName?.value.trim() || "",
+    email: shippingEmail?.value.trim() || "",
+    phone: shippingPhone?.value.trim() || "",
+    address: shippingAddress?.value.trim() || "",
+    notes: shippingNotes?.value.trim() || ""
+  };
+}
+
+function validateDelivery() {
+  const data = getDeliveryData();
+  if (!data.name || !data.email || !data.phone || !data.address) {
+    showToast("Completeaza nume, email, telefon si adresa");
+    return null;
+  }
+  if (!data.email.includes("@") || data.email.length < 6) {
+    showToast("Email invalid");
+    return null;
+  }
+  if (data.phone.replace(/\D/g, "").length < 9) {
+    showToast("Telefon invalid");
+    return null;
+  }
+  return data;
+}
+
 async function checkout() {
   if (!cartDetails.length) {
     showToast("Cosul este gol");
     return;
   }
-  const total = cartDetails.reduce((sum, item) => sum + item.price * item.qty, 0);
+  const delivery = validateDelivery();
+  if (!delivery) return;
+  const totalBefore = cartDetails.reduce((sum, item) => sum + item.price * item.qty, 0);
+  const total = Math.max(totalBefore - discountValue, 0);
   checkoutBtn.disabled = true;
   try {
     const orderRef = await addDoc(collection(db, "orders"), {
       items: cartDetails,
       total,
+      subtotal: totalBefore,
+      discount: discountValue,
+      discountCode: appliedVoucher || "",
       status: "new",
       createdAt: serverTimestamp(),
-      name: currentUser?.displayName || currentUser?.email || "Guest",
-      email: currentUser?.email || "",
+      name: delivery.name || currentUser?.displayName || currentUser?.email || "Guest",
+      email: delivery.email || currentUser?.email || "",
+      phone: delivery.phone,
+      address: delivery.address,
+      notes: delivery.notes,
+      paymentMethod: getPaymentMethod(),
       userId: currentUser?.uid || ""
     });
     await addDoc(collection(db, "notifications"), {
       audience: "user",
       userId: currentUser?.uid || "",
-      email: (currentUser?.email || "").toLowerCase(),
+      email: (delivery.email || currentUser?.email || "").toLowerCase(),
       message: "Comanda plasata. Multumim!",
       link: "order.html",
       createdAt: serverTimestamp()
@@ -167,6 +252,7 @@ async function checkout() {
     });
     showToast("Comanda plasata");
     clearCart();
+    setTimeout(() => (window.location = "index.html"), 600);
   } catch (err) {
     console.error("Nu pot salva comanda", err);
     showToast("Eroare la checkout");
@@ -179,9 +265,19 @@ function boot() {
   loadCart();
   onAuthStateChanged(auth, user => {
     currentUser = user;
+    if (user?.displayName && shippingName && !shippingName.value) shippingName.value = user.displayName;
+    if (user?.email && shippingEmail && !shippingEmail.value) shippingEmail.value = user.email;
+    if (user?.phoneNumber && shippingPhone && !shippingPhone.value) shippingPhone.value = user.phoneNumber;
   });
   checkoutBtn.addEventListener("click", checkout);
   clearCartBtn.addEventListener("click", clearCart);
+  voucherBtn?.addEventListener("click", applyVoucher);
+  voucherInput?.addEventListener("keydown", e => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      applyVoucher();
+    }
+  });
 }
 
 boot();
