@@ -192,6 +192,28 @@
         </div>
         <button id="reloadProducts" class="btn-ghost flex items-center gap-2"><i class="fa-solid fa-rotate"></i> Reincarca</button>
       </div>
+      <div class="glass p-4 mb-5 flex flex-wrap gap-3 items-center">
+        <div class="flex flex-wrap gap-3 items-center flex-1">
+          <select id="categoryFilter" class="input w-40 sm:w-48">
+            <option value="">Toate categoriile</option>
+          </select>
+          <select id="brandFilter" class="input w-40 sm:w-48">
+            <option value="">Toate brandurile</option>
+          </select>
+          <div class="flex items-center gap-2">
+            <input id="priceMin" class="input w-28" type="number" placeholder="Pret min">
+            <input id="priceMax" class="input w-28" type="number" placeholder="Pret max">
+          </div>
+          <select id="availabilityFilter" class="input w-40 sm:w-48">
+            <option value="">Toate</option>
+            <option value="in_stock">In stoc</option>
+            <option value="out_of_stock">Fara stoc</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+        </div>
+        <button id="clearFilters" class="btn-ghost">Reset filtre</button>
+      </div>
       <div id="productsGrid" class="grid-auto-fit"></div>
     </section>
 

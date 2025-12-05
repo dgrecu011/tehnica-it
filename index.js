@@ -60,11 +60,25 @@ const userEmailMobile = document.getElementById("userEmailMobile");
 const toAdminMobile = document.getElementById("toAdminMobile");
 const profileLink = document.getElementById("profileLink");
 const profileLinkMobile = document.getElementById("profileLinkMobile");
+const categoryFilter = document.getElementById("categoryFilter");
+const brandFilter = document.getElementById("brandFilter");
+const priceMinInput = document.getElementById("priceMin");
+const priceMaxInput = document.getElementById("priceMax");
+const availabilityFilter = document.getElementById("availabilityFilter");
+const clearFiltersBtn = document.getElementById("clearFilters");
 let isAdminUser = false;
 let currentUser = null;
 
 let authMode = "login";
 let products = [];
+let filtersState = {
+  search: "",
+  category: "",
+  brand: "",
+  minPrice: null,
+  maxPrice: null,
+  availability: ""
+};
 let unsubscribeUserNotifications = null;
 let notifications = [];
 let notificationsMap = new Map();
@@ -339,16 +353,24 @@ async function loadProducts() {
     const snapshot = await getDocs(collection(db, "products"));
     products = snapshot.docs.map(p => {
       const data = p.data() || {};
+      const rawName = data.name || data.title || "Produs";
+      const derivedBrand = (data.brand || data.manufacturer || rawName.split(" ")[0] || "").trim();
+      const stock = Number(data.stock || 0);
+      const active = data.active !== false;
       return {
         id: p.id,
-        name: data.name || data.title || "Produs",
+        name: rawName,
         price: Number(data.price || 0),
         category: data.category || "IT",
         tag: data.tag || "",
-        img: data.img || data.imageURL || data.imageUrl || ""
+        img: data.img || data.imageURL || data.imageUrl || "",
+        brand: derivedBrand,
+        stock,
+        active
       };
     });
-    renderProducts(products);
+    populateFilterOptions(products);
+    applyFilters();
 const tagged = products.filter(p => (p.tag || "").toLowerCase().includes("nou"));
     const pool = tagged.length ? tagged : products;
     const uniquePool = pool.slice(-10); // ultimele din lista incarcata
@@ -374,13 +396,84 @@ function addToCart(id) {
   showToast("Produs adaugat in cos");
 }
 
-function filterProducts(term) {
-  const t = term.toLowerCase();
-  const filtered = products.filter(p =>
+function filterBySearch(list, term) {
+  const t = term.trim().toLowerCase();
+  if (!t) return list;
+  return list.filter(p =>
     (p.name || "").toLowerCase().includes(t) ||
-    (p.category || "").toLowerCase().includes(t)
+    (p.category || "").toLowerCase().includes(t) ||
+    (p.brand || "").toLowerCase().includes(t)
   );
-  renderProducts(filtered);
+}
+
+function setSelectOptions(select, values, placeholder) {
+  if (!select) return;
+  const prev = select.value;
+  const items = Array.from(values).filter(Boolean).sort((a, b) => a.localeCompare(b));
+  select.innerHTML = `<option value="">${placeholder}</option>` + items.map(v => `<option value="${v}">${v}</option>`).join("");
+  if (prev && items.includes(prev)) {
+    select.value = prev;
+  }
+}
+
+function populateFilterOptions(list) {
+  const categories = new Set();
+  const brands = new Set();
+  list.forEach(p => {
+    if (p.category) categories.add(p.category);
+    if (p.brand) brands.add(p.brand);
+  });
+  setSelectOptions(categoryFilter, categories, "Toate categoriile");
+  setSelectOptions(brandFilter, brands, "Toate brandurile");
+}
+
+function parsePriceValue(value) {
+  if (value === "" || value === null || value === undefined) return null;
+  const num = Number(value);
+  return Number.isFinite(num) ? num : null;
+}
+
+function applyFilters() {
+  let list = [...products];
+  list = filterBySearch(list, filtersState.search);
+
+  if (filtersState.category) {
+    list = list.filter(p => (p.category || "").toLowerCase() === filtersState.category.toLowerCase());
+  }
+
+  if (filtersState.brand) {
+    list = list.filter(p => (p.brand || "").toLowerCase() === filtersState.brand.toLowerCase());
+  }
+
+  if (filtersState.minPrice !== null) {
+    list = list.filter(p => Number(p.price || 0) >= filtersState.minPrice);
+  }
+
+  if (filtersState.maxPrice !== null) {
+    list = list.filter(p => Number(p.price || 0) <= filtersState.maxPrice);
+  }
+
+  if (filtersState.availability) {
+    list = list.filter(p => {
+      const stock = Number(p.stock || 0);
+      if (filtersState.availability === "in_stock") return stock > 0;
+      if (filtersState.availability === "out_of_stock") return stock <= 0;
+      if (filtersState.availability === "active") return !!p.active;
+      if (filtersState.availability === "inactive") return !p.active;
+      return true;
+    });
+  }
+
+  renderProducts(list);
+}
+
+function resetFiltersState() {
+  filtersState.search = "";
+  filtersState.category = "";
+  filtersState.brand = "";
+  filtersState.minPrice = null;
+  filtersState.maxPrice = null;
+  filtersState.availability = "";
 }
 
 function renderRecommended(list) {
@@ -410,16 +503,11 @@ function renderSearchResults(list, target) {
 }
 
 function handleSearch(term, target, renderList = true) {
-  const t = term.trim().toLowerCase();
-  if (!t) {
+  if (!term.trim()) {
     target?.classList.remove("open");
     return products;
   }
-  const filtered = products.filter(
-    p =>
-      (p.name || "").toLowerCase().includes(t) ||
-      (p.category || "").toLowerCase().includes(t)
-  );
+  const filtered = filterBySearch(products, term);
   if (renderList) renderSearchResults(filtered, target);
   return filtered;
 }
@@ -736,11 +824,13 @@ function initAuth() {
 function initSearch() {
   const onInputDesktop = e => {
     const filtered = handleSearch(e.target.value, searchResults, true);
-    renderProducts(filtered);
+    filtersState.search = e.target.value || "";
+    applyFilters();
   };
   const onInputMobile = e => {
     const filtered = handleSearch(e.target.value, searchResultsMobile, true);
-    renderProducts(filtered);
+    filtersState.search = e.target.value || "";
+    applyFilters();
   };
 
   searchInput?.addEventListener("input", onInputDesktop);
@@ -762,6 +852,45 @@ function initReload() {
 
 function initNewsletter() {
   newsletterBtn?.addEventListener("click", () => showToast("Te-ai abonat la newsletter"));
+}
+
+function initCatalogFilters() {
+  categoryFilter?.addEventListener("change", e => {
+    filtersState.category = e.target.value;
+    applyFilters();
+  });
+
+  brandFilter?.addEventListener("change", e => {
+    filtersState.brand = e.target.value;
+    applyFilters();
+  });
+
+  const handlePriceChange = () => {
+    filtersState.minPrice = parsePriceValue(priceMinInput?.value);
+    filtersState.maxPrice = parsePriceValue(priceMaxInput?.value);
+    applyFilters();
+  };
+  priceMinInput?.addEventListener("input", handlePriceChange);
+  priceMaxInput?.addEventListener("input", handlePriceChange);
+
+  availabilityFilter?.addEventListener("change", e => {
+    filtersState.availability = e.target.value;
+    applyFilters();
+  });
+
+  clearFiltersBtn?.addEventListener("click", () => {
+    resetFiltersState();
+    if (categoryFilter) categoryFilter.value = "";
+    if (brandFilter) brandFilter.value = "";
+    if (priceMinInput) priceMinInput.value = "";
+    if (priceMaxInput) priceMaxInput.value = "";
+    if (availabilityFilter) availabilityFilter.value = "";
+    if (searchInput) searchInput.value = "";
+    if (searchInputMobile) searchInputMobile.value = "";
+    searchResults?.classList.remove("open");
+    searchResultsMobile?.classList.remove("open");
+    applyFilters();
+  });
 }
 
 function initShortcuts() {
@@ -821,6 +950,7 @@ function boot() {
   initMobileNav();
   initNotificationsBell();
   initSearch();
+  initCatalogFilters();
   initReload();
   initNewsletter();
   initShortcuts();
